@@ -1,8 +1,34 @@
 <% layout('layouts/base')%>
 
-<h1>Join our Discord</h1>
-<p></p>
-<iframe src="https://discord.com/widget?id=953659355562127371&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+<div class="body-container">
+    <div class="hero-left">
+        <h1>Join our Discord</h1>
+        <p>The Discord server is a chat room where members of Mines ACM communicate with each other. Join our Discord server to keep up-to-date with happenings in the organization!</p>
+        <ol>
+            <li><b>Create a Discord account</b>: Use our <a href="https://discord.com/invite/E2FnnrfdQ8">invite link</a> and create an account or sign in with an existing one.</li>
+            <li><b>Verify your email</b>: Make sure your email is verified so you can log in again!</li>
+            <li><b>Download the Discord app</b> on your mobile device or computer.</li>
+        </ol>
 
-<h1>Our Team</h1>
-<p></p>
+        <!-- TODO fix button hover here -->
+        <button class="btn btn-outline-primary"><a style="text-decoration: none;" href="https://discord.com/invite/E2FnnrfdQ8">Join Discord</a></button>
+    </div>
+
+    <div style="width: 50%">
+        <iframe src="https://discord.com/widget?id=953659355562127371&theme=dark" width="400" height="350" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+    </div>
+</div>
+
+<div class="content">
+    <h1>Our Team</h1>
+    <p>Mines ACM is run by an amazing team of students, and elections are run every year around March to decide roles.</p>
+    
+    <% for(let person of people) { %>
+    <div class="team-card">
+        <img class="team-picture" src="/static/images/default_user.png"/>
+        <h2><%= person.name %></h2>
+        <p><%= person.role %></p>
+        <p><%= person.email %></p>
+    </div>
+    <% } %>
+</div>

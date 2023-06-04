@@ -10,13 +10,65 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.static('public'))
 
+app.use((req, res, next) => {
+  res.status(404).render('404');
+})
+
 app.get('/', (req, res) => {
   res.render('home')
 })
 
+const people = [
+  {
+    name: "Ethan Richards",
+    role: "President, HSPC Chair",
+    email: "erichards [at] mines [dot] edu"
+  },
+  {
+    name: "Umberto Gherardi",
+    role: "Vice President"
+  },
+  {
+    name: "Tyler Wright",
+    role: "Treasurer"
+  },
+  {
+    name: "Brooke Bowcutt",
+    role: "Director of Advertising"
+  },
+  {
+    name: "Keenan Buckley",
+    role: "Director of Project Meetings"
+  },
+  {
+    name: "Eugin Pahk",
+    role: "Advisor, Director of Tech Talks"
+  },
+  {
+    name: "Jayden Pahukula",
+    role: "Director of Special Events"
+  },
+  {
+    name: "Finn Burns",
+    role: "Director of DI&A"
+  },
+  {
+    name: "Dorian Cauwe",
+    role: "Advisor"
+  },
+]
+
 app.get('/about', (req, res) => {
-  res.render('about')
+  res.render('about', { people })
 })
+
+// const presentations = [
+//   {
+//     name: "",
+//     author: "",
+//     date: ""
+//   }
+// ]
 
 app.get('/presentations', (req, res) => {
   res.render('presentations')
