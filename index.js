@@ -10,10 +10,6 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.static('public'))
 
-app.use((req, res, next) => {
-  res.status(404).render('404');
-})
-
 app.get('/', (req, res) => {
   res.render('home')
 })
@@ -76,6 +72,14 @@ app.get('/presentations', (req, res) => {
 
 app.get('/projects', (req, res) => {
   res.render('projects')
+})
+
+// app.get('/admim', (req, res) => {
+//   res.render('admin')
+// })
+
+app.use((req, res, next) => {
+  res.status(404).render('404');
 })
 
 app.listen(port, () => {

@@ -105,6 +105,17 @@ body {
     margin-right: 1%;
 }
 
+.btn-outline-primary:hover {
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.footer {
+    padding-top: 1%;
+    background-color: #f8f9fa; 
+    width: 100%;
+}
+
 /* Animations */
 @keyframes fadein {
 	from { opacity: 0; }
