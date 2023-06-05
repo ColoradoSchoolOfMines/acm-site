@@ -23,7 +23,11 @@
     
     <% for(let person of people) { %>
     <div class="team-card">
-        <img class="team-picture" src="/static/images/default_user.png"/>
+        <% if(person.url) { %>
+            <img class="team-picture" src="/static/images/<%= person.url %>"/>
+        <% } else { %>
+            <img class="team-picture" src="/static/images/default_user.png"/>
+        <% } %>
         <h2><%= person.name %></h2>
         <p><%= person.role %></p>
         <p><%= person.email %></p>

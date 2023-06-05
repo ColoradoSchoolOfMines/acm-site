@@ -18,7 +18,8 @@ const people = [
   {
     name: "Ethan Richards",
     role: "President, HSPC Chair",
-    email: "erichards [at] mines [dot] edu"
+    email: "erichards [at] mines [dot] edu",
+    url: 'ethan.jpg'
   },
   {
     name: "Umberto Gherardi",
