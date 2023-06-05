@@ -6,7 +6,15 @@
     }
 
 	.body-container {
-        background-color: #222222;
+        background-color: #222222 !important;
+    }
+
+    .navbar-light .navbar-nav .nav-link {
+        color: white;
+    }
+
+    .footer {
+        background-color: #222222 !important;
     }
 }
 
