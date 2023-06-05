@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-  res.render('home')
+  res.render('home', { title: 'Mines ACM' })
 })
 
 const people = [
@@ -55,23 +55,23 @@ const people = [
 ]
 
 app.get('/about', (req, res) => {
-  res.render('about', { people })
+  res.render('about', { title: 'About Us | Mines ACM', people })
 })
 
-// const presentations = [
-//   {
-//     name: "",
-//     author: "",
-//     date: ""
-//   }
-// ]
+const presentations = [
+  {
+    name: "",
+    author: "",
+    date: ""
+  }
+]
 
 app.get('/presentations', (req, res) => {
-  res.render('presentations')
+  res.render('presentations', { title: 'Presentations | Mines ACM', presentations })
 })
 
 app.get('/projects', (req, res) => {
-  res.render('projects')
+  res.render('projects', { title: "Projects | Mines ACM"})
 })
 
 // app.get('/admim', (req, res) => {
@@ -79,7 +79,7 @@ app.get('/projects', (req, res) => {
 // })
 
 app.use((req, res, next) => {
-  res.status(404).render('404');
+  res.status(404).render('404', { title: "404 | Mines ACM"});
 })
 
 app.listen(port, () => {

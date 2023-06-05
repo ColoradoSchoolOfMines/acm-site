@@ -28,6 +28,13 @@ body {
     margin-bottom: 2%;
 }
 
+.sub-container {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 2%;
+}
+
 .team-card {
     display: inline-block;
     text-align: center;
