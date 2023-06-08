@@ -4,7 +4,7 @@ const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const path = require('path');
 const passport = require('passport');
-const CustomStrategy = require('passport-custom').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const axios = require('axios')
 const app = express()
 const port = 3000
@@ -31,26 +31,23 @@ app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use('mpapi', new CustomStrategy(
-  async function(req, callback) {
-    let userData = {};
-    if(req.query['tkt'] != undefined) {
-      await axios.post('https://mastergo.mines.edu/mpapi/fetch?tkt=' + req.query['tkt']).then(function(response) {
-        // TODO this can probably be organized/added better
-        userData['uid'] = response.data['uid'];
-        userData['mail'] = response.data.attributes['mail'];
-        userData['first'] = response.data.attributes['first'];
-        userData['last'] = response.data.attributes['sn'];
-        userData['full'] = response.data.attributes['gecos'];
-      }).catch(function (error) {
-        if(error.response.status == 500) {
-          userData['uid'] = 'session expired'
-        }
-      });
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/callback",
+    passReqToCallback: true
+  }, (request, accessToken, refreshToken, profile, done) => {
+    if(profile.email.endsWith("@mines.edu")) {
+      user = {
+        "first": profile.given_name,
+        "last": profile.family_name,
+        "full": profile.given_name + ' ' + profile.family_name,
+        "email": profile.email
+      }
+      done(null, user);
     }
-
-    console.log("got back:", userData)
-    callback(null, userData);
+    // TODO test this logic
+    done(null, null);
   }
 ));
 
@@ -62,25 +59,20 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-app.use(function(req,res,next){
+app.use(function(req,res,next) {
   res.locals.currentUser = req.user;
   next();
 })
 
-app.get('/', passport.authenticate('mpapi', { failureRedirect: '/' }), async(req, res) => {
-  if(req.user.uid == 'session expired') {
-    console.log('REDIRECTING currentuser:', req.user)
-    res.redirect('/')
-  }
-  else {
-    if(req.isAuthenticated()) {
-      res.render('home', { title: 'Mines ACM', user: req.user })
-    }
-    else {
-      res.render('home', { title: 'Mines ACM' })
-    }
-  }
-})
+app.get('/auth/google/callback', passport.authenticate('google', {
+  // TODO figure out flash for "logged in!" or something
+  successRedirect: '/',
+  failureRedirect: '/auth/google/failure'
+}));
+
+app.get('/', async(req, res) => {
+  res.render('home', { title: 'Mines ACM', user: req.user });
+});
 
 const people = [
   {
@@ -135,12 +127,9 @@ const presentations = [
   }
 ]
 
-app.get('/login', (req, res) => {
-  console.log("Came from:", req.url)
-
-
-  res.redirect('https://mastergo.mines.edu/mpapi/sso?return=http://localhost:3000/')
-})
+app.get('/login', passport.authenticate('google', { scope: [ 'email', 'profile' ] }), (req, res) => {
+  res.redirect('/');
+});
 
 app.get('/presentations', (req, res) => {
   res.render('presentations', { title: 'Presentations | Mines ACM', presentations })
