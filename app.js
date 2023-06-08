@@ -5,7 +5,6 @@ const session = require('express-session');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const axios = require('axios')
 const app = express()
 const port = 3000
 
@@ -46,10 +45,22 @@ passport.use(new GoogleStrategy({
       }
       done(null, user);
     }
-    // TODO test this logic
-    done(null, null);
+    else {
+      // TODO test this logic
+      done(null, null);
+    }
   }
 ));
+
+
+isLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+      req.session.returnTo = req.originalUrl;
+      console.log("returnTo:", req.session.returnTo)
+      // return res.redirect('/');
+  }
+  next();
+}
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -66,11 +77,14 @@ app.use(function(req,res,next) {
 
 app.get('/auth/google/callback', passport.authenticate('google', {
   // TODO figure out flash for "logged in!" or something
-  successRedirect: '/',
-  failureRedirect: '/auth/google/failure'
-}));
+  failureRedirect: '/auth/google/failure',
+  keepSessionInfo: true
+}), (req, res) => {
+  res.redirect(req.session.returnTo || '/');
+  delete req.session.returnTo;
+});
 
-app.get('/', async(req, res) => {
+app.get('/', isLoggedIn, async(req, res) => {
   res.render('home', { title: 'Mines ACM', user: req.user });
 });
 
@@ -115,8 +129,8 @@ const people = [
   },
 ]
 
-app.get('/about', (req, res) => {
-  res.render('about', { title: 'About Us | Mines ACM', people, user: false })
+app.get('/about', isLoggedIn, (req, res) => {
+  res.render('about', { title: 'About Us | Mines ACM', people, user: req.user })
 })
 
 const presentations = [
