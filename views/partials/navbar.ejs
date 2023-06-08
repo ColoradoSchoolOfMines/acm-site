@@ -27,7 +27,11 @@
 				</ul>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link text-nowrap" href="#">Login</a>
+				<% if(user.full) { %>
+				<a class="nav-link text-nowrap" href="/profile"><%= user.full %></a>
+				<% } else { %>
+				<a class="nav-link text-nowrap" href="/login">Login</a>
+				<% } %>
 			</li>
 		</ul>
 		</div>
