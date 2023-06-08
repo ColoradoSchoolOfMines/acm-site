@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
