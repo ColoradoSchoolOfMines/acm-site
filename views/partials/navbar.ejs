@@ -26,13 +26,24 @@
 					<li><a class="dropdown-item" href="/projects">Projects</a></li>
 				</ul>
 			</li>
-			<li class="nav-item">
-				<% if(user) { %>
-				<a class="nav-link text-nowrap" href="/profile"><%= user.full %></a>
-				<% } else { %>
-				<a class="nav-link text-nowrap" href="/login">Login</a>
-				<% } %>
+			<% if(user) { %>
+			<li class="nav-item dropdown">
+				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<%= user.full %>
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="/profile">Profile</a></li>
+					<% if(user.isAdmin) %>
+						<li><a class="dropdown-item" href="/admin">Admin</a></li>
+					<% } %>
+					<li><a class="dropdown-item" href="/logout">Log Out</a></li>
+				</ul>
 			</li>
+			<% } else { %>
+			<li class="nav-item">
+				<a class="nav-link text-nowrap" href="/login">Login</a>
+			</li>
+			<% } %>
 		</ul>
 		</div>
 	</div>

@@ -41,8 +41,11 @@ passport.use(new GoogleStrategy({
         "first": profile.given_name,
         "last": profile.family_name,
         "full": profile.given_name + ' ' + profile.family_name,
-        "email": profile.email
+        "email": profile.email,
+        "isAdmin": false
       }
+      // TODO check with admin registry file
+
       done(null, user);
     }
     else {
@@ -52,12 +55,10 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-
 isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
       req.session.returnTo = req.originalUrl;
-      console.log("returnTo:", req.session.returnTo)
-      // return res.redirect('/');
+      req.user = false;
   }
   next();
 }
@@ -76,7 +77,7 @@ app.use(function(req,res,next) {
 })
 
 app.get('/auth/google/callback', passport.authenticate('google', {
-  // TODO figure out flash for "logged in!" or something
+  // TODO figure out flash for "logged in!" or something, figure out failure page/flash too
   failureRedirect: '/auth/google/failure',
   keepSessionInfo: true
 }), (req, res) => {
