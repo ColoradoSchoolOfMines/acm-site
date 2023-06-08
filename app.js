@@ -42,10 +42,8 @@ passport.use(new GoogleStrategy({
         "last": profile.family_name,
         "full": profile.given_name + ' ' + profile.family_name,
         "email": profile.email,
-        "isAdmin": false
+        "isAdmin": true // TODO check with admin registry file
       }
-      // TODO check with admin registry file
-
       done(null, user);
     }
     else {
@@ -89,6 +87,7 @@ app.get('/', isLoggedIn, async(req, res) => {
   res.render('home', { title: 'Mines ACM', user: req.user });
 });
 
+// TODO Use SQL or JSON configs to store presentation officer etc data
 const people = [
   {
     name: "Ethan Richards",

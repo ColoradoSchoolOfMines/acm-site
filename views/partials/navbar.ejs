@@ -33,7 +33,7 @@
 				</a>
 				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 					<li><a class="dropdown-item" href="/profile">Profile</a></li>
-					<% if(user.isAdmin) %>
+					<% if(user.isAdmin) { %>
 						<li><a class="dropdown-item" href="/admin">Admin</a></li>
 					<% } %>
 					<li><a class="dropdown-item" href="/logout">Log Out</a></li>
