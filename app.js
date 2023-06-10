@@ -4,9 +4,11 @@ const ejsMate = require('ejs-mate');
 const flash = require('connect-flash');
 const session = require('express-session');
 const path = require('path');
+const fs = require('fs');
+const pg = require('pg');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const app = express()
+const app = express();
 const port = 3000
 
 app.engine('ejs', ejsMate);
@@ -168,11 +170,32 @@ app.get('/admim', (req, res) => {
 })
 
 app.use((req, res, next) => {
-  res.status(404).render('404', { title: "404 | Mines ACM"});
+  res.status(404).render('404', { title: "404 | Mines ACM" });
 })
 
 // TODO check for error routes
 
-app.listen(port, () => {
+app.listen(port, async() => {
+  const client = new pg.Client({ connectionString: process.env.DB_URL })
+  await client.connect()
+  const initQuery = fs.readFileSync('database/init_database.sql').toString();
+  const res = await client.query(initQuery);
+  console.log(res)
+  
+  // const res2 = await client.query(initQuery, function(err, result){
+  //     if(err){
+  //         console.log('error: ', err);
+  //         return;
+  //     }
+  //     console.log("result:", result)
+  //     console.log("initialized db")
+  // });
+  // console.log("RES2:", res2)
+
+
+  await client.end()
+
+  
+
   console.log(`ACM listening on port ${port}`)
 })
