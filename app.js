@@ -176,11 +176,11 @@ app.use((req, res, next) => {
 // TODO check for error routes
 
 app.listen(port, async() => {
-  const client = new pg.Client({ connectionString: process.env.DB_URL })
-  await client.connect()
-  const initQuery = fs.readFileSync('database/init_database.sql').toString();
-  const res = await client.query(initQuery);
-  console.log(res)
+  // const client = new pg.Client({ connectionString: process.env.DB_URL })
+  // await client.connect()
+  // const initQuery = fs.readFileSync('database/init_database.sql').toString();
+  // const res = await client.query(initQuery);
+  // console.log(res)
   
   // const res2 = await client.query(initQuery, function(err, result){
   //     if(err){
@@ -191,11 +191,7 @@ app.listen(port, async() => {
   //     console.log("initialized db")
   // });
   // console.log("RES2:", res2)
-
-
-  await client.end()
-
-  
+  // await client.end()
 
   console.log(`ACM listening on port ${port}`)
 })
