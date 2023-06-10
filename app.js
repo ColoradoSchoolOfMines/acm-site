@@ -153,8 +153,9 @@ app.get('/login', passport.authenticate('google', { scope: [ 'email', 'profile' 
   res.redirect('/');
 });
 
-app.get('/logout', function(req, res, next){
+app.get('/logout', (req, res) => {
   req.logout(function(err) {
+    req.flash('success', 'Succesfully logged out.')
     res.redirect('/');
   });
 });
