@@ -145,6 +145,12 @@ app.get('/login', passport.authenticate('google', { scope: [ 'email', 'profile' 
   res.redirect('/');
 });
 
+app.get('/logout', function(req, res, next){
+  req.logout(function(err) {
+    res.redirect('/');
+  });
+});
+
 app.get('/presentations', (req, res) => {
   res.render('presentations', { title: 'Presentations | Mines ACM', presentations })
 })
