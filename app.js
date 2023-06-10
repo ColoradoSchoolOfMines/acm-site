@@ -1,11 +1,14 @@
 require('dotenv').config();
 const express = require('express')
 const ejsMate = require('ejs-mate');
+const flash = require('connect-flash');
 const session = require('express-session');
 const path = require('path');
+const fs = require('fs');
+const pg = require('pg');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const app = express()
+const app = express();
 const port = 3000
 
 app.engine('ejs', ejsMate);
@@ -27,8 +30,14 @@ const sessionConfig = {
 }
 
 app.use(session(sessionConfig));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+// TODO enable debug mode?
+// if(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+
+// }
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -44,11 +53,12 @@ passport.use(new GoogleStrategy({
         "email": profile.email,
         "isAdmin": true // TODO check with admin registry file
       }
+      request.flash('success', 'Succesfully logged in!')
       done(null, user);
     }
     else {
-      // TODO test this logic
-      done(null, null);
+      request.flash('error', 'Please log in with a valid mines.edu email!')
+      done(null, false)
     }
   }
 ));
@@ -71,14 +81,12 @@ passport.deserializeUser(function(user, done) {
 
 app.use(function(req,res,next) {
   res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
   next();
 })
 
-app.get('/auth/google/callback', passport.authenticate('google', {
-  // TODO figure out flash for "logged in!" or something, figure out failure page/flash too
-  failureRedirect: '/auth/google/failure',
-  keepSessionInfo: true
-}), (req, res) => {
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/', keepSessionInfo: true }), (req, res) => {
   res.redirect(req.session.returnTo || '/');
   delete req.session.returnTo;
 });
@@ -168,9 +176,28 @@ app.get('/admim', (req, res) => {
 })
 
 app.use((req, res, next) => {
-  res.status(404).render('404', { title: "404 | Mines ACM"});
+  res.status(404).render('404', { title: "404 | Mines ACM" });
 })
 
-app.listen(port, () => {
+// TODO check for error routes
+
+app.listen(port, async() => {
+  // const client = new pg.Client({ connectionString: process.env.DB_URL })
+  // await client.connect()
+  // const initQuery = fs.readFileSync('database/init_database.sql').toString();
+  // const res = await client.query(initQuery);
+  // console.log(res)
+  
+  // const res2 = await client.query(initQuery, function(err, result){
+  //     if(err){
+  //         console.log('error: ', err);
+  //         return;
+  //     }
+  //     console.log("result:", result)
+  //     console.log("initialized db")
+  // });
+  // console.log("RES2:", res2)
+  // await client.end()
+
   console.log(`ACM listening on port ${port}`)
 })
