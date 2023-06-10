@@ -4,42 +4,41 @@ CREATE TABLE IF NOT EXISTS users (
     first_name TEXT NOT NULL,
     last_name  TEXT NOT NULL,
     is_officer BOOLEAN DEFAULT FALSE,
-    title      TEXT
+    title      TEXT,
     picture    TEXT
 );
 
+CREATE TABLE IF NOT EXISTS surveys (
+    id              INTEGER PRIMARY KEY,
+    opens           TIMESTAMP,
+    closes          TIMESTAMP,
+    allow_anonymous BOOLEAN DEFAULT TRUE
+);
+
 CREATE TABLE IF NOT EXISTS meetings (
-    `date`        DATETIME,
+    "date"        TIMESTAMP,
     duration      INTEGER,
-    `location`    TEXT,
+    "location"    TEXT,
     title         TEXT NOT NULL,
-    `description` TEXT
-    id            PRIMARY KEY
-    survey_id     INTEGER FOREIGN KEY
+    "description" TEXT,
+    id            INTEGER PRIMARY KEY,
+    survey INT REFERENCES surveys(id)
 );
 
 CREATE TABLE IF NOT EXISTS presentations (
-    id            INT PRIMARY KEY,
+    id            INTEGER PRIMARY KEY,
     title         TEXT NOT NULL,
-    `description` TEXT,
-    `date`        DATETIME,
-    `url`         TEXT
+    "description" TEXT,
+    "date"        TIMESTAMP,
+    "url"         TEXT
 );
 
 CREATE TABLE IF NOT EXISTS projects (
-    id            INT PRIMARY KEY,
+    id            INTEGER PRIMARY KEY,
     title         TEXT NOT NULL,
-    `description` TEXT,
+    "description" TEXT,
     authors       TEXT,
     website       TEXT,
     repository    TEXT,
     archived      BOOLEAN DEFAULT FALSE
-);
-
-CREATE TABLE IF NOT EXISTS surveys (
-    id              INT PRIMARY KEY,
-    meeting         FOREIGN KEY,
-    opens           DATETIME,
-    closes          DATETIME,
-    allow_anonymous BOOLEAN DEFAULT TRUE
 );
