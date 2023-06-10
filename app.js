@@ -16,6 +16,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static('public'))
 
+const client = new pg.Client({ connectionString: process.env.DB_URL });
+
 const sessionConfig = {
   name: 'session',
   secret: 'yeehaw',
@@ -95,59 +97,57 @@ app.get('/', isLoggedIn, async(req, res) => {
   res.render('home', { title: 'Mines ACM', user: req.user });
 });
 
-// TODO Use SQL or JSON configs to store presentation officer etc data
-const people = [
-  {
-    name: "Ethan Richards",
-    role: "President, HSPC Chair",
-    email: "erichards [at] mines [dot] edu",
-    url: 'ethan.jpg'
-  },
-  {
-    name: "Umberto Gherardi",
-    role: "Vice President"
-  },
-  {
-    name: "Tyler Wright",
-    role: "Treasurer"
-  },
-  {
-    name: "Brooke Bowcutt",
-    role: "Director of Advertising"
-  },
-  {
-    name: "Keenan Buckley",
-    role: "Director of Project Meetings"
-  },
-  {
-    name: "Eugin Pahk",
-    role: "Advisor, Director of Tech Talks"
-  },
-  {
-    name: "Jayden Pahukula",
-    role: "Director of Special Events"
-  },
-  {
-    name: "Finn Burns",
-    role: "Director of DI&A"
-  },
-  {
-    name: "Dorian Cauwe",
-    role: "Advisor"
-  },
-]
+// const people = [
+//   {
+//     name: "Ethan Richards",
+//     role: "President, HSPC Chair",
+//     email: "erichards [at] mines [dot] edu",
+//     url: 'ethan.jpg'
+//   },
+//   {
+//     name: "Umberto Gherardi",
+//     role: "Vice President"
+//   },
+//   {
+//     name: "Tyler Wright",
+//     role: "Treasurer"
+//   },
+//   {
+//     name: "Brooke Bowcutt",
+//     role: "Director of Advertising"
+//   },
+//   {
+//     name: "Keenan Buckley",
+//     role: "Director of Project Meetings"
+//   },
+//   {
+//     name: "Eugin Pahk",
+//     role: "Advisor, Director of Tech Talks"
+//   },
+//   {
+//     name: "Jayden Pahukula",
+//     role: "Director of Special Events"
+//   },
+//   {
+//     name: "Finn Burns",
+//     role: "Director of DI&A"
+//   },
+//   {
+//     name: "Dorian Cauwe",
+//     role: "Advisor"
+//   },
+// ]
 
-app.get('/about', isLoggedIn, (req, res) => {
-  res.render('about', { title: 'About Us | Mines ACM', people, user: req.user })
+app.get('/about', isLoggedIn, async(req, res) => {
+  const resp = await client.query("SELECT * FROM users WHERE is_officer = true;");
+  
+  // TODO handle query errors appropriately
+  // resp.on('error', (err) => {
+  //   console.error(err.stack)
+  // })
+
+  res.render('about', { title: 'About Us | Mines ACM', people: resp.rows, user: req.user })
 })
-
-const presentations = [
-  {
-    name: "",
-    author: "",
-    date: ""
-  }
-]
 
 app.get('/login', passport.authenticate('google', { scope: [ 'email', 'profile' ] }), (req, res) => {
   res.redirect('/');
@@ -161,11 +161,20 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/presentations', (req, res) => {
+
+  const presentations = [
+    {
+      name: "",
+      author: "",
+      date: ""
+    }
+  ]
+
   res.render('presentations', { title: 'Presentations | Mines ACM', presentations })
 })
 
 app.get('/projects', (req, res) => {
-  res.render('projects', { title: "Projects | Mines ACM"})
+  res.render('projects', { title: "Projects"})
 })
 
 app.get('/profile', (req, res) => {
@@ -177,17 +186,16 @@ app.get('/admim', (req, res) => {
 })
 
 app.use((req, res, next) => {
-  res.status(404).render('404', { title: "404 | Mines ACM" });
+  res.status(404).render('404', { title: "404" });
 })
 
 // TODO check for error routes
 
 app.listen(port, async() => {
-  // const client = new pg.Client({ connectionString: process.env.DB_URL })
-  // await client.connect()
-  // const initQuery = fs.readFileSync('database/init_database.sql').toString();
-  // const res = await client.query(initQuery);
-  // console.log(res)
+  await client.connect()
+  const initQuery = fs.readFileSync('database/init_database.sql').toString();
+  const resp = await client.query(initQuery);
+  // console.log(resp)
   
   // const res2 = await client.query(initQuery, function(err, result){
   //     if(err){
@@ -201,4 +209,9 @@ app.listen(port, async() => {
   // await client.end()
 
   console.log(`ACM listening on port ${port}`)
+})
+
+process.on('exit', async() => {
+  await client.end()
+  console.log('ended spql')
 })

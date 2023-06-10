@@ -19,7 +19,7 @@
 
 <div class="content">
     <h1>Our Team</h1>
-    <p>Mines ACM is run by an amazing team of students, and elections are run every year around March to decide roles.</p>
+    <p>Mines ACM is run by an amazing team of students with support from CS@Mines! Elections are run every year around March to decide roles.</p>
     
     <% for(let person of people) { %>
     <div class="team-card">
@@ -28,8 +28,8 @@
         <% } else { %>
             <img class="team-picture" src="/static/images/default_user.png"/>
         <% } %>
-        <h2><%= person.name %></h2>
-        <p><%= person.role %></p>
+        <h2><%= person.first_name %> <%= person.last_name %></h2>
+        <p><%= person.title %></p>
         <p><%= person.email %></p>
     </div>
     <% } %>
