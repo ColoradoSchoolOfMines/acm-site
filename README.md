@@ -2,16 +2,21 @@
 The ACM site backend and frontend.
 
 ## Setup
-TODO
+First, clone the repository. Then, install dependencies using:
+```
+cd acm-site
+npm install
+```
 
-## Routes
-TODO
+Next, make your environment file. A sample one is provided.
+`cp .env.sample .env`
+
+The `.env` file should specify Google the client ID + secret
+for the OAuth2 hook, as well as a PostgreSQL database link.
 
 ## Roadmap
-- Dockerfile and/or systemctl service start script
+- Dockerfile and systemctl service start script
 - Figure out mailing list stuff
-- Link to external events like HSPC and such
 - Admin panel where current officers can be modified
 - Better dark mode support
 - Convert to TypeScript on backend?
-- Convert to React or something more modern on frontend?
