@@ -15,12 +15,26 @@ CREATE TABLE IF NOT EXISTS surveys (
     allow_anonymous BOOLEAN DEFAULT TRUE
 );
 
+-- CREATE TABLE IF NOT EXISTS survey_fields(
+
+-- );
+
+-- CREATE TABLE IF NOT EXISTS survey_responses(
+
+-- );
+
+CREATE TABLE IF NOT EXISTS images(
+    "url"   TEXT NOT NULL,
+    caption TEXT
+);
+
 CREATE TABLE IF NOT EXISTS meetings (
     "date"        TIMESTAMP,
     duration      INTEGER,
     "location"    TEXT,
     title         TEXT NOT NULL,
     "description" TEXT,
+    "type"        TEXT,
     id            INTEGER PRIMARY KEY,
     survey INT REFERENCES surveys(id)
 );

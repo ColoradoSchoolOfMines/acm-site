@@ -48,12 +48,14 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
   }, (request, accessToken, refreshToken, profile, done) => {
     if(profile.email.endsWith("@mines.edu")) {
+      // TODO run INSERT IGNORE INTO users
+      // query; if user was generated already they don't need to be again
       user = {
         "first": profile.given_name,
         "last": profile.family_name,
         "full": profile.given_name + ' ' + profile.family_name,
         "email": profile.email,
-        "isAdmin": true // TODO check with admin registry file
+        "isAdmin": false
       }
       request.flash('success', 'Succesfully logged in!')
       done(null, user);
@@ -94,59 +96,12 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 });
 
 app.get('/', isLoggedIn, async(req, res) => {
-  res.render('home', { title: 'Mines ACM', user: req.user });
+  res.render('home', { title: 'Home', user: req.user });
 });
-
-// const people = [
-//   {
-//     name: "Ethan Richards",
-//     role: "President, HSPC Chair",
-//     email: "erichards [at] mines [dot] edu",
-//     url: 'ethan.jpg'
-//   },
-//   {
-//     name: "Umberto Gherardi",
-//     role: "Vice President"
-//   },
-//   {
-//     name: "Tyler Wright",
-//     role: "Treasurer"
-//   },
-//   {
-//     name: "Brooke Bowcutt",
-//     role: "Director of Advertising"
-//   },
-//   {
-//     name: "Keenan Buckley",
-//     role: "Director of Project Meetings"
-//   },
-//   {
-//     name: "Eugin Pahk",
-//     role: "Advisor, Director of Tech Talks"
-//   },
-//   {
-//     name: "Jayden Pahukula",
-//     role: "Director of Special Events"
-//   },
-//   {
-//     name: "Finn Burns",
-//     role: "Director of DI&A"
-//   },
-//   {
-//     name: "Dorian Cauwe",
-//     role: "Advisor"
-//   },
-// ]
 
 app.get('/about', isLoggedIn, async(req, res) => {
   const resp = await client.query("SELECT * FROM users WHERE is_officer = true;");
-  
-  // TODO handle query errors appropriately
-  // resp.on('error', (err) => {
-  //   console.error(err.stack)
-  // })
-
-  res.render('about', { title: 'About Us | Mines ACM', people: resp.rows, user: req.user })
+  res.render('about', { title: 'About Us', people: resp.rows, user: req.user })
 })
 
 app.get('/login', passport.authenticate('google', { scope: [ 'email', 'profile' ] }), (req, res) => {
@@ -160,28 +115,21 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/presentations', (req, res) => {
-
-  const presentations = [
-    {
-      name: "",
-      author: "",
-      date: ""
-    }
-  ]
-
-  res.render('presentations', { title: 'Presentations | Mines ACM', presentations })
+app.get('/presentations', async(req, res) => {
+  const resp = await client.query("SELECT * FROM presentations");
+  res.render('presentations', { title: 'Presentations', presentations: resp.rows, user: req.user })
 })
 
-app.get('/projects', (req, res) => {
-  res.render('projects', { title: "Projects"})
+app.get('/projects', async(req, res) => {
+  const resp = await client.query("SELECT * FROM projects");
+  res.render('projects', { title: "Projects", projects: resp.rows, user: req.user })
 })
 
 app.get('/profile', (req, res) => {
   res.render('profile')
 })
 
-app.get('/admim', (req, res) => {
+app.get('/admin', (req, res) => {
   res.render('admin')
 })
 
@@ -193,25 +141,15 @@ app.use((req, res, next) => {
 
 app.listen(port, async() => {
   await client.connect()
+  client.on('error', (err) => {
+    console.error('The database encountered an error:', err.stack)
+  })
+
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
-  const resp = await client.query(initQuery);
-  // console.log(resp)
-  
-  // const res2 = await client.query(initQuery, function(err, result){
-  //     if(err){
-  //         console.log('error: ', err);
-  //         return;
-  //     }
-  //     console.log("result:", result)
-  //     console.log("initialized db")
-  // });
-  // console.log("RES2:", res2)
-  // await client.end()
+  await client.query(initQuery);
 
   console.log(`ACM listening on port ${port}`)
 })
 
-process.on('exit', async() => {
-  await client.end()
-  console.log('ended spql')
-})
+// TODO find a way to safely end PSQL client connection
+// await client.end();
