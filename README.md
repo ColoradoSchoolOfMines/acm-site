@@ -1,15 +1,14 @@
-# acm-site
-The ACM site backend and frontend.
+# acm.mines.edu
+Source code for the acm.mines.edu website.
 
 ## Setup
-First, clone the repository. Then, install dependencies using:
+Once the repository is cloned, install all dependencies using npm:
 ```
 cd acm-site
 npm install
 ```
 
-Next, make your environment file. A sample one is provided.
-`cp .env.sample .env`
+Next, make your environment file. A sample one is provided: `cp .env.sample .env`
 
 The `.env` file should specify Google the client ID + secret
 for the OAuth2 hook, as well as a PostgreSQL database link.
@@ -19,5 +18,5 @@ for the OAuth2 hook, as well as a PostgreSQL database link.
 - Figure out mailing list stuff
 - Admin panel where current officers can be modified
 - Better dark mode support
-- Convert to TypeScript on backend?
 - Accessibility checks
+- Better backend error handling
