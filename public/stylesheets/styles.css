@@ -28,13 +28,34 @@ body {
 }
 
 /* Components */
-.body-container {
+.container {
+    background-color: #f8f9fa; 
+    padding-top: 2%; 
+    padding-bottom: 2%; 
+    margin-bottom: 2%;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    min-width: 100%;
+}
+
+/* .footer .container {
+    min-width: inherit;
+} */
+
+.col-left {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10%;
+}
+
+/* .body-container {
     display: flex; 
     background-color: #f8f9fa; 
     padding-top: 1%; 
     padding-bottom: 1%; 
     margin-bottom: 2%;
-}
+} */
 
 .sub-container {
     width: 80%;
