@@ -55,7 +55,7 @@ passport.use(new GoogleStrategy({
         "last": profile.family_name,
         "full": profile.given_name + ' ' + profile.family_name,
         "email": profile.email,
-        "isAdmin": false
+        "isAdmin": false // false in prod, true for debugging right now
       }
       request.flash('success', 'Succesfully logged in!')
       done(null, user);
@@ -73,6 +73,18 @@ isLoggedIn = (req, res, next) => {
       req.user = false;
   }
   next();
+}
+
+isAdminAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated() && !req.user.isAdmin) {
+      req.session.returnTo = req.originalUrl;
+      req.user = false;
+      req.flash('error', 'You do not have permission to view this page!')
+      res.redirect('/')
+  }
+  else {
+    next();
+  }
 }
 
 passport.serializeUser(function(user, done) {
@@ -96,6 +108,12 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 });
 
 app.get('/', isLoggedIn, async(req, res) => {
+  // TODO convert to DB query + randomize
+  image = {
+    url: "./static/images/acm2.jpeg",
+    caption: "Some image caption here! 2023"
+  }
+
   res.render('home', { title: 'Home', user: req.user });
 });
 
@@ -129,8 +147,8 @@ app.get('/profile', (req, res) => {
   res.render('profile')
 })
 
-app.get('/admin', (req, res) => {
-  res.render('admin')
+app.get('/admin', isAdminAuthenticated, (req, res) => {
+  res.render('admin', { title: 'Admin', user: req.user })
 })
 
 app.use((req, res, next) => {

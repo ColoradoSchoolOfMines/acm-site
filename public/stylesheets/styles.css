@@ -5,12 +5,31 @@
         color: white;
     }
 
-	.body-container {
+	.container {
         background-color: #222222 !important;
+    }
+
+    .team-card {
+        background-color: #373737 !important;
+    }
+
+    /* TODO remove this once conversion to Bootstrap is done */
+	.body-container {
+        background-color: #3e3e3e !important;
     }
 
     .navbar-light .navbar-nav .nav-link {
         color: white;
+    }
+
+    /* TODO figure out better darkmode hover */
+    /* Dropdown styling in dark mode also broken */
+    .navbar-light .navbar-nav .nav-link:hover {
+        color: #0083c5;
+    }
+
+    .navbar-light .navbar-nav .nav-link.active {
+        color: #0083c5;
     }
 
     .footer {
@@ -27,6 +46,10 @@ body {
 	animation: fadein 1s;
 }
 
+a {
+    text-decoration: none;
+}
+
 /* Components */
 .container {
     background-color: #f8f9fa; 
@@ -39,9 +62,11 @@ body {
     min-width: 100%;
 }
 
-/* .footer .container {
+.footer .container {
+    margin-left: auto;
+    margin-right: auto;
     min-width: inherit;
-} */
+}
 
 .col-left {
     margin-top: auto;
@@ -115,6 +140,8 @@ body {
 .header-description {
     margin-right: 10%;
     font-size: 20px;
+    border-left: 4px solid #0083c5; 
+    padding-left: 3%;
 }
 
 .header-image {
@@ -158,6 +185,10 @@ body {
     padding-top: 1%;
     background-color: #f8f9fa; 
     width: 100%;
+}
+
+#discord {
+    padding-left: 5%;
 }
 
 /* Animations */
