@@ -1,0 +1,11 @@
+<% layout('layouts/base')%>
+
+<h1>Presentations:</h1>
+<% for(let presentation of presentations) { %>
+    <p>
+        <%= presentation.title %>
+        <%= presentation.description %>
+        <%= presentation.date %>
+        <%= presentation.url %>
+    </p>
+<% } %>

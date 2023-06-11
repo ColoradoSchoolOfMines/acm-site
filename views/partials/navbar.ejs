@@ -1,5 +1,3 @@
-<!-- TODO active tab switching styling isn't working? -->
-
 <nav class="navbar navbar-expand-lg navbar-light">
 	<div class="container-fluid">
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,10 +11,18 @@
 				<img width="200" height="auto" src="./static/images/logo.png" alt="Mines ACM" />
 			</a>
 			<li class="nav-item">
-				<a class="nav-link text-nowrap active" data-bs-toggle="tab" aria-current="page" href="/">Home</a>
+				<% if(title === 'Home') { %>
+					<a class="nav-link text-nowrap active" aria-current="page" href="/">Home</a>
+				<% } else { %>
+					<a class="nav-link text-nowrap" href="/">Home</a>
+				<% } %>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link text-nowrap" href="/about">About Us</a>
+				<% if(title === 'About Us') { %>
+					<a class="nav-link text-nowrap active" aria-current="page" href="/about">About Us</a>
+				<% } else { %>
+					<a class="nav-link text-nowrap" href="/about">About Us</a>
+				<% } %>
 			</li>
 			<li class="nav-item dropdown">
 				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
