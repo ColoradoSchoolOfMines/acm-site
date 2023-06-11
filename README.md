@@ -20,3 +20,4 @@ for the OAuth2 hook, as well as a PostgreSQL database link.
 - Admin panel where current officers can be modified
 - Better dark mode support
 - Convert to TypeScript on backend?
+- Accessibility checks

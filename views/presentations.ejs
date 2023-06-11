@@ -1,11 +1,17 @@
 <% layout('layouts/base')%>
 
-<h1>Presentations:</h1>
-<% for(let presentation of presentations) { %>
-    <p>
-        <%= presentation.title %>
-        <%= presentation.description %>
-        <%= presentation.date %>
-        <%= presentation.url %>
-    </p>
-<% } %>
+<div class="content">
+    <h1>Presentations</h1>
+    <p>Slides of all of our tech talks, workshops and related presentations can be found here!</p>
+
+    <% for(let presentation of presentations) { %>
+        <div class="large-card">
+            <p>
+                <%= presentation.title %>
+                <%= presentation.description %>
+                <%= presentation.date %>
+                <%= presentation.url %>
+            </p>
+        </div>
+    <% } %>   
+</div>

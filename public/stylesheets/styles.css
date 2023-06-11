@@ -191,6 +191,10 @@ a {
     padding-left: 5%;
 }
 
+.large-card {
+    /* TODO implement large card template for projects/presentations */
+}
+
 /* Animations */
 @keyframes fadein {
 	from { opacity: 0; }
