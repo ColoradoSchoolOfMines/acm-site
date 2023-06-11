@@ -13,7 +13,7 @@ Next, make your environment file. A sample one is provided: `cp .env.sample .env
 The `.env` file should specify Google the client ID + secret
 for the OAuth2 hook, as well as a PostgreSQL database link.
 
-Finally, initialize the session tables: `psql mydatabase < node_modules/connect-pg-simple/table.sql`
+Finally, initialize the session tables: `psql mydb < node_modules/connect-pg-simple/table.sql`
 
 ## Roadmap
 - Dockerfile and systemctl service start script
