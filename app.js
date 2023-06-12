@@ -10,7 +10,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const app = express();
-const client = new pg.Client({ connectionString: process.env.DB_URL });
+const pool = new pg.Pool({ connectionString: process.env.DB_URL });
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -92,9 +92,9 @@ app.get('/', isLoggedIn, async (req, res) => {
 });
 
 app.get('/about', isLoggedIn, async (req, res) => {
-  const resp = await client.query("SELECT * FROM users WHERE is_officer = true;");
-  res.render('about', { title: 'About Us', people: resp.rows, user: req.user })
-})
+  const resp = await pool.query("SELECT * FROM users WHERE is_officer = true;");
+  res.render('about', { title: 'About Us', people: resp.rows, user: req.user });
+});
 
 app.get('/login', passport.authenticate('google', { scope: ['email', 'profile'] }), (req, res) => {
   res.redirect('/');
@@ -108,42 +108,40 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/presentations', isLoggedIn, async (req, res) => {
-  const resp = await client.query("SELECT * FROM presentations");
-  res.render('presentations', { title: 'Presentations', presentations: resp.rows, user: req.user })
-})
+  const resp = await pool.query("SELECT * FROM presentations");
+  res.render('presentations', { title: 'Presentations', presentations: resp.rows, user: req.user });
+});
 
 app.get('/projects', isLoggedIn, async (req, res) => {
-  const resp = await client.query("SELECT * FROM projects");
-  res.render('projects', { title: "Projects", projects: resp.rows, user: req.user })
-})
+  const resp = await pool.query("SELECT * FROM projects");
+  res.render('projects', { title: "Projects", projects: resp.rows, user: req.user });
+});
 
 app.get('/profile', isLoggedIn, (req, res) => {
-  res.render('profile', { title: req.user.first + ' ' + req.user.last, user: req.user })
-})
+  res.render('profile', { title: req.user.first + ' ' + req.user.last, user: req.user });
+});
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
-  res.render('admin', { title: 'Admin', user: req.user })
-})
+  res.render('admin', { title: 'Admin', user: req.user });
+});
 
 app.use((req, res, next) => {
   res.status(404).render('404', { title: "404" });
-})
+});
 
 app.use((err, req, res, next) => {
   res.status(500).send('Sorry - Something broke on our end!');
-})
+});
 
 app.listen(process.env.PORT || 3000, async () => {
-  await client.connect()
-  client.on('error', (err) => {
-    console.error('The database encountered an error:', err.stack)
-  })
-
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
-  await client.query(initQuery);
+  await pool.query(initQuery);
+  console.log("ACM server started!");
+});
 
-  console.log(`ACM server started!`)
-})
-
-// TODO find a way to safely end PSQL client connection
-// await client.end();
+// TODO potentially handle SIGTERM + exit
+process.on('SIGINT', async () => {
+  console.log("Shutting down..");
+  await pool.end();
+  process.exit(0);
+});
