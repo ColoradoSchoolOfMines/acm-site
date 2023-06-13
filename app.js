@@ -138,6 +138,14 @@ app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile', { title: req.user.first + ' ' + req.user.last, user: req.user });
 });
 
+app.get('/rsvp', isLoggedIn, (req, res) => {
+  res.render('rsvp', { title: 'RSVP', user: req.user });
+});
+
+app.get('/attend', isLoggedIn, (req, res) => {
+  res.render('attend', { title: 'Attend', user: req.user });
+});
+
 app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin', user: req.user });
 });
