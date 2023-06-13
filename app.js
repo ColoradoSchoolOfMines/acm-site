@@ -8,6 +8,8 @@ const path = require('path');
 const fs = require('fs');
 const pg = require('pg');
 const passport = require('passport');
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const app = express();
@@ -57,7 +59,7 @@ passport.use(new GoogleStrategy({
       "last": profile.family_name,
       "full": profile.given_name + ' ' + profile.family_name,
       "email": profile.email,
-      "isAdmin": false // false in prod, true for debugging right now
+      "isAdmin": true // false in prod, true for debugging right now
     }
     req.flash('success', 'Succesfully logged in!');
     done(null, user);
@@ -131,6 +133,13 @@ app.get('/profile', isLoggedIn, (req, res) => {
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin', user: req.user });
+});
+
+app.post('/admin', upload.single('avatar'), (req, res) => {
+  console.log(req.file.filename);
+  console.log(req.body); // text field (if any)
+
+  res.redirect('/admin');
 });
 
 app.use((req, res, next) => {
