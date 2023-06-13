@@ -3,6 +3,7 @@ const express = require('express');
 const ejsMate = require('ejs-mate');
 const flash = require('connect-flash');
 const session = require('express-session');
+const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
 const pg = require('pg');
@@ -17,6 +18,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'));
 app.use(flash());
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: [ "'unsafe-inline'", "'self'", "https://discord.com/" ],
+    scriptSrc: [ "'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net" ],
+  },
+}));
 
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
