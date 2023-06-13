@@ -28,6 +28,8 @@ app.use(helmet.contentSecurityPolicy({
   },
 }));
 
+// TODO investigate session timeouts
+
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     conString: process.env.DB_URL
@@ -50,16 +52,23 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "/auth/google/callback",
   passReqToCallback: true
-}, (req, accessToken, refreshToken, profile, done) => {
+}, async(req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    // TODO run INSERT IGNORE INTO users
-    // query; if user was generated already they don't need to be again
+    // update users if one doesn't exist
+    await pool.query("INSERT INTO USERS VALUES ('" + profile.email + "', '" 
+    + profile.given_name + "', '" 
+    + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
+    
+    // get user by email
+    const resp = await pool.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
     user = {
-      "first": profile.given_name,
-      "last": profile.family_name,
-      "full": profile.given_name + ' ' + profile.family_name,
-      "email": profile.email,
-      "isAdmin": true // false in prod, true for debugging right now
+      "first": resp.rows[0].first_name,
+      "last": resp.rows[0].last_name,
+      "full": resp.rows[0].first_name + ' ' + resp.rows[0].last_name,
+      "email": resp.rows[0].email,
+      "title": resp.rows[0].title,
+      "isAdmin": resp.rows[0].title.length > 0,
+      "picture": resp.rows[0].picture
     }
     req.flash('success', 'Succesfully logged in!');
     done(null, user);
@@ -109,7 +118,7 @@ app.get('/', isLoggedIn, async (req, res) => {
 });
 
 app.get('/about', isLoggedIn, async (req, res) => {
-  const resp = await pool.query("SELECT * FROM users WHERE is_officer = true;");
+  const resp = await pool.query("SELECT * FROM users WHERE title != '';");
   res.render('about', { title: 'About Us', people: resp.rows, user: req.user });
 });
 
@@ -135,8 +144,16 @@ app.get('/projects', isLoggedIn, async (req, res) => {
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
+// re-query user since picture may update?
   res.render('profile', { title: req.user.first + ' ' + req.user.last, user: req.user });
 });
+
+app.post('/profile', isLoggedIn, upload.single('profilepicture'), async(req, res) => {
+  await pool.query("UPDATE users SET picture = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
+  req.user.picture = req.file.filename; // set until next login
+  // TODO debug if this works: weird stuff with session/passport may happen
+  res.redirect('/profile');
+})
 
 app.get('/rsvp', isLoggedIn, (req, res) => {
   res.render('rsvp', { title: 'RSVP', user: req.user });
@@ -145,6 +162,10 @@ app.get('/rsvp', isLoggedIn, (req, res) => {
 app.get('/attend', isLoggedIn, (req, res) => {
   res.render('attend', { title: 'Attend', user: req.user });
 });
+
+app.post('/attend', isLoggedIn, (req, res) => {
+  // POST form data to attendance table
+})
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin', user: req.user });
@@ -170,11 +191,8 @@ app.use((req, res, next) => {
   res.status(404).render('404', { title: "404" });
 });
 
-// TODO better error handling page
 app.use((err, req, res, next) => {
-  res.status(500).send('Sorry - Something broke on our end! ' + res.statusCode);
-
-  console.log(err)
+  res.status(500).render('error', { title: "Error", error: err });
 });
 
 app.listen(process.env.PORT || 3000, async () => {

@@ -22,3 +22,4 @@ Finally, initialize the session tables: `psql mydb < node_modules/connect-pg-sim
 - Better dark mode support
 - Accessibility checks
 - Better backend error handling
+- Blog page eventually?

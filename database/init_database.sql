@@ -25,6 +25,10 @@ CREATE TABLE IF NOT EXISTS surveys (
     meeting         INT REFERENCES meetings(id)
 );
 
+
+-- survey_responses: attendance form? table
+
+
 -- CREATE TABLE IF NOT EXISTS survey_fields(
 
 -- );
