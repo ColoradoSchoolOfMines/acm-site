@@ -34,9 +34,10 @@ CREATE TABLE IF NOT EXISTS surveys (
 --     response TEXT REFERENCES users(email)
 -- );
 
-CREATE TABLE IF NOT EXISTS images(
-    "url"   TEXT NOT NULL,
-    caption TEXT
+CREATE TABLE IF NOT EXISTS images (
+    id        TEXT PRIMARY KEY,
+    caption   TEXT,
+    "profile" BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS presentations (

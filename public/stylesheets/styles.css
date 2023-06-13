@@ -195,6 +195,11 @@ a {
     /* TODO implement large card template for projects/presentations */
 }
 
+
+.upload-form {
+    /* TODO implement upload form for admin */
+}
+
 /* Animations */
 @keyframes fadein {
 	from { opacity: 0; }

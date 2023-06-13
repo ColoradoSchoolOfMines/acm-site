@@ -92,12 +92,19 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 });
 
 app.get('/', isLoggedIn, async (req, res) => {
-  // TODO convert to DB query + randomize
-  image = {
-    url: "./static/images/acm2.jpeg",
-    caption: "Some image caption here! 2023"
+  const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
+  if(resp.rows.length > 0) {
+    image = {
+      url: resp.rows[0].url,
+      caption: resp.rows[0].caption
+    }
   }
-
+  else {
+    image = { 
+      url: "default_acm.jpeg",
+      caption: ""
+    }
+  }
   res.render('home', { title: 'Home', user: req.user, image: image });
 });
 
@@ -137,17 +144,29 @@ app.get('/admin', isAdminAuthenticated, (req, res) => {
 
 app.post('/admin', upload.single('avatar'), (req, res) => {
   console.log(req.file.filename);
-  console.log(req.body); // text field (if any)
+  console.log(req.body); // text fields
+
+  // run DB insert query
+  // have boolean in DB image as "image" or "profilepic" for when getting randoms out
 
   res.redirect('/admin');
 });
+
+app.get('/uploads/:id', (req, res) => {
+  let image = fs.readFileSync("uploads/" + req.params.id);
+  res.contentType('image/jpeg');
+  res.send(Buffer.from(image.toString('base64'), 'base64'));
+})
 
 app.use((req, res, next) => {
   res.status(404).render('404', { title: "404" });
 });
 
+// TODO better error handling page
 app.use((err, req, res, next) => {
-  res.status(500).send('Sorry - Something broke on our end!');
+  res.status(500).send('Sorry - Something broke on our end! ' + res.statusCode);
+
+  console.log(err)
 });
 
 app.listen(process.env.PORT || 3000, async () => {
