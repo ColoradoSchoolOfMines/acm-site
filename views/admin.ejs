@@ -3,16 +3,23 @@
 <div class="content">
     <h1>Admin</h1>
 
-    <div class="upload-form">    
+    <div class="large-card">    
+        <h2>Images</h2>
         <p>Upload new image to be displayed randomly on the front page of the site.</p>
         <form action="/admin" method="post" enctype="multipart/form-data">
-            <input type="file" name="avatar" />
-            <input type="text" name="caption" placeholder="Some caption.." />
-            <button>Submit</button>
+            <input class="d-inline-block" type="file" name="avatar" />
+            <br>
+            <input class="d-inline-block" type="text" name="caption" placeholder="Caption.." />
+            <br>
+            <button class="btn d-inline-block btn-primary">Submit</button>
         </form>
+
+        <!-- TODO area to view/edit current images? -->
     </div>
 
-</div>
+    <div class="large-card">
+        <h2>Attendance</h2>
 
-<!-- Work out club attendance per meeting, “tidy” stats export to csv; meeting ‘type’, meeting attendance, name, date -->
-<!-- Likely will be calculated by # of survey responses per associated meeting -->
+        <!-- TODO: export attendance stats to CSV; meeting, attendance, type, date -->
+    </div>
+</div>

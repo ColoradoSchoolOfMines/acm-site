@@ -102,7 +102,7 @@ app.get('/', isLoggedIn, async (req, res) => {
   else {
     image = { 
       url: "default_acm.jpeg",
-      caption: ""
+      caption: "ACM officers at the 2021 Celebration of Mines."
     }
   }
   res.render('home', { title: 'Home', user: req.user, image: image });

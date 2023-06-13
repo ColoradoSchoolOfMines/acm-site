@@ -74,14 +74,6 @@ a {
     margin-left: 10%;
 }
 
-/* .body-container {
-    display: flex; 
-    background-color: #f8f9fa; 
-    padding-top: 1%; 
-    padding-bottom: 1%; 
-    margin-bottom: 2%;
-} */
-
 .sub-container {
     width: 80%;
     margin-left: auto;
@@ -192,12 +184,10 @@ a {
 }
 
 .large-card {
-    /* TODO implement large card template for projects/presentations */
-}
-
-
-.upload-form {
-    /* TODO implement upload form for admin */
+    background-color: #f8f9fa;
+    padding: 4%;
+    border-radius: 25px;
+    margin-bottom: 2%;
 }
 
 /* Animations */
