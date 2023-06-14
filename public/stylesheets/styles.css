@@ -81,6 +81,7 @@ a {
     padding-bottom: 2%;
 }
 
+/* TODO these styles are a lil broken */
 .team-card {
     display: inline-block;
     text-align: center;
@@ -95,7 +96,7 @@ a {
 
 .team-picture {
     border-radius: 100px;
-    max-width: 50%;
+    max-width: 75%;
     margin-bottom: 7.5%;
 }
 
@@ -104,13 +105,6 @@ a {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 2%;
-}
-
-.hero-left {
-    width: 50%;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 10%;
 }
 
 .nav-item {

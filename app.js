@@ -28,8 +28,6 @@ app.use(helmet.contentSecurityPolicy({
   },
 }));
 
-// TODO investigate session timeouts
-
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     conString: process.env.DB_URL
@@ -89,7 +87,7 @@ passport.deserializeUser((user, done) => {
 });
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  res.locals.user = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
@@ -114,12 +112,12 @@ app.get('/', isLoggedIn, async (req, res) => {
       caption: "ACM officers at the 2021 Celebration of Mines."
     }
   }
-  res.render('home', { title: 'Home', user: req.user, image: image });
+  res.render('home', { title: 'Home', image: image });
 });
 
 app.get('/about', isLoggedIn, async (req, res) => {
   const resp = await pool.query("SELECT * FROM users WHERE title != '';");
-  res.render('about', { title: 'About Us', people: resp.rows, user: req.user });
+  res.render('about', { title: 'About Us', people: resp.rows });
 });
 
 app.get('/login', passport.authenticate('google', { scope: ['email', 'profile'] }), (req, res) => {
@@ -135,32 +133,32 @@ app.get('/logout', (req, res) => {
 
 app.get('/presentations', isLoggedIn, async (req, res) => {
   const resp = await pool.query("SELECT * FROM presentations");
-  res.render('presentations', { title: 'Presentations', presentations: resp.rows, user: req.user });
+  res.render('presentations', { title: 'Presentations', presentations: resp.rows });
 });
 
 app.get('/projects', isLoggedIn, async (req, res) => {
   const resp = await pool.query("SELECT * FROM projects");
-  res.render('projects', { title: "Projects", projects: resp.rows, user: req.user });
+  res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
-// re-query user since picture may update?
-  res.render('profile', { title: req.user.first + ' ' + req.user.last, user: req.user });
+  // re-query user since picture may update?
+  res.render('profile', { title: req.user.first + ' ' + req.user.last });
 });
 
 app.post('/profile', isLoggedIn, upload.single('profilepicture'), async(req, res) => {
   await pool.query("UPDATE users SET picture = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-  req.user.picture = req.file.filename; // set until next login
+  res.locals.user.picture = req.file.filename;
   // TODO debug if this works: weird stuff with session/passport may happen
   res.redirect('/profile');
 })
 
 app.get('/rsvp', isLoggedIn, (req, res) => {
-  res.render('rsvp', { title: 'RSVP', user: req.user });
+  res.render('rsvp', { title: 'RSVP' });
 });
 
 app.get('/attend', isLoggedIn, (req, res) => {
-  res.render('attend', { title: 'Attend', user: req.user });
+  res.render('attend', { title: 'Attend' });
 });
 
 app.post('/attend', isLoggedIn, (req, res) => {
@@ -168,7 +166,7 @@ app.post('/attend', isLoggedIn, (req, res) => {
 })
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
-  res.render('admin', { title: 'Admin', user: req.user });
+  res.render('admin', { title: 'Admin' });
 });
 
 app.post('/admin', upload.single('avatar'), (req, res) => {
