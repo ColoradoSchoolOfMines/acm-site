@@ -176,7 +176,7 @@ app.get('/uploads/:id', (req, res) => {
   let image = fs.readFileSync("uploads/" + req.params.id);
   res.contentType('image/jpeg');
   res.send(Buffer.from(image.toString('base64'), 'base64'));
-})
+});
 
 app.use((req, res, next) => {
   res.status(404).render('404', { title: "404" });

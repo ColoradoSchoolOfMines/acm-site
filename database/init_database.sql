@@ -1,10 +1,26 @@
--- Initialize all tables
+-- Initialize all tables with defaults
+
 CREATE TABLE IF NOT EXISTS users (
     email      TEXT NOT NULL PRIMARY KEY,
     first_name TEXT NOT NULL,
     last_name  TEXT NOT NULL,
     title      TEXT,
-    picture    TEXT
+    picture_id TEXT
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+    id            INTEGER PRIMARY KEY,
+    title         TEXT NOT NULL,
+    "description" TEXT,
+    website       TEXT,
+    repository    TEXT,
+    archived      BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE user_projects (
+    user_id    TEXT REFERENCES users(email),
+    project_id INTEGER REFERENCES projects(id),
+    PRIMARY KEY (user_id, project_id)
 );
 
 CREATE TABLE IF NOT EXISTS meetings (
@@ -36,14 +52,4 @@ CREATE TABLE IF NOT EXISTS presentations (
     "description" TEXT,
     "date"        TIMESTAMP,
     "url"         TEXT
-);
-
-CREATE TABLE IF NOT EXISTS projects (
-    id            INTEGER PRIMARY KEY,
-    title         TEXT NOT NULL,
-    "description" TEXT,
-    authors       TEXT,
-    website       TEXT,
-    repository    TEXT,
-    archived      BOOLEAN DEFAULT FALSE
 );
