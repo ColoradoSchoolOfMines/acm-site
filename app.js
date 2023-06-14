@@ -38,7 +38,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+    maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }));
 
@@ -53,7 +53,7 @@ passport.use(new GoogleStrategy({
 }, async(req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
     // update users if one doesn't exist
-    await pool.query("INSERT INTO USERS VALUES ('" + profile.email + "', '" 
+    await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '" 
     + profile.given_name + "', '" 
     + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
     
@@ -99,7 +99,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 });
 
 app.get('/', isLoggedIn, async (req, res) => {
-  const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
+  const resp = await pool.query("SELECT * FROM images WHERE profile = false ORDER BY RANDOM() LIMIT 1");
   if(resp.rows.length > 0) {
     image = {
       url: resp.rows[0].url,
@@ -142,14 +142,12 @@ app.get('/projects', isLoggedIn, async (req, res) => {
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
-  // re-query user since picture may update?
   res.render('profile', { title: req.user.first + ' ' + req.user.last });
 });
 
 app.post('/profile', isLoggedIn, upload.single('profilepicture'), async(req, res) => {
   await pool.query("UPDATE users SET picture = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-  res.locals.user.picture = req.file.filename;
-  // TODO debug if this works: weird stuff with session/passport may happen
+  req.user.picture = req.file.filename;
   res.redirect('/profile');
 })
 
@@ -169,13 +167,8 @@ app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin' });
 });
 
-app.post('/admin', upload.single('avatar'), (req, res) => {
-  console.log(req.file.filename);
-  console.log(req.body); // text fields
-
-  // run DB insert query
-  // have boolean in DB image as "image" or "profilepic" for when getting randoms out
-
+app.post('/admin', upload.single('avatar'), async(req, res) => {
+  await pool.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', true)");
   res.redirect('/admin');
 });
 
@@ -199,7 +192,6 @@ app.listen(process.env.PORT || 3000, async () => {
   console.log("ACM server started!");
 });
 
-// TODO potentially handle SIGTERM + exit
 process.on('SIGINT', async () => {
   console.log("Shutting down..");
   await pool.end();

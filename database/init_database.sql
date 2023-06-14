@@ -17,26 +17,12 @@ CREATE TABLE IF NOT EXISTS meetings (
     id            INTEGER PRIMARY KEY
 );
 
-CREATE TABLE IF NOT EXISTS surveys (
-    id              INTEGER PRIMARY KEY,
-    opens           TIMESTAMP,
-    closes          TIMESTAMP,
-    allow_anonymous BOOLEAN DEFAULT TRUE,
-    meeting         INT REFERENCES meetings(id)
+CREATE TABLE IF NOT EXISTS attendance (
+    meeting  INTEGER PRIMARY KEY REFERENCES meetings(id),
+    opens    TIMESTAMP,
+    closes   TIMESTAMP,
+    "user"   TEXT REFERENCES users(email)
 );
-
-
--- survey_responses: attendance form? table
-
-
--- CREATE TABLE IF NOT EXISTS survey_fields(
-
--- );
-
--- CREATE TABLE IF NOT EXISTS survey_responses(
-
---     response TEXT REFERENCES users(email)
--- );
 
 CREATE TABLE IF NOT EXISTS images (
     id        TEXT PRIMARY KEY,
