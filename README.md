@@ -32,21 +32,27 @@ explain some of my decisions with this project.
 These aren't the "be all end all" choices and can be changed,
 but for maintainability purposes, I think this will help.
 
-1. PostgreSQL over MongoDB: Traditionally, Node.js projects
+1. **PostgreSQL over MongoDB**: Traditionally, Node.js projects
 with ExpressJS use MongoDB. However, there is a realistic case
 for a relational database given that we have users and meetings 
 that are related to surveys, and hence SQL is a good idea.
 Our old site ran on PostgreSQL, so we decided to use Postgre.
 
-2. JavaScript as a backend: This was one of the hardest choices,
+2. **JavaScript as a backend**: This was one of the hardest choices,
 as I had considered Flask and other backends. I think that Node.js 
 with ExpressJS is a good way to get people out of their comfort
 zones and learning about web development though (and I had the
 most experience in this).
 
-3. Plain old HTML + CSS as a frontend: Even before the site
+3. **Plain old HTML and CSS on the frontend**: Even before the site
 was done, I was asked why not use Angular/React or other client
 side frontend frameworks. I think HTML + CSS is again better
 for beginners as well and just allowed for a quicker turnaround
 for the project. The good thing is that this can always be
 converted into a frontend framework as desired.
+
+4. **Google OAuth2 Authentication**: Originally we had considered
+linking in with Mines's SSO/SAML auth systems (Okta or Shibboleth), 
+but acquiring a certificate for these could take a long time. For
+now, we're simply hooking into mines@edu Google accounts, since all
+students are provided with one.
