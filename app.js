@@ -10,7 +10,6 @@ const pg = require('pg');
 const uuid = require('uuid');
 const passport = require('passport');
 const multer = require('multer')
-const sharp = require("sharp")
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const app = express();
