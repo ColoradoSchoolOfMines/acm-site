@@ -22,13 +22,13 @@ CREATE TABLE IF NOT EXISTS user_projects (
 );
 
 CREATE TABLE IF NOT EXISTS meetings (
-    "id"          INTEGER PRIMARY KEY
+    "id"          INTEGER PRIMARY KEY,
     "title"       TEXT NOT NULL,
     "description" TEXT,
     "date"        TIMESTAMP,
     "duration"    INTEGER,
     "location"    TEXT,
-    "type"        TEXT,
+    "type"        TEXT
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
