@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const pg = require('pg');
 const passport = require('passport');
-const multer  = require('multer')
+const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
@@ -23,8 +23,8 @@ app.use(flash());
 app.use(helmet());
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: [ "'unsafe-inline'", "'self'", "https://discord.com/" ],
-    scriptSrc: [ "'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net" ],
+    defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
+    scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
   },
 }));
 
@@ -51,13 +51,13 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "/auth/google/callback",
   passReqToCallback: true
-}, async(req, accessToken, refreshToken, profile, done) => {
+}, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
     // update users if one doesn't exist
-    await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '" 
-    + profile.given_name + "', '" 
-    + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
-    
+    await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '"
+      + profile.given_name + "', '"
+      + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
+
     // get user by email
     const resp = await pool.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
     user = {
@@ -101,14 +101,14 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 
 app.get('/', isLoggedIn, async (req, res) => {
   const resp = await pool.query("SELECT * FROM images WHERE profile = false ORDER BY RANDOM() LIMIT 1");
-  if(resp.rows.length > 0) {
+  if (resp.rows.length > 0) {
     image = {
       url: resp.rows[0].url,
       caption: resp.rows[0].caption
     }
   }
   else {
-    image = { 
+    image = {
       url: "default_acm.jpeg",
       caption: "ACM officers at the 2021 Celebration of Mines."
     }
@@ -146,7 +146,7 @@ app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile', { title: req.user.first + ' ' + req.user.last });
 });
 
-app.post('/profile', isLoggedIn, upload.single('profilepicture'), async(req, res) => {
+app.post('/profile', isLoggedIn, upload.single('profilepicture'), async (req, res) => {
   await pool.query("UPDATE users SET picture = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
   req.user.picture = req.file.filename;
   res.redirect('/profile');
@@ -168,7 +168,7 @@ app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin' });
 });
 
-app.post('/admin', isAdminAuthenticated, upload.single('avatar'), async(req, res) => {
+app.post('/admin', isAdminAuthenticated, upload.single('profilepicture'), async (req, res) => {
   await pool.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', true)");
   res.redirect('/admin');
 });
