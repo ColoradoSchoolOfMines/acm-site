@@ -15,7 +15,7 @@ for the OAuth2 hook, as well as a PostgreSQL database link.
 
 Finally, initialize the session tables: `psql mydb < node_modules/connect-pg-simple/table.sql`
 
-### Running with Docker (Experimental)
+## Docker Setup (Experimental)
 Alternatively, you can follow these steps to run with Docker.
 
 First, ensure the `HOST` in the `DB_URL` in `.env` is set to `db`, instead of `localhost`.

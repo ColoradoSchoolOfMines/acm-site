@@ -1,12 +1,13 @@
 version: '3.8'
 services:
-  app:
+  web:
     build: .
     ports:
       - 3000:3000
     env_file: .env
-    depends_on:
-      - db
+    depends_on: 
+      db:
+        condition: service_healthy
     restart: on-failure
     environment:
       - DATABASE_URL={$DB_URL}
@@ -22,6 +23,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-mydb}
       - POSTGRES_USER=${POSTGRES_USER:-user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER:-user}
 
 volumes:
   postgres-data:
