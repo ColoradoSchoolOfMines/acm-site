@@ -12,7 +12,9 @@ ImageStorage.prototype._handleFile = function _handleFile(req, file, cb) {
     file.filename = uuid.v4()
     const path = "uploads/" + file.filename
 
-    var pngConverter = sharp().toFormat('png')
+    var pngConverter = sharp()
+        .resize(500, 500)
+        .png()
     pngConverter.on('error', cb)
 
     var outStream = fs.createWriteStream(path)
