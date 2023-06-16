@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS projects (
     archived      BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE user_projects (
+CREATE TABLE IF NOT EXISTS user_projects (
     user_id    TEXT REFERENCES users(email),
     project_id INTEGER REFERENCES projects(id),
     PRIMARY KEY (user_id, project_id)
