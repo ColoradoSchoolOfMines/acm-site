@@ -1,7 +1,7 @@
 FROM node:lts
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 8888
+EXPOSE 3000
 CMD [ "npm", "start" ]

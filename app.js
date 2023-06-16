@@ -167,7 +167,7 @@ app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin' });
 });
 
-app.post('/admin', upload.single('avatar'), async(req, res) => {
+app.post('/admin', isAdminAuthenticated, upload.single('avatar'), async(req, res) => {
   await pool.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', true)");
   res.redirect('/admin');
 });

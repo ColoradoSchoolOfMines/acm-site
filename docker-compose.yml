@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    env_file: .env
+    depends_on:
+      - db
+    restart: on-failure
+    environment:
+      - DATABASE_URL={$DB_URL}
+    volumes:
+      - node_modules:/app/node_modules
+  db:
+    image: postgres:latest
+    ports:
+      - 35432:5432
+    volumes:
+       - postgres-data:/data/postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-mydb}
+      - POSTGRES_USER=${POSTGRES_USER:-user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+
+volumes:
+  postgres-data:
+  node_modules: 
