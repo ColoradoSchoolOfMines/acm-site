@@ -10,7 +10,6 @@ const pg = require('pg');
 const passport = require('passport');
 const imagestorage = require('./imagestorage');
 const multer = require('multer')
-const uuid = require('uuid')
 const upload = multer({ storage: imagestorage(), limits: { fileSize: 1024 * 1024 * 5 } })
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
@@ -171,7 +170,7 @@ app.get('/admin', isAdminAuthenticated, (req, res) => {
 });
 
 app.post('/admin', isAdminAuthenticated, upload.single('profilepicture'), async (req, res) => {
-  await pool.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', true)");
+  await pool.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', false)");
   res.redirect('/admin');
 });
 
