@@ -1,6 +1,6 @@
 var fs = require('fs')
-var sharp = require("sharp")
-var uuid = require("uuid")
+var uuid = require('uuid')
+var sharp = require('sharp')
 
 function getDestination(req, file, cb) {
     cb(null, '/dev/null')
@@ -9,8 +9,8 @@ function getDestination(req, file, cb) {
 function ImageStorage() { }
 
 ImageStorage.prototype._handleFile = function _handleFile(req, file, cb) {
-    file.filename = uuid.v4()
-    const path = "uploads/" + file.filename
+    file.filename = uuid.v4();
+    const path = 'uploads/' + file.filename;
 
     var pngConverter = sharp()
         .resize(500, 500)
@@ -20,9 +20,11 @@ ImageStorage.prototype._handleFile = function _handleFile(req, file, cb) {
     var outStream = fs.createWriteStream(path)
     outStream.on('error', cb)
     outStream.on('finish', function () {
-        cb(null, {
-            path: path,
-            size: outStream.bytesWritten
+        fs.unlink("uploads/" + req.user.picture, function () {
+            cb(null, {
+                path: path,
+                size: outStream.bytesWritten
+            })
         })
     })
 
