@@ -30,7 +30,8 @@ app.use(helmet.contentSecurityPolicy({
 
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
-    conString: process.env.DB_URL
+    conString: process.env.DB_URL,
+    createTableIfMissing: true
   }),
   name: 'session',
   secret: process.env.COOKIE_SECRET || "change this!",
@@ -187,12 +188,8 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(process.env.PORT || 3000, async () => {
-  // const initSession = fs.readFileSync('node_modules/connect-pg-simple/table.sql').toString();
-  // await pool.query(initSession);
-
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
   await pool.query(initQuery);
-
   console.log("ACM server started!");
 });
 
