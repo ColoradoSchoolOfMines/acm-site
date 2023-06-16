@@ -7,10 +7,10 @@ const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
 const pg = require('pg');
+const uuid = require('uuid');
 const passport = require('passport');
-const imagestorage = require('./imagestorage');
 const multer = require('multer')
-const upload = multer({ storage: imagestorage(), limits: { fileSize: 1024 * 1024 * 5 } })
+const sharp = require("sharp")
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const app = express();
@@ -57,7 +57,7 @@ passport.use(new GoogleStrategy({
     // update users if one doesn't exist
     await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '"
       + profile.given_name + "', '"
-      + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
+      + profile.family_name + "', '', '" + uuid.v4() + "') ON CONFLICT DO NOTHING");
 
     // get user by email
     const resp = await pool.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
@@ -68,7 +68,7 @@ passport.use(new GoogleStrategy({
       "email": resp.rows[0].email,
       "title": resp.rows[0].title,
       "isAdmin": resp.rows[0].title.length > 0,
-      "picture": resp.rows[0].picture
+      "avatar_id": resp.rows[0].avatar_id
     }
     req.flash('success', 'Succesfully logged in!');
     done(null, user);
@@ -88,6 +88,22 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/")
+    },
+    filename: function (req, file, cb) {
+      cb(null, req.user.avatar_id)
+    }
+  }),
+  fileFilter: function (req, file, cb) {
+    const validFormats = ["image/png", "image/jpeg"]
+    return cb(null, validFormats.includes(file.mimetype))
+  },
+  limits: { fileSize: 1024 * 1024 * 5 }
+})
+
 app.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.success = req.flash('success');
@@ -101,7 +117,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 });
 
 app.get('/', isLoggedIn, async (req, res) => {
-  const resp = await pool.query("SELECT * FROM images WHERE profile = false ORDER BY RANDOM() LIMIT 1");
+  const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
   if (resp.rows.length > 0) {
     image = {
       url: resp.rows[0].url,
@@ -147,9 +163,7 @@ app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile', { title: req.user.first + ' ' + req.user.last });
 });
 
-app.post('/profile', isLoggedIn, upload.single('profilepicture'), async (req, res) => {
-  await pool.query("UPDATE users SET picture = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-  req.user.picture = req.file.filename;
+app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
   res.redirect('/profile');
 })
 
