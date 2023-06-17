@@ -114,16 +114,19 @@ passport.deserializeUser((user, done) => {
 app.use((req, res, next) => {
   res.locals.user = req.user;
 
+  // all flash cookies should expire after an hour
+  cookieSettings = { httpOnly: true, maxAge: 1000 * 3600 };
+
   req.flash = (type, message) => {
-    res.cookie('flash', message);
-    res.cookie('flashType', type);
-    res.cookie('flashed', true);
+    res.cookie('flash', message, cookieSettings);
+    res.cookie('flashType', type, cookieSettings);
+    res.cookie('flashed', true, cookieSettings);
   }
 
   if(req.cookies.flashed === "true") {
-    res.cookie('flash', '');
-    res.cookie('flashType', '');
-    res.cookie('flashed', false);
+    res.cookie('flash', '', cookieSettings);
+    res.cookie('flashType', '', cookieSettings);
+    res.cookie('flashed', false, cookieSettings);
     res.locals.flash = req.cookies.flash;
     res.locals.flashType = req.cookies.flashType;
   }
