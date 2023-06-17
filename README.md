@@ -34,6 +34,7 @@ docker compose up -d
 - Test uploads vulnerability and other security stuff
 - Clean up routes as well as possible
 - Webhook or API with discord bot to display meetings
+- Put google strategy + other configs (session, multer) in separate files
 
 ## Design Choices
 Given that this is intended to be continuously maintained by students
