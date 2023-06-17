@@ -15,8 +15,26 @@ const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const app = express();
 const pool = new pg.Pool({ connectionString: process.env.DB_URL });
 
-const upload = multer({ dest: 'uploads/',
-  limits: { fileSize: 5 * 1024 * 1024 } 
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/")
+    },
+    filename: function (req, file, cb) {
+      cb(null, req.user.avatar_id)
+    }
+  }),
+  limits: { 
+    fileSize: 5 * 1024 * 1024 // 5 MB
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  }
 });
 
 const sessionConfig = {
@@ -38,7 +56,7 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public')); // TODO path.join here too?
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(session(sessionConfig));
 app.use(cookieParser());
 app.use(helmet());
@@ -75,16 +93,14 @@ passport.use(new GoogleStrategy({
       "isAdmin": resp.rows[0].title.length > 0,
       "avatar_id": resp.rows[0].avatar_id
     }
-    // req.flash('flashMessage', 'Succesfully logged in!'); // TODO change back to success and error msgs
     req.flash('success', 'Successfully logged in!');
     done(null, user);
   }
   else {
-    req.flash('flashMessage', 'Please log in with a valid mines.edu email!');
+    req.flash('error', 'Please log in with a valid mines.edu email!');
     done(null, false);
   }
-}
-));
+}));
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -94,22 +110,6 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-// const upload = multer({
-//   storage: multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, "uploads/")
-//     },
-//     filename: function (req, file, cb) {
-//       cb(null, req.user.avatar_id)
-//     }
-//   }),
-//   fileFilter: function (req, file, cb) {
-//     const validFormats = ["image/png", "image/jpeg"]
-//     return cb(null, validFormats.includes(file.mimetype))
-//   },
-//   limits: { fileSize: 1024 * 1024 * 5 }
-// })
-
 app.use((req, res, next) => {
   res.locals.user = req.user;
 
@@ -117,7 +117,7 @@ app.use((req, res, next) => {
     res.cookie('flash', message);
     res.cookie('flashType', type);
     res.cookie('flashed', true);
-  };
+  }
 
   if(req.cookies.flashed === "true") {
     res.cookie('flash', '');
@@ -190,7 +190,7 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
     req.flash('success', 'File uploaded successfully!');
   } 
   else {
-    req.flash('error', 'Failed to upload file.');
+    req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
   }
   res.redirect('/profile');
 })
