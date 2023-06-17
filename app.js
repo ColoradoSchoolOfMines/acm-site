@@ -12,6 +12,7 @@ const passport = require('passport');
 const multer = require('multer')
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
+const authRoutes = require('./routes/auth');
 const app = express();
 const pool = new pg.Pool({ connectionString: process.env.DB_URL });
 
@@ -133,10 +134,7 @@ app.use((req, res, next) => {
   next();
 })
 
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/', keepSessionInfo: true }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
-  delete req.session.returnTo;
-});
+app.use('/', authRoutes);
 
 app.get('/', async (req, res) => {
   const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
@@ -158,17 +156,6 @@ app.get('/', async (req, res) => {
 app.get('/about', isLoggedIn, async (req, res) => {
   const resp = await pool.query("SELECT * FROM users WHERE title != '';");
   res.render('about', { title: 'About Us', people: resp.rows });
-});
-
-app.get('/login', passport.authenticate('google', { scope: ['email', 'profile'] }), (req, res) => {
-  res.redirect('/');
-});
-
-app.get('/logout', (req, res) => {
-  req.logout((err) => {
-    req.flash('success', 'Succesfully logged out.')
-    res.redirect('/');
-  });
 });
 
 app.get('/presentations', isLoggedIn, async (req, res) => {

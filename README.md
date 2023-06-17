@@ -24,8 +24,6 @@ docker compose build
 docker compose up -d
 ```
 
-TODO: write script for initializing the session tables
-
 ## Roadmap
 - Figure out mailing list subscribe
 - Admin panel where current officers can be modified
@@ -33,6 +31,9 @@ TODO: write script for initializing the session tables
 - Frontend accessibility checks
 - Better backend error handling
 - Blog page
+- Test uploads vulnerability and other security stuff
+- Clean up routes as well as possible
+- Webhook or API with discord bot to display meetings
 
 ## Design Choices
 Given that this is intended to be continuously maintained by students
