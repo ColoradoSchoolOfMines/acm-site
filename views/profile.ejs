@@ -1,13 +1,13 @@
 <% layout('layouts/base')%>
 
-    <p>Profile for <%= user.first %>
-            <%= user.last %>
-    </p>
+<p>Profile for <%= user.first %>
+        <%= user.last %>
+</p>
 
-    <img class="team-picture" src="uploads/<%= user.avatar_id %>" />
+<img class="team-picture" src="uploads/<%= user.avatar_id %>" />
 
-    <form action="/profile" method="post" enctype="multipart/form-data">
-        <input class="d-inline-block" type="file" name="avatar" />
-        <br>
-        <button class="btn d-inline-block btn-primary">Submit</button>
-    </form>
+<form action="/profile" method="post" enctype="multipart/form-data" accept="image/png,image/jpg">
+    <input class="d-inline-block" type="file" name="avatar" />
+    <br>
+    <button class="btn d-inline-block btn-primary">Submit</button>
+</form>
