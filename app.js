@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const ejsMate = require('ejs-mate');
-const flash = require('connect-flash');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const helmet = require('helmet');
 const path = require('path');
@@ -15,20 +15,11 @@ const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const app = express();
 const pool = new pg.Pool({ connectionString: process.env.DB_URL });
 
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static('public'));
-app.use(flash());
-app.use(helmet());
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
-    scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
-  },
-}));
+const upload = multer({ dest: 'uploads/',
+  limits: { fileSize: 5 * 1024 * 1024 } 
+});
 
-app.use(session({
+const sessionConfig = {
   store: new (require('connect-pg-simple')(session))({
     conString: process.env.DB_URL,
     createTableIfMissing: true
@@ -41,6 +32,21 @@ app.use(session({
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7
   }
+};
+
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public')); // TODO path.join here too?
+app.use(session(sessionConfig));
+app.use(cookieParser());
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
+    scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
+  },
 }));
 
 app.use(passport.initialize());
@@ -69,11 +75,12 @@ passport.use(new GoogleStrategy({
       "isAdmin": resp.rows[0].title.length > 0,
       "avatar_id": resp.rows[0].avatar_id
     }
-    req.flash('success', 'Succesfully logged in!');
+    // req.flash('flashMessage', 'Succesfully logged in!'); // TODO change back to success and error msgs
+    req.flash('success', 'Successfully logged in!');
     done(null, user);
   }
   else {
-    req.flash('error', 'Please log in with a valid mines.edu email!');
+    req.flash('flashMessage', 'Please log in with a valid mines.edu email!');
     done(null, false);
   }
 }
@@ -87,26 +94,42 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads/")
-    },
-    filename: function (req, file, cb) {
-      cb(null, req.user.avatar_id)
-    }
-  }),
-  fileFilter: function (req, file, cb) {
-    const validFormats = ["image/png", "image/jpeg"]
-    return cb(null, validFormats.includes(file.mimetype))
-  },
-  limits: { fileSize: 1024 * 1024 * 5 }
-})
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, "uploads/")
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, req.user.avatar_id)
+//     }
+//   }),
+//   fileFilter: function (req, file, cb) {
+//     const validFormats = ["image/png", "image/jpeg"]
+//     return cb(null, validFormats.includes(file.mimetype))
+//   },
+//   limits: { fileSize: 1024 * 1024 * 5 }
+// })
 
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error');
+
+  req.flash = (type, message) => {
+    res.cookie('flash', message);
+    res.cookie('flashType', type);
+    res.cookie('flashed', true);
+  };
+
+  if(req.cookies.flashed === "true") {
+    res.cookie('flash', '');
+    res.cookie('flashType', '');
+    res.cookie('flashed', false);
+    res.locals.flash = req.cookies.flash;
+    res.locals.flashType = req.cookies.flashType;
+  }
+  else {
+    res.locals.flash = null;
+  }
+
   next();
 })
 
@@ -115,7 +138,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
   delete req.session.returnTo;
 });
 
-app.get('/', isLoggedIn, async (req, res) => {
+app.get('/', async (req, res) => {
   const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
   if (resp.rows.length > 0) {
     image = {
@@ -163,6 +186,12 @@ app.get('/profile', isLoggedIn, (req, res) => {
 });
 
 app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
+  if (req.file) {
+    req.flash('success', 'File uploaded successfully!');
+  } 
+  else {
+    req.flash('error', 'Failed to upload file.');
+  }
   res.redirect('/profile');
 })
 

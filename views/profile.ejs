@@ -1,8 +1,6 @@
 <% layout('layouts/base')%>
 
-<p>Profile for <%= user.first %>
-        <%= user.last %>
-</p>
+<p>Profile for <%= user.first %> <%= user.last %></p>
 
 <img class="team-picture" src="uploads/<%= user.avatar_id %>" />
 
