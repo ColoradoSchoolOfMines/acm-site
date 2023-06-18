@@ -156,6 +156,7 @@ app.get('/', async (req, res) => {
   res.render('home', { title: 'Home', image: image });
 });
 
+// TODO: isloggedin middleware probably isn't needed on a lot of these routes, experiment with this
 app.get('/about', isLoggedIn, async (req, res) => {
   const resp = await pool.query("SELECT * FROM users WHERE title != '';");
   res.render('about', { title: 'About Us', people: resp.rows });
@@ -196,6 +197,10 @@ app.get('/attend', isLoggedIn, (req, res) => {
 app.post('/attend', isLoggedIn, (req, res) => {
   // POST form data to attendance table
 })
+
+app.get('/meetings', isLoggedIn, (req, res) => {
+  res.render('meetings', { title: 'Meetings' });
+});
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin' });

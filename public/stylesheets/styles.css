@@ -13,11 +13,6 @@
         background-color: #373737 !important;
     }
 
-    /* TODO remove this once conversion to Bootstrap is done */
-	.body-container {
-        background-color: #3e3e3e !important;
-    }
-
     .navbar-light .navbar-nav .nav-link {
         color: white;
     }
@@ -52,7 +47,6 @@ a {
 
 /* Components */
 .container {
-    background-color: #f8f9fa; 
     padding-top: 2%; 
     padding-bottom: 2%; 
     margin-bottom: 2%;
@@ -74,14 +68,6 @@ a {
     margin-left: 10%;
 }
 
-.sub-container {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 2%;
-}
-
-/* TODO these styles are a lil broken */
 .team-card {
     display: inline-block;
     text-align: center;
@@ -121,6 +107,33 @@ a {
 .big-header-2 {
     font-size: 50px;
     color: goldenrod;
+}
+
+.highlight {
+    border-left: 4px solid goldenrod;
+    padding-left: 4%;
+    font-size: 18px;
+}
+
+.meeting {
+    border-bottom: 1px solid lightgray; 
+    padding-bottom: 2%;
+    padding-top: 2%;
+    line-height: 30px;
+}
+
+.meeting-title {
+    font-size: 19px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.meeting-info {
+    margin: 0;
+}
+
+.rsvp {
+    margin-left: 1%;
 }
 
 .header-description {
