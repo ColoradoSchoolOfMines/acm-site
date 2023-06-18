@@ -82,7 +82,8 @@ passport.use(new GoogleStrategy({
     // update users if one doesn't exist
     await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '"
       + profile.given_name + "', '"
-      + profile.family_name + "', '', '" + uuid.v4() + "') ON CONFLICT DO NOTHING");
+      + profile.family_name + "', '', '"
+      + uuid.v4() + "') ON CONFLICT DO NOTHING");
 
     // get user by email
     const resp = await pool.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
@@ -170,6 +171,18 @@ app.get('/presentations', async (req, res) => {
 app.get('/projects', async (req, res) => {
   const resp = await pool.query("SELECT * FROM projects");
   res.render('projects', { title: "Projects", projects: resp.rows });
+});
+
+app.post('/projects', async (req, res) => {
+  const resp = await pool.query("INSERT INTO projects VALUES ('" + 
+      uuid.v4() + "', '" +
+      req.body.title + "', '" + 
+      req.body.description + "', '" +
+      req.body.website + "', '" +
+      req.body.repository + "', '" +
+      (req.body.archived !== undefined).toString() + "')")
+  req.flash('success', 'Successfully added project!')
+  res.redirect('projects')
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {

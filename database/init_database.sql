@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS projects (
-    "id"           INTEGER PRIMARY KEY,
+    "id"           TEXT PRIMARY KEY,
     "title"        TEXT NOT NULL,
     "description"  TEXT,
     "website"      TEXT,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE TABLE IF NOT EXISTS user_projects (
     "user_id"    TEXT REFERENCES users(email),
-    "project_id" INTEGER REFERENCES projects(id),
+    "project_id" TEXT REFERENCES projects(id),
     PRIMARY KEY (user_id, project_id)
 );
 

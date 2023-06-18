@@ -18,7 +18,6 @@
         </div>
     <% } %>
 
-
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">
         New Project
@@ -35,25 +34,25 @@
                 <form method="POST" action="/projects">
                     <div class="modal-body">
                         <label class="d-block py-1" for="title">Title</label>
-                        <input name="title" type="text" />
+                        <input name="title" type="text" required />
     
                         <label class="d-block py-1" for="description">Description</label>
-                        <input name="description" type="text" />
+                        <input name="description" type="text" required />
     
                         <label class="d-block py-1" for="repository">Repository Link</label>
-                        <input name="repository" type="url" />
+                        <input name="repository" type="url" required />
     
                         <label class="d-block py-1" for="website">Website Link</label>
-                        <input name="website" type="url" />
+                        <input name="website" type="url" required />
     
                         <label class="d-block py-1" for="authors">Authors</label>
-                        <input name="authors" type="text" />
+                        <input name="authors" type="text" required />
     
                         <label class="d-block py-1" for="archived">Archived</label>
                         <input name="archived" type="checkbox" />
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
