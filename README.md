@@ -35,6 +35,7 @@ docker compose up -d
 - Clean up routes as well as possible
 - Webhook or API with discord bot to display meetings
 - Put google strategy + other configs (session, multer) in separate files
+- SSL errors happen on Safari because of the helmet CSP, investigate this
 
 ## Design Choices
 Given that this is intended to be continuously maintained by students

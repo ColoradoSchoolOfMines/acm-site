@@ -65,6 +65,7 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
     scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
+    styleSrc: ["'unsafe-inline'", "'self'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
   },
 }));
 
@@ -156,18 +157,17 @@ app.get('/', async (req, res) => {
   res.render('home', { title: 'Home', image: image });
 });
 
-// TODO: isloggedin middleware probably isn't needed on a lot of these routes, experiment with this
-app.get('/about', isLoggedIn, async (req, res) => {
+app.get('/about', async (req, res) => {
   const resp = await pool.query("SELECT * FROM users WHERE title != '';");
   res.render('about', { title: 'About Us', people: resp.rows });
 });
 
-app.get('/presentations', isLoggedIn, async (req, res) => {
+app.get('/presentations', async (req, res) => {
   const resp = await pool.query("SELECT * FROM presentations");
   res.render('presentations', { title: 'Presentations', presentations: resp.rows });
 });
 
-app.get('/projects', isLoggedIn, async (req, res) => {
+app.get('/projects', async (req, res) => {
   const resp = await pool.query("SELECT * FROM projects");
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
@@ -190,15 +190,15 @@ app.get('/rsvp', isLoggedIn, (req, res) => {
   res.render('rsvp', { title: 'RSVP' });
 });
 
-app.get('/attend', isLoggedIn, (req, res) => {
+app.get('/attend', (req, res) => {
   res.render('attend', { title: 'Attend' });
 });
 
-app.post('/attend', isLoggedIn, (req, res) => {
+app.post('/attend', (req, res) => {
   // POST form data to attendance table
 })
 
-app.get('/meetings', isLoggedIn, (req, res) => {
+app.get('/meetings', (req, res) => {
   res.render('meetings', { title: 'Meetings' });
 });
 
