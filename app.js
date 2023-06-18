@@ -25,7 +25,7 @@ const upload = multer({
       cb(null, req.user.avatar_id)
     }
   }),
-  limits: { 
+  limits: {
     fileSize: 5 * 1024 * 1024 // 5 MB
   },
   fileFilter: (req, file, cb) => {
@@ -124,7 +124,7 @@ app.use((req, res, next) => {
     res.cookie('flashed', true, cookieSettings);
   }
 
-  if(req.cookies.flashed === "true") {
+  if (req.cookies.flashed === "true") {
     res.cookie('flash', '', cookieSettings);
     res.cookie('flashType', '', cookieSettings);
     res.cookie('flashed', false, cookieSettings);
@@ -178,8 +178,8 @@ app.get('/profile', isLoggedIn, (req, res) => {
 
 app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
   if (req.file) {
-    req.flash('success', 'File uploaded successfully!');
-  } 
+    req.flash('success', 'Profile picture uploaded successfully!');
+  }
   else {
     req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
   }
