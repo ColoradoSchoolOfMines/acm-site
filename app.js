@@ -65,7 +65,7 @@ const cspDirectives = {
   defaultSrc: ["'self'", "https://discord.com/"],
   scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
   styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-  imgSrc: ["'self'"],
+  imgSrc: ["'self'", "data:"],
 };
 
 if (process.env.NODE_ENV === "development") {
