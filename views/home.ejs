@@ -1,78 +1,98 @@
 <% layout('layouts/base')%>
 
 <div class="container bg-light">
-  <div class="row">
-    <div class="col col-left">
-	  <h1 class="big-header">Mines ACM</h1>
-	  <p class="header-description">
-		Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and strives
-		to provide meaningful career opportunities and CS experiences to students.
-		<br><br>
-		We host weekly tech talks from recognized industry professionals, project meetings
-		with diverse and interesting projects, skill workshops, and more.
-		<br><br>
-		Mines ACM is an official student chapter of the <a href="https://www.acm.org">Association for Computing Machinery</a>
-		and is an official club of <a href="https://cs.mines.edu">CS@Mines</a>.
-		<br><br>
-		To join Mines ACM, simply show up to our meetings every <b>Tuesday at 6:00pm</b>.
-		Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing list</a> 
-		for weekly meeting details and to stay in touch with our community.
-	  </p>
-	  <div>
-		  <p class="next-meeting">Next meeting: Project Meeting, June 8th, 6:00pm in MZ126</p>
-		  <button class="btn btn-outline-primary">I'm in!</button>
-	  </div>
-    </div>
-    <div class="col-lg-6">
-		<img src="uploads/<%= image.url %>" class="header-image shadow" />
-		<p class="image-caption"><%= image.caption %></p>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col col-left">
+			<h1 class="big-header">Mines ACM</h1>
+			<p class="header-description">
+				Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
+				strives
+				to provide meaningful career opportunities and CS experiences to students.
+				<br><br>
+				We host weekly tech talks from recognized industry professionals, project meetings
+				with diverse and interesting projects, skill workshops, and more.
+				<br><br>
+				Mines ACM is an official student chapter of the <a href="https://www.acm.org">Association for
+					Computing Machinery</a>
+				and is an official club of <a href="https://cs.mines.edu">CS@Mines</a>.
+				<br><br>
+				To join Mines ACM, simply show up to our meetings every <b>Tuesday at 6:00pm</b>.
+				Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing
+					list</a>
+				for weekly meeting details and to stay in touch with our community.
+			</p>
+			<div>
+				<p class="next-meeting">Next meeting: Project Meeting, June 8th, 6:00pm in MZ126</p>
+				<button class="btn btn-outline-primary">I'm in!</button>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<img src="uploads/<%= image.url %>" class="header-image shadow" />
+			<p class="image-caption">
+				<%= image.caption %>
+			</p>
+		</div>
+	</div>
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col" style="margin-left: 10%; margin-right: 2.5%;">
-		<h1 class="big-header-2">Upcoming Meetings</h1>
-		<div class="highlight">
-			<div class="meeting">
-				<p class="meeting-title">Intro to Web Development Workshop
-					<button class="btn btn-outline-primary rsvp">RSVP</button>
-				</p>
-				<p class="meeting-info"><strong>Tuesday, April 4, 2023</strong> from <strong>6:00-7:00pm</strong> in <strong>Marquez Hall 326</strong></p>
-				<p class="meeting-description">Ethan Richards will be hosting a Web Development Workshop teaching HTML, CSS, and JavaScript basics, along with how to host and deploy a website to GitHub Pages for free. No prior experience is necessary.</p>
-			</div>
-			<div class="meeting">
-				<p class="meeting-title">ACM-E-Days Social
-					<button class="btn btn-outline-primary rsvp">RSVP</button>	
-				</p>
-				<p class="meeting-info"><strong>Tuesday, April 11, 2023</strong> from <strong>6:00-7:00pm</strong> in <strong>Marquez Hall 326</strong></p>
-				<p class="meeting-description">Stop by, play board games, and hang out with CS students! As always, food will be provided.</p>	
-			</div>
-			<p class="pt-3"><a href="meetings">View our full schedule here</a>.</p>
+	<div class="row">
+		<!-- TODO better solution here for column headers + don't use inline styling -->
+		<div class="col" style="margin-left: 9%; margin-right: 2.5%;">
+			<h1 class="big-header-2">Upcoming Meetings</h1>
 		</div>
-    </div>
-    <div class="col" style="margin-left: 2.5%; margin-right: 10%;">
-		<h1 class="big-header-2">Our Events</h1>
-		<div class="highlight">
-			<div class="event">
-				<p class="meeting-title">Tech Talks</p>
-				<p class="meeting-description">Tech talks are hour long talks from industry professionals, often CS@Mines alum.
-					We've hosted representatives from Google, Chevron, Cloudflare, and more.</p>
-			</div>
-			<div class="event">
-				<p class="meeting-title">Project Meetings</p>
-				<p class="meeting-description">Project meetings are a great and low-pressure way to learn
-					new skills and collaborate with others outside of school on a variety of <a href="/projects">projects</a>.</p>
-			</div>
-			<div class="event">
-				<p class="meeting-title">Workshops</p>
-				<p class="meeting-description">Workshops are another way Mines ACM provides students with opportunities to learn
-					 industry skills. We regularly host our Git Workshop, with seasonal workshops
-					such as web and even Minecraft development also happening!</p>
-				<p><strong>and so much more!</strong></p>
+		<div class="col" style="margin-left: 2.5%; margin-right: 10%;">
+			<h1 class="big-header-2">Our Events</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-gold" style="margin-left: 10%; margin-right: 2.5%;">
+			<div class="highlight">
+				<div class="meeting">
+					<p class="meeting-title">Intro to Web Development Workshop
+						<button class="btn btn-outline-primary rsvp">RSVP</button>
+					</p>
+					<p class="meeting-info"><strong>Tuesday, April 4, 2023</strong> from
+						<strong>6:00-7:00pm</strong> in <strong>Marquez Hall 326</strong></p>
+					<p class="meeting-description">Ethan Richards will be hosting a Web Development Workshop
+						teaching HTML, CSS, and JavaScript basics, along with how to host and deploy a website to
+						GitHub Pages for free. No prior experience is necessary.</p>
+				</div>
+				<div class="meeting">
+					<p class="meeting-title">ACM-E-Days Social
+						<button class="btn btn-outline-primary rsvp">RSVP</button>
+					</p>
+					<p class="meeting-info"><strong>Tuesday, April 11, 2023</strong> from
+						<strong>6:00-7:00pm</strong> in <strong>Marquez Hall 326</strong></p>
+					<p class="meeting-description">Stop by, play board games, and hang out with CS students! As
+						always, food will be provided.</p>
+				</div>
+				<p class="pt-3"><a href="meetings">View our full schedule here</a>.</p>
 			</div>
 		</div>
-    </div>
-  </div>
+		<div class="col col-gold" style="margin-left: 2.5%; margin-right: 10%;">
+			<div class="highlight">
+				<div class="event">
+					<p class="meeting-title">Tech Talks</p>
+					<p class="meeting-description">Tech talks are hour long talks from industry professionals, often
+						CS@Mines alum.
+						We've hosted representatives from Google, Chevron, Cloudflare, and more.</p>
+				</div>
+				<div class="event">
+					<p class="meeting-title">Project Meetings</p>
+					<p class="meeting-description">Project meetings are a great and low-pressure way to learn
+						new skills and collaborate with others outside of school on a variety of <a
+							href="/projects">projects</a>.</p>
+				</div>
+				<div class="event">
+					<p class="meeting-title">Workshops</p>
+					<p class="meeting-description">Workshops are another way Mines ACM provides students with
+						opportunities to learn
+						industry skills. We regularly host our Git Workshop, with seasonal workshops
+						such as web and even Minecraft development also happening!</p>
+					<p><strong>and so much more!</strong></p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

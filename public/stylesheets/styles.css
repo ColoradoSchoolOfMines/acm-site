@@ -113,9 +113,12 @@ a {
     color: goldenrod;
 }
 
-.highlight {
+.col-gold {
     border-left: 4px solid goldenrod;
-    padding-left: 4%;
+    padding-left: 1%;
+}
+
+.highlight {
     font-size: 18px;
 }
 
