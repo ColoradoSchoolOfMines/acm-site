@@ -1,0 +1,18 @@
+<% layout('layouts/base')%>
+
+<div class="content">
+    <h1>Meeting Name</h1>
+    <p>Please fill out the following attendance form!</p>
+            
+    <div class="large-card">
+        <form method="POST" action="/attend">
+            <p>Name</p>
+            <input class="d-inline-block" type="text" name="name" placeholder="Your name.." />
+            <br>
+            <p>Email</p>
+            <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
+            <br>
+            <button class="btn d-inline-block btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

@@ -218,10 +218,15 @@ app.get('/attend', (req, res) => {
 
 app.post('/attend', (req, res) => {
   // POST form data to attendance table
+  console.log(req.body.name)
+  console.log(req.body.email)
+
+  req.flash('success', 'Your attendance has been logged! Thanks for coming.')
+  res.redirect('/');
 })
 
-app.get('/meetings', (req, res) => {
-  res.render('meetings', { title: 'Meetings' });
+app.get('/schedule', (req, res) => {
+  res.render('schedule', { title: 'Schedule' });
 });
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
