@@ -60,22 +60,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session(sessionConfig));
 app.use(cookieParser());
-app.use(helmet());
-// app.use(helmet.contentSecurityPolicy({
-//   directives: {
-//     defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
-//     scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
-//     styleSrc: ["'unsafe-inline'", "'self'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-//   },
-// }));
+
+const cspDirectives = {
+  defaultSrc: ["'self'"],
+  scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
+  styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+  imgSrc: ["'self'"],
+};
+
+if (process.env.NODE_ENV === "development") {
+  // This prevents Safari from trying to load localhost over HTTPS.
+  // See https://github.com/helmetjs/helmet/issues/429
+  cspDirectives.upgradeInsecureRequests = null;
+}
 
 app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
-    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-    imgSrc: ["'self'"],
-  },
+  directives: cspDirectives,
 }));
 
 app.use(passport.initialize());
