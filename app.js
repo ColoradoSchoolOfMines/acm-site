@@ -62,7 +62,7 @@ app.use(session(sessionConfig));
 app.use(cookieParser());
 
 const cspDirectives = {
-  defaultSrc: ["'self'"],
+  defaultSrc: ["'self'", "https://discord.com/"],
   scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
   styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
   imgSrc: ["'self'"],
