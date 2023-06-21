@@ -9,49 +9,14 @@ const fs = require('fs');
 const pg = require('pg');
 const uuid = require('uuid');
 const passport = require('passport');
-const multer = require('multer')
+const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const authRoutes = require('./routes/auth');
 const app = express();
 const pool = new pg.Pool({ connectionString: process.env.DB_URL });
-
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads/")
-    },
-    filename: function (req, file, cb) {
-      cb(null, req.user.avatar_id)
-    }
-  }),
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5 MB
-  },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  }
-});
-
-const sessionConfig = {
-  store: new (require('connect-pg-simple')(session))({
-    conString: process.env.DB_URL,
-    createTableIfMissing: true
-  }),
-  name: 'session',
-  secret: process.env.COOKIE_SECRET || "change this!",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7
-  }
-};
+const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
+const upload = multer(multerConfig);
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -60,24 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session(sessionConfig));
 app.use(cookieParser());
-
-const cspDirectives = {
-  defaultSrc: ["'self'", "https://discord.com/"],
-  scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
-  styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-  imgSrc: ["'self'", "data:"],
-};
-
-if (process.env.NODE_ENV === "development") {
-  // This prevents Safari from trying to load localhost over HTTPS.
-  // See https://github.com/helmetjs/helmet/issues/429
-  cspDirectives.upgradeInsecureRequests = null;
-}
-
-app.use(helmet.contentSecurityPolicy({
-  directives: cspDirectives,
-}));
-
+app.use(helmet.contentSecurityPolicy(cspConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
