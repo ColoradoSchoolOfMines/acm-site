@@ -61,11 +61,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session(sessionConfig));
 app.use(cookieParser());
 app.use(helmet());
+// app.use(helmet.contentSecurityPolicy({
+//   directives: {
+//     defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
+//     scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
+//     styleSrc: ["'unsafe-inline'", "'self'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+//   },
+// }));
+
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'unsafe-inline'", "'self'", "https://discord.com/"],
-    scriptSrc: ["'unsafe-inline'", "'self'", "https://cdn.jsdelivr.net"],
-    styleSrc: ["'unsafe-inline'", "'self'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
+    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+    imgSrc: ["'self'"],
   },
 }));
 
