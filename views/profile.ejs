@@ -1,15 +1,19 @@
 <% layout('layouts/base')%>
 
 <div class="content">
-    <p>Profile for <%= user.first %>
-            <%= user.last %>
-    </p>
+    <div class="large-card">
+        <h1><%= user.first %> <%= user.last %></h1>
+        <% if(user.title.length > 0) { %>
+            <h2><%= user.title%></h2>
+        <% } %>
 
-    <img class="team-picture" src="uploads/<%= user.avatar_id %>" />
-
-    <form method="POST" action="/profile" enctype="multipart/form-data" accept="image/png,image/jpg,image/jpeg">
-        <input class="d-inline-block" type="file" name="avatar" />
-        <br>
-        <button class="btn d-inline-block btn-primary">Submit</button>
-    </form>
+        <img class="team-picture" src="uploads/<%= user.avatar_id %>" />
+        
+        <p>Update Profile Picture</p>
+        <form method="POST" action="/profile" enctype="multipart/form-data" accept="image/png,image/jpg,image/jpeg">
+            <input class="d-inline-block" type="file" name="avatar" />
+            <br>
+            <button class="btn d-inline-block btn-primary">Submit</button>
+        </form>
+    </div>
 </div>

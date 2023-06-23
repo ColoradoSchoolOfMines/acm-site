@@ -32,7 +32,7 @@
     }
 }
 
-/* Body */
+/* Body & Elements */
 body {
     -webkit-animation: fadein 1s;
     /* Safari, Chrome and Opera > 12.1 */
@@ -58,12 +58,6 @@ a {
     margin-right: 0;
     width: 100%;
     min-width: 100%;
-}
-
-.footer .container {
-    margin-left: auto;
-    margin-right: auto;
-    min-width: inherit;
 }
 
 .col-left {
@@ -95,12 +89,6 @@ a {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 2%;
-}
-
-.nav-item {
-    margin-top: auto;
-    margin-bottom: auto;
-    padding-right: 2%;
 }
 
 .big-header {
@@ -148,10 +136,6 @@ a {
     margin-left: 1%;
 }
 
- .btn-outline-primary:hover {
-    color: #0d6efd;
- }
-
 .header-description {
     margin-right: 10%;
     font-size: 20px;
@@ -174,6 +158,27 @@ a {
     font-style: italic;
 }
 
+.next-meeting {
+    display: inline-block;
+    font-size: 22px;
+    margin-right: 1%;
+}
+
+.large-card {
+    background-color: #f8f9fa;
+    padding: 4%;
+    border-radius: 25px;
+    margin-bottom: 2%;
+}
+
+/* Buttons */
+.btn-outline-primary:hover {
+    background-color: transparent;
+    text-decoration: underline;
+    color: #0d6efd;
+}
+
+/* Navigation */
 .navbar {
     font-size: 20px;
     padding: 20px;
@@ -185,32 +190,21 @@ a {
     margin-right: 5%;
 }
 
-.next-meeting {
-    display: inline-block;
-    font-size: 22px;
-    margin-right: 1%;
+.nav-item {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-right: 2%;
 }
 
-.btn-outline-primary:hover {
-    background-color: transparent;
-    text-decoration: underline;
-}
-
+/* Footer */
 .footer {
-    padding-top: 1%;
     background-color: #f8f9fa;
-    width: 100%;
 }
 
-#discord {
-    padding-left: 5%;
-}
-
-.large-card {
-    background-color: #f8f9fa;
-    padding: 4%;
-    border-radius: 25px;
-    margin-bottom: 2%;
+.footer .container {
+    margin-left: auto;
+    margin-right: auto;
+    min-width: inherit;
 }
 
 /* Animations */

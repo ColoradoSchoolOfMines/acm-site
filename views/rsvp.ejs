@@ -1,1 +1,16 @@
 <% layout('layouts/base')%>
+
+<div class="content">
+    <h1>RSVP for {meeting title}</h1>
+    <p>{meeting details}</p>
+
+    <form method="POST" action="/rsvp">
+        <p>Name</p>
+        <input class="d-inline-block" type="text" name="name" placeholder="Your name.." />
+        <br>
+        <p>Email</p>
+        <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
+        <br>
+        <button class="btn d-inline-block btn-primary">Submit</button>
+    </form>
+</div>

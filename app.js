@@ -13,6 +13,7 @@ const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
 const authRoutes = require('./routes/auth');
+const attendRoutes = require('./routes/attendance');
 const app = express();
 const pool = new pg.Pool({ connectionString: process.env.DB_URL });
 const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
@@ -97,6 +98,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/', authRoutes);
+app.use('/', attendRoutes);
 
 app.get('/', async (req, res) => {
   const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
@@ -118,6 +120,10 @@ app.get('/', async (req, res) => {
 app.get('/about', async (req, res) => {
   const resp = await pool.query("SELECT * FROM users WHERE title != '';");
   res.render('about', { title: 'About Us', people: resp.rows });
+});
+
+app.get('/schedule', (req, res) => {
+  res.render('schedule', { title: 'Schedule' });
 });
 
 app.get('/presentations', async (req, res) => {
@@ -155,27 +161,6 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
   }
   res.redirect('/profile');
 })
-
-app.get('/rsvp', isLoggedIn, (req, res) => {
-  res.render('rsvp', { title: 'RSVP' });
-});
-
-app.get('/attend', (req, res) => {
-  res.render('attend', { title: 'Attend' });
-});
-
-app.post('/attend', (req, res) => {
-  // POST form data to attendance table
-  console.log(req.body.name)
-  console.log(req.body.email)
-
-  req.flash('success', 'Your attendance has been logged! Thanks for coming.')
-  res.redirect('/');
-})
-
-app.get('/schedule', (req, res) => {
-  res.render('schedule', { title: 'Schedule' });
-});
 
 app.get('/admin', isAdminAuthenticated, (req, res) => {
   res.render('admin', { title: 'Admin' });

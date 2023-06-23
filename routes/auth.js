@@ -8,8 +8,14 @@ router.get('/login', passport.authenticate('google', { scope: ['email', 'profile
 
 router.get('/logout', (req, res) => {
   req.logout((err) => {
-    req.flash('success', 'Succesfully logged out.')
-    res.redirect('/');
+    if(err) {
+      req.flash('error', 'Could not successfully log out! Please contact a site administrator.')
+      res.redirect('/');
+    }
+    else {
+      req.flash('success', 'Succesfully logged out.')
+      res.redirect('/');
+    }
   });
 });
 

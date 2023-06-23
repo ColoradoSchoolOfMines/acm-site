@@ -14,11 +14,9 @@ The `.env` file should specify Google the client ID + secret
 for the OAuth2 hook, as well as a PostgreSQL database link.
 
 ## Docker Setup (Experimental)
-Alternatively, you can follow these steps to run with Docker.
+Alternatively, you can follow these steps to run with Docker. First, ensure `HOST` in the `DB_URL` in `.env` is set to `db`, instead of `localhost`.
 
-First, ensure the `HOST` in the `DB_URL` in `.env` is set to `db`, instead of `localhost`.
-
-Then, navigate to the server directory and run the following commands.
+Then, navigate to the server directory and run the following commands:
 ```
 docker compose build
 docker compose up -d
@@ -29,12 +27,9 @@ docker compose up -d
 - Admin panel where current officers can be modified
 - Better dark mode support
 - Frontend accessibility checks
-- Better backend error handling
 - Blog page
 - Test uploads vulnerability and other security stuff
-- Clean up routes as well as possible
 - Webhook or API with discord bot to display meetings
-- Put google strategy + other configs (session, multer) in separate files
 
 ## Design Choices
 Given that this is intended to be continuously maintained by students
