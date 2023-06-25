@@ -116,6 +116,8 @@ app.get('/', async (req, res) => {
   }
 
   // TODO select two from upcoming meetings where date is in next two weeks
+  const meetings = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' LIMIT 2");
+  console.log(meetings.rows[0]);
 
   res.render('home', { title: 'Home', image: image });
 });
@@ -125,8 +127,18 @@ app.get('/about', async (req, res) => {
   res.render('about', { title: 'About Us', people: resp.rows });
 });
 
-app.get('/schedule', (req, res) => {
-  res.render('schedule', { title: 'Schedule' });
+app.get('/schedule', async(req, res) => {
+  const upcoming = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' LIMIT 2");
+  console.log(upcoming)
+  console.log(upcoming.rows[0]);
+  console.log("UPCOMING^")
+
+  const previous = await pool.query("SELECT * FROM meetings WHERE date <= NOW()");
+  console.log(previous)
+  console.log(previous.rows[0]);
+  console.log("PREVIOUS^")
+
+  res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows[0], previous: previous.rows[0] });
 });
 
 app.get('/presentations', async (req, res) => {
@@ -146,9 +158,9 @@ app.post('/projects', async (req, res) => {
       req.body.description + "', '" +
       req.body.website + "', '" +
       req.body.repository + "', '" +
-      (req.body.archived !== undefined).toString() + "')")
-  req.flash('success', 'Successfully added project!')
-  res.redirect('projects')
+      (req.body.archived !== undefined).toString() + "')");
+  req.flash('success', 'Successfully added project!');
+  res.redirect('projects');
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
@@ -165,8 +177,25 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
   res.redirect('/profile');
 })
 
-app.get('/admin', isAdminAuthenticated, (req, res) => {
-  res.render('admin', { title: 'Admin' });
+app.get('/admin', isAdminAuthenticated, async(req, res) => {
+  const meetings = await pool.query("SELECT * FROM meetings");
+  console.log("ADMIN MEETINGS:", meetings)
+
+  res.render('admin', { title: 'Admin', meetings: meetings.rows });
+});
+
+// TODO try POSTing to this with Postman
+app.post('/meetings', isAdminAuthenticated, async(req, res) => {
+  await pool.query("INSERT INTO meetings VALUES ('" + 
+      uuid.v4() + "', '" +
+      req.body.title + "', '" + 
+      req.body.description + "', '" +
+      req.body.date + "', '" +
+      req.body.duration + "', '" +
+      req.body.location + "', '" +
+      req.body.type + "')")
+
+  res.redirect('/admin');
 });
 
 app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res) => {

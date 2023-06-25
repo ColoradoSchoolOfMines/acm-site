@@ -5,14 +5,41 @@
 
     <div class="large-card">
         <h2>Meetings</h2>
-    
-        <!-- add meeting stuff -->
+
+        <!-- TODO: left column for meetings, right column for adding meetings. -->
+        <!-- Leftcolumn should be a searchable scroll view sort of thing bc there are a lot of meetings  -->
+
+        <form method="POST" action="/meetings">
+            <input class="d-inline-block" type="text" name="title" placeholder="Title.." />
+            <br>
+            <input class="d-inline-block" type="text" name="description" placeholder="Description.." />
+            <br>
+            <input class="d-inline-block" type="date" name="date" />
+            <br>
+            <input class="d-inline-block" type="text" name="duration" placeholder="Duration (hours) as an integer" />
+            <br>
+            <input class="d-inline-block" type="text" name="location" placeholder="Location.." />
+            <br>
+            <input class="d-inline-block" type="text" name="type" placeholder="Meeting type.." />
+            <br>
+            <button class="btn d-inline-block btn-primary">Submit</button>
+        </form>
+
+        <% for(let meeting of meetings) { %>
+            <p><%= meeting.title %> (<%= meeting.id %>)</p>
+            <p><%= meeting.description %></p>
+            <p><%= meeting.date %></p>
+            <p><%= meeting.duration %></p>
+            <p><%= meeting.location %></p>
+            <p><%= meeting.type %></p>
+        <% } %>
+
     </div>
 
     <div class="large-card">    
         <h2>Images</h2>
         <p>Upload new image to be displayed randomly on the front page of the site.</p>
-        <form action="/admin" method="post" enctype="multipart/form-data">
+        <form method="POST" action="/admin" enctype="multipart/form-data">
             <input class="d-inline-block" type="file" name="image" />
             <br>
             <input class="d-inline-block" type="text" name="caption" placeholder="Caption.." />

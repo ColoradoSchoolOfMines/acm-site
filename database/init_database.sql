@@ -22,19 +22,19 @@ CREATE TABLE IF NOT EXISTS user_projects (
 );
 
 CREATE TABLE IF NOT EXISTS meetings (
-    "id"          INTEGER PRIMARY KEY,
+    "id"          TEXT PRIMARY KEY,
     "title"       TEXT NOT NULL,
     "description" TEXT,
     "date"        TIMESTAMP,
     "duration"    INTEGER,
     "location"    TEXT,
     "type"        TEXT
+    -- "opens"   TIMESTAMP,
+    -- "closes"  TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
-    "meeting" INTEGER PRIMARY KEY REFERENCES meetings(id),
-    "opens"   TIMESTAMP,
-    "closes"  TIMESTAMP,
+    "meeting" TEXT PRIMARY KEY REFERENCES meetings(id),
     "user"    TEXT REFERENCES users(email)
 );
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS images (
 );
 
 CREATE TABLE IF NOT EXISTS presentations (
-    "id"          INTEGER PRIMARY KEY,
+    "id"          TEXT PRIMARY KEY,
     "title"       TEXT NOT NULL,
     "description" TEXT,
     "date"        TIMESTAMP,
