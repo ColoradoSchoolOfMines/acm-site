@@ -114,6 +114,9 @@ app.get('/', async (req, res) => {
       caption: "ACM officers at the 2021 Celebration of Mines."
     }
   }
+
+  // TODO select two from upcoming meetings where date is in next two weeks
+
   res.render('home', { title: 'Home', image: image });
 });
 
