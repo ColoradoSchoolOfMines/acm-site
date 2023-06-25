@@ -137,7 +137,7 @@ app.get('/projects', async (req, res) => {
 });
 
 app.post('/projects', async (req, res) => {
-  const resp = await pool.query("INSERT INTO projects VALUES ('" + 
+  await pool.query("INSERT INTO projects VALUES ('" + 
       uuid.v4() + "', '" +
       req.body.title + "', '" + 
       req.body.description + "', '" +
