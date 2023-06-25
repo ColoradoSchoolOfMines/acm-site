@@ -22,8 +22,9 @@
 				for weekly meeting details and to stay in touch with our community.
 			</p>
 			<div>
-				<p class="next-meeting">Next meeting: Project Meeting, June 8th, 6:00pm in MZ126</p>
-				<button class="btn btn-outline-primary">I'm in!</button>
+				<p class="next-meeting"><strong>Next meeting</strong>: <%= meetings[0].title %>, <%= meetings[0].date %>, <%= meetings[0].duration %> in <%= meetings[0].location %>
+					<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
+				</p>
 			</div>
 		</div>
 		<div class="col-lg-6">
@@ -48,17 +49,21 @@
 	<div class="row">
 		<div class="col col-gold" style="margin-left: 10%; margin-right: 2.5%;">
 			<div class="highlight">
-				<% for(let meeting of meetings) { %>
-				<div class="meeting">
-					<p class="meeting-title"><%= meeting.title %>
-						<button class="btn btn-outline-primary rsvp">RSVP</button>
-					</p>
-					<p class="meeting-info"><strong>Tuesday, April 4, 2023 | <%= meeting.date %></strong> from
-						<strong>6:00-7:00pm | <%= meeting.duration %></strong> in <strong><%= meeting.location %></strong></p>
-					<p class="meeting-description"><%= meeting.description %></p>
-				</div>
+				<% if(meetings.length > 0) { %>
+					<% for(let meeting of meetings) { %>
+					<div class="meeting">
+						<p class="meeting-title"><%= meeting.title %>
+							<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+						</p>
+						<p class="meeting-info"><strong>Tuesday, April 4, 2023 | <%= meeting.date %></strong> from
+							<strong>6:00-7:00pm | <%= meeting.duration %></strong> in <strong><%= meeting.location %></strong></p>
+						<p class="meeting-description"><%= meeting.description %></p>
+					</div>
+					<% } %>
+				<% } else { %> 
+					<p>No upcoming meetings! Check back soon for more.</p>
 				<% } %>
-				<p class="pt-3"><a href="meetings">View our full schedule here</a>.</p>
+				<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
 			</div>
 		</div>
 		<div class="col col-gold" style="margin-left: 2.5%; margin-right: 10%;">

@@ -116,6 +116,11 @@ app.get('/', async (req, res) => {
   }
 
   const meetings = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
+
+  // reformat meeting date: TODO figure out best way to pass it through
+  let date = new Date(meetings.rows[0].date);
+  console.log(date.toUTCString());
+
   res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
 });
 
@@ -214,3 +219,6 @@ process.on('SIGINT', async () => {
   await pool.end();
   process.exit(0);
 });
+
+// TODO this may not be good practice (but in theory allows for safer pool access)
+module.exports = pool;

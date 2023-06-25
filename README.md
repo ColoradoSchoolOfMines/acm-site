@@ -30,6 +30,7 @@ docker compose up -d
 - Blog page
 - Test uploads vulnerability and other security stuff
 - Webhook or API with discord bot to display meetings
+- Navbar moves slightly when dropdown is clicked
 
 ## Design Choices
 Given that this is intended to be continuously maintained by students
