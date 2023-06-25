@@ -26,14 +26,15 @@
         </form>
 
         <% for(let meeting of meetings) { %>
-            <p><%= meeting.title %> (<%= meeting.id %>)</p>
-            <p><%= meeting.description %></p>
-            <p><%= meeting.date %></p>
-            <p><%= meeting.duration %></p>
-            <p><%= meeting.location %></p>
-            <p><%= meeting.type %></p>
+            <div style="border: 1px solid black;">
+                <p><%= meeting.title %> (<%= meeting.id %>)</p>
+                <p><%= meeting.description %></p>
+                <p><%= meeting.date %></p>
+                <p><%= meeting.duration %></p>
+                <p><%= meeting.location %></p>
+                <p><%= meeting.type %></p>
+            </div>
         <% } %>
-
     </div>
 
     <div class="large-card">    

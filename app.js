@@ -115,30 +115,19 @@ app.get('/', async (req, res) => {
     }
   }
 
-  // TODO select two from upcoming meetings where date is in next two weeks
-  const meetings = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' LIMIT 2");
-  console.log(meetings.rows[0]);
-
-  res.render('home', { title: 'Home', image: image });
+  const meetings = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
+  res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
 });
 
 app.get('/about', async (req, res) => {
-  const resp = await pool.query("SELECT * FROM users WHERE title != '';");
+  const resp = await pool.query("SELECT * FROM users WHERE title != ''");
   res.render('about', { title: 'About Us', people: resp.rows });
 });
 
 app.get('/schedule', async(req, res) => {
-  const upcoming = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' LIMIT 2");
-  console.log(upcoming)
-  console.log(upcoming.rows[0]);
-  console.log("UPCOMING^")
-
-  const previous = await pool.query("SELECT * FROM meetings WHERE date <= NOW()");
-  console.log(previous)
-  console.log(previous.rows[0]);
-  console.log("PREVIOUS^")
-
-  res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows[0], previous: previous.rows[0] });
+  const upcoming = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date LIMIT 2");
+  const previous = await pool.query("SELECT * FROM meetings WHERE date <= NOW() ORDER BY date DESC");
+  res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows, previous: previous.rows });
 });
 
 app.get('/presentations', async (req, res) => {
@@ -178,13 +167,10 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
 })
 
 app.get('/admin', isAdminAuthenticated, async(req, res) => {
-  const meetings = await pool.query("SELECT * FROM meetings");
-  console.log("ADMIN MEETINGS:", meetings)
-
+  const meetings = await pool.query("SELECT * FROM meetings ORDER BY date");
   res.render('admin', { title: 'Admin', meetings: meetings.rows });
 });
 
-// TODO try POSTing to this with Postman
 app.post('/meetings', isAdminAuthenticated, async(req, res) => {
   await pool.query("INSERT INTO meetings VALUES ('" + 
       uuid.v4() + "', '" +
