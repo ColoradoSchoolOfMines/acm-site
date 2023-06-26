@@ -51,6 +51,14 @@
         <!-- TODO: export attendance stats to CSV; meeting, attendance, type, date -->
     </div>
 
+    <div class="large-card">
+        <h2>Officers</h2>
+        <% for(let officer of officers) { %>
+            <p><%= officer.first_name %> <%= officer.last_name %> | <%= officer.title %></p>
+            <p><%= officer.email %></p>
+        <% } %>
+    </div>
+
     <div class="large-card">    
         <h2>Images</h2>
         <p>Upload new image to be displayed randomly on the front page of the site.</p>

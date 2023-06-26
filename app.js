@@ -169,7 +169,7 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
     req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
   }
   res.redirect('/profile');
-})
+});
 
 app.get('/admin', isAdminAuthenticated, async(req, res) => {
   let meetings = await db.query("SELECT * FROM meetings ORDER BY date");  
@@ -177,7 +177,9 @@ app.get('/admin', isAdminAuthenticated, async(req, res) => {
     const attendance = await db.query("SELECT attendance.user FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
     meetings.rows[meeting].attendance = attendance.rows;
   }
-  res.render('admin', { title: 'Admin', meetings: meetings.rows });
+
+  const officers = await db.query("SELECT * FROM users WHERE title != ''");
+  res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows });
 });
 
 app.post('/meetings', isAdminAuthenticated, async(req, res) => {
