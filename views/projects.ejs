@@ -4,19 +4,20 @@
     <h1>Projects</h1>
     <p>Projects are a great way to get involved with Mines ACM! Apply existing knowledge
         and learn new skills with our variety of projects.</p>
-            
     <% for(let project of projects) { %>
         <div class="large-card">
-            <p>
+            <h2>
                 <%= project.title %>
-                <%= project.description %>
-                <%= project.repository %>
-                <%= project.website %>
-                <%= project.authors %>
-                <%= project.archived %>
-            </p>
+                <!-- TODO: Make a style for this-->
+                <% if (project.archived) { %>
+                    <span class="project-archived">(Inactive)</span>
+                <% } %>
+            </h2>
+            <p class="project-desc"><%= project.description %></p>
+            <a class="d-block" href="<%= project.website %>">Website</a>
+            <a class="d-block"  href="<%= project.repository %>">Repository</a>
         </div>
-    <% } %>
+    <% } %> 
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">

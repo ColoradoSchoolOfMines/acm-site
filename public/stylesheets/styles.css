@@ -133,6 +133,21 @@ p {
     line-height: 30px;
 }
 
+.project-title {
+    font-size: 19px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.project-archived {
+    color: lightslategray;
+    font-weight: normal;
+}
+
+.project-desc {
+    font-size: 22px;
+}
+
 .meeting {
     border-bottom: 1px solid lightgray;
     padding-bottom: 1%;
