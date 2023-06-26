@@ -55,7 +55,7 @@
 						<p class="meeting-title"><%= meeting.title %>
 							<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
 						</p>
-						<p class="meeting-info"><strong>Tuesday, April 4, 2023 | <%= meeting.date %></strong> from
+						<p class="meeting-info"><strong><%= meeting.date %></strong> from
 							<strong>6:00-7:00pm | <%= meeting.duration %></strong> in <strong><%= meeting.location %></strong></p>
 						<p class="meeting-description"><%= meeting.description %></p>
 					</div>

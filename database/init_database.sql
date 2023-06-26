@@ -29,13 +29,18 @@ CREATE TABLE IF NOT EXISTS meetings (
     "duration"    INTEGER,
     "location"    TEXT,
     "type"        TEXT
-    -- "opens"   TIMESTAMP,
     -- "closes"  TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
     "meeting" TEXT PRIMARY KEY REFERENCES meetings(id),
     "user"    TEXT REFERENCES users(email)
+);
+
+CREATE TABLE IF NOT EXISTS rsvps (
+    "meeting" TEXT PRIMARY KEY REFERENCES meetings(id),
+    "name"    TEXT NOT NULL,
+    "email"   TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS images (
