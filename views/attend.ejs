@@ -1,18 +1,33 @@
 <% layout('layouts/base')%>
 
 <div class="content">
-    <h1>Meeting Name</h1>
-    <p>Please fill out the following attendance form!</p>
-            
     <div class="large-card">
-        <form method="POST" action="/attend">
-            <p>Name</p>
-            <input class="d-inline-block" type="text" name="name" placeholder="Your name.." />
-            <br>
-            <p>Email</p>
-            <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
-            <br>
-            <button class="btn d-inline-block btn-primary">Submit</button>
-        </form>
+    <% if(!meeting) { %>
+        <h1>There is no active meeting right now!</h1>
+        <p><a href="/schedule">Check our schedule</a> to see upcoming meetings.</p>
+        <p>If you believe this is an error, please <a href="https://github.com/ColoradoSchoolOfMines/acm-site/issues">submit an issue</a>.</p>
+    <% } else { %>
+        <h1><%= meeting.title %></h1>
+        <p>Please fill out the following form so we can log your attendance!</p>
+        
+        <% if(typeof user == 'object' && user) { %>
+            <p>You're logged in already, so we'll submit your form as <strong><%= user.full %></strong>.</p>
+            <form method="POST" action="/rsvp">
+                <input type="hidden" name="meetingId" value="<%= meeting.id %>">
+                <button class="btn d-inline-block btn-primary">Submit</button>
+            </form>
+        <% } else { %>
+            <form method="POST" action="/attend">
+                <p>Name</p>
+                <input class="d-inline-block" type="text" name="name" placeholder="Your name.." />
+                <br>
+                <p>Email</p>
+                <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
+                <br>
+                <input type="hidden" name="meetingId" value="<%= meeting.id %>">
+                <button class="btn d-inline-block btn-primary">Submit</button>
+            </form>
+        <% } %>
+    <% } %>
     </div>
 </div>

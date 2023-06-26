@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 
+// TODO on get routes, just send a boolean if user has submitted already so they can't submit again
+
 router.get('/rsvp', async(req, res) => {
   if(req.query.meeting) {
     // Find next meeting and show it to user
@@ -20,8 +22,8 @@ router.get('/rsvp', async(req, res) => {
 
 router.post('/rsvp', async(req, res) => {
   // use logged in credentials if possible
-  let email = req.user.email;
-  let name = req.user.full;
+  let email;
+  let name;
 
   if(req.body.name && req.body.email) {
     // user is submitting with form data
@@ -29,67 +31,62 @@ router.post('/rsvp', async(req, res) => {
     name = req.body.name;
   }
   else {
-    // something went very wrong if they submitted without data and aren't logged in
-    req.flash('error', 'Something went wrong! Contact a site administrator about this.');
-    res.redirect('/');
+    email = req.user.email;
+    name = req.user.full;
   }
 
   // Check if user has RSVP'ed already
-  let rsvped = false;
   const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1", [req.user.email]);
   if(rsvp.rows.length > 0) {
-    rsvped = true;
-  }
-  else {
-    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.meetingId, name, email]);
-  }
-  
-  if(rsvped) {
     req.flash('error', 'You have already RSVP\'ed for this event!');
     res.redirect('/');
   }
   else {
+    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.meetingId, name, email]);
     req.flash('success', 'Successfully RSVP\'ed! Thanks for coming.');
     res.redirect('/');
   }
 });
 
-router.get('/attend', (req, res) => {
-  res.render('attend', { title: 'Attend' });
+router.get('/attend', async (req, res) => {
+  // Find active meeting if possible; TODO: use more precise date (hours)?
+  const resp = await db.query("SELECT * FROM meetings WHERE date = current_date");
+  if(resp.rows.length > 0) {
+    res.render('attend', { title: 'Attend', meeting: resp.rows[0] });
+  }
+  else {
+    res.render('attend', { title: 'Attend', meeting: false });
+  }
 });
 
 router.post('/attend', async(req, res) => {
-  // If user is logged in, use those credentials instead
-  let email;
-  if(req.user) {
-    console.log(req.user.email)
+  // TODO abstract this common functionality with /rsvp and also check for error cases
 
-    email = req.user.email;
+  // use logged in credentials if possible
+  let email;
+  let name;
+
+  if(req.body.name && req.body.email) {
+    // user is submitting with form data
+    email = req.body.email;
+    name = req.body.name;
   }
   else {
-    console.log(req.body)
-
-    email = req.body.email;
+    email = req.user.email;
+    name = req.user.full;
   }
 
   // check if submitted already
-  
-  // POST form data to attendance table
-  // console.log(req.body.meeting) // pass meeting through somehow
-
-  // get active meeting
-  let meetingId;
-
-  let now = new Date();
-  console.log(now.toISOString());
-
-  const resp = await db.query("SELECT id FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 hour'")
-
-  await db.query("INSERT INTO attendance VALUES ('" + meetingId + "', '" + req.body.email + "') ON CONFLICT DO NOTHING");
-  // await db.query("INSERT INTO attendance VALUES ($1, $2) ON CONFLICT DO NOTHING", ['6378aad4-43c9-49cd-a3f9-7019a2df144a', 'erichards@mines.edu'])
-
-  req.flash('success', 'Your attendance has been logged! Thanks for coming.')
-  res.redirect('/');
-})
+  const attendance = await db.query("SELECT 1 FROM attendance WHERE user = $1 AND meeting = $2", [email, req.body.meetingId]);
+  if(attendance.rows.length > 0) {
+    req.flash('error', 'You have already submitted an attendance form for this event!');
+    res.redirect('/');
+  }
+  else {
+    await db.query("INSERT INTO attendance VALUES ('" + req.body.meetingId + "', '" + email + "') ON CONFLICT DO NOTHING");
+    req.flash('success', 'Your attendance has been logged! Thanks for coming.')
+    res.redirect('/');
+  }
+});
 
 module.exports = router;
