@@ -9,11 +9,11 @@
 
         <img class="team-picture" src="uploads/<%= user.avatar_id %>" />
         
-        <p>Update Profile Picture</p>
+        <h5>Update Profile Picture</h5>
         <form method="POST" action="/profile" enctype="multipart/form-data" accept="image/png,image/jpg,image/jpeg">
-            <input class="d-inline-block" type="file" name="avatar" />
+            <input class="d-inline-block mb-1" type="file" name="avatar" />
             <br>
-            <button class="btn d-inline-block btn-primary">Submit</button>
+            <button class="btn d-inline-block btn-primary mt-1">Submit</button>
         </form>
     </div>
 </div>
