@@ -63,6 +63,10 @@ a {
     text-decoration: none;
 }
 
+p {
+    margin-bottom: 0;
+}
+
 /* Components */
 .container {
     padding-top: 2%;
@@ -182,6 +186,11 @@ a {
     padding: 4%;
     border-radius: 25px;
     margin-bottom: 2%;
+}
+
+.meeting-scroll {
+    height: 400px;
+    overflow: scroll;
 }
 
 /* Buttons */

@@ -53,6 +53,9 @@
 					<% for(let meeting of meetings) { %>
 					<div class="meeting">
 						<p class="meeting-title"><%= meeting.title %>
+
+							<!-- check if RSVP'ed already -->
+
 							<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
 						</p>
 						<p class="meeting-info"><strong><%= meeting.date %></strong> from

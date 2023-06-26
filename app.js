@@ -37,7 +37,6 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    // update users if one doesn't exist
     await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '"
       + profile.given_name + "', '"
       + profile.family_name + "', '', '"
@@ -221,6 +220,3 @@ process.on('SIGINT', async () => {
   await pool.end();
   process.exit(0);
 });
-
-// TODO this may not be good practice (but in theory allows for safer pool access)
-module.exports = pool;

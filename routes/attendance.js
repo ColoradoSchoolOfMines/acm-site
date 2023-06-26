@@ -86,8 +86,6 @@ router.post('/attend', async(req, res) => {
   console.log(now.toISOString());
 
   const resp = await pool.query("SELECT id FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 hour'")
-  // date >= NOW() AND date <= NOW() + INTERVAL '2 weeks'
-
 
   await pool.query("INSERT INTO attendance VALUES ('" + meetingId + "', '" + req.body.email + "') ON CONFLICT DO NOTHING");
 
