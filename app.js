@@ -201,7 +201,12 @@ app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res
 });
 
 app.get('/uploads/:id', (req, res) => {
-  let image = fs.readFileSync("uploads/" + req.params.id);
+  let image = undefined; 
+  try {
+    image = fs.readFileSync("uploads/" + req.params.id);
+  } catch (e) {
+    image = fs.readFileSync("public/static/images/default_user.png")
+  }
   res.contentType('image/jpeg');
   res.send(Buffer.from(image.toString('base64'), 'base64'));
 });
