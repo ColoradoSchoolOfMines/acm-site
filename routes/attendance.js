@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../app');
 const db = require('../database/db');
-// import * as db from '../db.js'
 
 router.get('/rsvp', async(req, res) => {
   if(req.query.meeting) {

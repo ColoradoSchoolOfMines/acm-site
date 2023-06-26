@@ -7,30 +7,28 @@
         <br><a href="https://support.google.com/calendar/answer/37100#add_via_link">Instructions for subscribing to our calendar.</a>    
     </div>
 
-    <div class="large-card">
+    <div class="large-card meeting-scroll">
         <h1>Upcoming Meetings</h1>
         <% for(let meeting of upcoming) { %>
-            <div style="border: 1px solid black;">
-                <p><%= meeting.title %></p>
-                <p><%= meeting.description %></p>
-                <p><%= meeting.date %></p>
-                <p><%= meeting.duration %></p>
-                <p><%= meeting.location %></p>
-                <p><%= meeting.type %></p>
+            <div class="meeting">
+                <p><strong><%= meeting.title %></strong>: <%= meeting.description %></p>
+                <p><strong>Date</strong>: <%= meeting.date %></p>
+                <p><strong>Location</strong>: <%= meeting.location %></p>
+                <p><strong>Type</strong>: <%= meeting.type %></p>
+                <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
             </div>
         <% } %>
     </div>
 
-    <div class="large-card">
+    <div class="large-card ">
         <h1>Previous Meetings</h1>
         <% for(let meeting of previous) { %>
-            <div style="border: 1px solid black;">
-                <p><%= meeting.title %></p>
-                <p><%= meeting.description %></p>
-                <p><%= meeting.date %></p>
-                <p><%= meeting.duration %></p>
-                <p><%= meeting.location %></p>
-                <p><%= meeting.type %></p>
+            <div class="meeting">
+                <p><strong><%= meeting.title %></strong>: <%= meeting.description %></p>
+                <p><strong>Date</strong>: <%= meeting.date %></p>
+                <p><strong>Location</strong>: <%= meeting.location %></p>
+                <p><strong>Type</strong>: <%= meeting.type %></p>
+                <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
             </div>
         <% } %>
     </div>

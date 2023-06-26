@@ -20,12 +20,10 @@
 				Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing
 					list</a>
 				for weekly meeting details and to stay in touch with our community.
-			</p>
-			<div>
-				<p class="next-meeting"><strong>Next meeting</strong>: <%= meetings[0].title %>, <%= meetings[0].date %>, <%= meetings[0].duration %> in <%= meetings[0].location %>
+				<br><br>
+				<strong>Next meeting</strong>: <%= meetings[0].title %>, <%= meetings[0].date %>, <%= meetings[0].duration %> in <%= meetings[0].location %>
 					<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
-				</p>
-			</div>
+			</p>
 		</div>
 		<div class="col-lg-6">
 			<img src="uploads/<%= image.url %>" class="header-image shadow" />
@@ -89,8 +87,9 @@
 						opportunities to learn
 						industry skills. We regularly host our Git Workshop, with seasonal workshops
 						such as web and even Minecraft development also happening!</p>
-					<p><strong>and so much more!</strong></p>
 				</div>
+				<br>
+				<p><strong>and so much more!</strong></p>
 			</div>
 		</div>
 	</div>

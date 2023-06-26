@@ -6,18 +6,17 @@ const session = require('express-session');
 const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
-const pg = require('pg');
 const uuid = require('uuid');
 const passport = require('passport');
 const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
 const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
+const upload = multer(multerConfig);
+const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
 const app = express();
-const pool = new pg.Pool({ connectionString: process.env.DB_URL });
-const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
-const upload = multer(multerConfig);
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -37,13 +36,13 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    await pool.query("INSERT INTO users VALUES ('" + profile.email + "', '"
+    await db.query("INSERT INTO users VALUES ('" + profile.email + "', '"
       + profile.given_name + "', '"
       + profile.family_name + "', '', '"
       + uuid.v4() + "') ON CONFLICT DO NOTHING");
 
     // get user by email
-    const resp = await pool.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
+    const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
     user = {
       "first": resp.rows[0].first_name,
       "last": resp.rows[0].last_name,
@@ -100,7 +99,7 @@ app.use('/', authRoutes);
 app.use('/', attendRoutes);
 
 app.get('/', async (req, res) => {
-  const resp = await pool.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
+  const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
   if (resp.rows.length > 0) {
     image = {
       url: resp.rows[0].url,
@@ -114,7 +113,7 @@ app.get('/', async (req, res) => {
     }
   }
 
-  const meetings = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
+  const meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
 
   //clientside JS 'formatDate()' or just format it as text when putting it into the DB?  
   // reformat meeting date: TODO figure out best way to pass it through
@@ -126,28 +125,28 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/about', async (req, res) => {
-  const resp = await pool.query("SELECT * FROM users WHERE title != ''");
+  const resp = await db.query("SELECT * FROM users WHERE title != ''");
   res.render('about', { title: 'About Us', people: resp.rows });
 });
 
 app.get('/schedule', async(req, res) => {
-  const upcoming = await pool.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date LIMIT 2");
-  const previous = await pool.query("SELECT * FROM meetings WHERE date <= NOW() ORDER BY date DESC");
+  const upcoming = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date LIMIT 2");
+  const previous = await db.query("SELECT * FROM meetings WHERE date <= NOW() ORDER BY date DESC");
   res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows, previous: previous.rows });
 });
 
 app.get('/presentations', async (req, res) => {
-  const resp = await pool.query("SELECT * FROM presentations");
+  const resp = await db.query("SELECT * FROM presentations");
   res.render('presentations', { title: 'Presentations', presentations: resp.rows });
 });
 
 app.get('/projects', async (req, res) => {
-  const resp = await pool.query("SELECT * FROM projects");
+  const resp = await db.query("SELECT * FROM projects");
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
 app.post('/projects', async (req, res) => {
-  await pool.query("INSERT INTO projects VALUES ('" + 
+  await db.query("INSERT INTO projects VALUES ('" + 
       uuid.v4() + "', '" +
       req.body.title + "', '" + 
       req.body.description + "', '" +
@@ -173,12 +172,12 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
 })
 
 app.get('/admin', isAdminAuthenticated, async(req, res) => {
-  const meetings = await pool.query("SELECT * FROM meetings ORDER BY date");
+  const meetings = await db.query("SELECT * FROM meetings ORDER BY date");
   res.render('admin', { title: 'Admin', meetings: meetings.rows });
 });
 
 app.post('/meetings', isAdminAuthenticated, async(req, res) => {
-  await pool.query("INSERT INTO meetings VALUES ('" + 
+  await db.query("INSERT INTO meetings VALUES ('" + 
       uuid.v4() + "', '" +
       req.body.title + "', '" + 
       req.body.description + "', '" +
@@ -191,7 +190,7 @@ app.post('/meetings', isAdminAuthenticated, async(req, res) => {
 });
 
 app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res) => {
-  await pool.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', false)");
+  await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', false)");
   res.redirect('/admin');
 });
 
@@ -211,12 +210,12 @@ app.use((err, req, res, next) => {
 
 app.listen(process.env.PORT || 3000, async () => {
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
-  await pool.query(initQuery);
+  await db.query(initQuery);
   console.log("ACM server started!");
 });
 
 process.on('SIGINT', async () => {
   console.log("Shutting down..");
-  await pool.end();
+  await db.end();
   process.exit(0);
 });

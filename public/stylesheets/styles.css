@@ -176,11 +176,6 @@ p {
     font-style: italic;
 }
 
-.next-meeting {
-    display: inline-block;
-    font-size: 20px;
-}
-
 .large-card {
     background-color: #f8f9fa;
     padding: 4%;
