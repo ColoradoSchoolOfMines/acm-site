@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../app');
 const db = require('../database/db');
 
 router.get('/rsvp', async(req, res) => {
@@ -84,9 +83,10 @@ router.post('/attend', async(req, res) => {
   let now = new Date();
   console.log(now.toISOString());
 
-  const resp = await pool.query("SELECT id FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 hour'")
+  const resp = await db.query("SELECT id FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 hour'")
 
-  await pool.query("INSERT INTO attendance VALUES ('" + meetingId + "', '" + req.body.email + "') ON CONFLICT DO NOTHING");
+  await db.query("INSERT INTO attendance VALUES ('" + meetingId + "', '" + req.body.email + "') ON CONFLICT DO NOTHING");
+  // await db.query("INSERT INTO attendance VALUES ($1, $2) ON CONFLICT DO NOTHING", ['6378aad4-43c9-49cd-a3f9-7019a2df144a', 'erichards@mines.edu'])
 
   req.flash('success', 'Your attendance has been logged! Thanks for coming.')
   res.redirect('/');

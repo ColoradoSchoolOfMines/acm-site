@@ -15,6 +15,12 @@
                             <p><strong>Location</strong>: <%= meeting.location %></p>
                             <p><strong>Type</strong>: <%= meeting.type %></p>
                             <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
+                            <% if(meeting.attendance.length > 0) { %>
+                                <p><strong>Students attended</strong>:</p>
+                                <% for(let attendance of meeting.attendance) { %>
+                                    <p><%= attendance.user %></p>
+                                <% } %>
+                            <% } %>
                         </div>
                     <% } %>
                 </div>
@@ -39,6 +45,13 @@
             </div>
         </div>
     </div>
+    
+    <div class="large-card">
+        <h2>Attendance</h2>
+
+        <!-- this may or may not be needed depending on what data is in the meetings section above -->
+        <!-- TODO: export attendance stats to CSV; meeting, attendance, type, date -->
+    </div>
 
     <div class="large-card">    
         <h2>Images</h2>
@@ -50,11 +63,5 @@
             <br>
             <button class="btn d-inline-block btn-primary">Submit</button>
         </form>
-    </div>
-
-    <div class="large-card">
-        <h2>Attendance</h2>
-
-        <!-- TODO: export attendance stats to CSV; meeting, attendance, type, date -->
     </div>
 </div>

@@ -172,7 +172,11 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
 })
 
 app.get('/admin', isAdminAuthenticated, async(req, res) => {
-  const meetings = await db.query("SELECT * FROM meetings ORDER BY date");
+  let meetings = await db.query("SELECT * FROM meetings ORDER BY date");  
+  for(let meeting in meetings.rows) {
+    const attendance = await db.query("SELECT attendance.user FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
+    meetings.rows[meeting].attendance = attendance.rows;
+  }
   res.render('admin', { title: 'Admin', meetings: meetings.rows });
 });
 
