@@ -3,45 +3,43 @@
 <div class="content">
     <h1>Admin</h1>
     <div class="large-card">
-        <div class="container">
-            <div class="row">
-                <div class="col meeting-scroll">
-                    <h2>Meetings</h2>
-                    <% for(let meeting of meetings) { %>
-                        <div class="meeting">
-                            <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
-                            <p><strong>Description</strong>: <%= meeting.description %></p>
-                            <p><strong>Date</strong>: <%= meeting.date %></p>
-                            <p><strong>Location</strong>: <%= meeting.location %></p>
-                            <p><strong>Type</strong>: <%= meeting.type %></p>
-                            <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
-                            <% if(meeting.attendance.length > 0) { %>
-                                <p><strong>Students attended</strong>:</p>
-                                <% for(let attendance of meeting.attendance) { %>
-                                    <p><%= attendance.user %></p>
-                                <% } %>
+        <div class="row">
+            <div class="col meeting-scroll">
+                <h2>Meetings</h2>
+                <% for(let meeting of meetings) { %>
+                    <div class="meeting">
+                        <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
+                        <p><strong>Description</strong>: <%= meeting.description %></p>
+                        <p><strong>Date</strong>: <%= meeting.date %></p>
+                        <p><strong>Location</strong>: <%= meeting.location %></p>
+                        <p><strong>Type</strong>: <%= meeting.type %></p>
+                        <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
+                        <% if(meeting.attendance.length > 0) { %>
+                            <p><strong>Students attended</strong>:</p>
+                            <% for(let attendance of meeting.attendance) { %>
+                                <p><%= attendance.user %></p>
                             <% } %>
-                        </div>
-                    <% } %>
-                </div>
-                <div class="col-sm-2">
-                    <h2>Add Meeting</h2>
-                    <form method="POST" action="/meetings">
-                        <input class="d-inline-block" type="text" name="title" placeholder="Title.." />
-                        <br>
-                        <input class="d-inline-block" type="text" name="description" placeholder="Description.." />
-                        <br>
-                        <input class="d-inline-block" type="date" name="date" />
-                        <br>
-                        <input class="d-inline-block" type="text" name="duration" placeholder="Duration (hours) as an integer" />
-                        <br>
-                        <input class="d-inline-block" type="text" name="location" placeholder="Location.." />
-                        <br>
-                        <input class="d-inline-block" type="text" name="type" placeholder="Meeting type.." />
-                        <br>
-                        <button class="btn d-inline-block btn-primary">Submit</button>
-                    </form>
-                </div>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+            <div class="col-sm-2">
+                <h2>Add Meeting</h2>
+                <form method="POST" action="/meetings">
+                    <input class="d-inline-block" type="text" name="title" placeholder="Title.." />
+                    <br>
+                    <input class="d-inline-block" type="text" name="description" placeholder="Description.." />
+                    <br>
+                    <input class="d-inline-block" type="date" name="date" />
+                    <br>
+                    <input class="d-inline-block" type="text" name="duration" placeholder="Duration (hours) as an integer" />
+                    <br>
+                    <input class="d-inline-block" type="text" name="location" placeholder="Location.." />
+                    <br>
+                    <input class="d-inline-block" type="text" name="type" placeholder="Meeting type.." />
+                    <br>
+                    <button class="btn d-inline-block btn-primary">Submit</button>
+                </form>
             </div>
         </div>
     </div>
