@@ -141,7 +141,7 @@ app.get('/presentations', async (req, res) => {
 });
 
 app.get('/projects', async (req, res) => {
-  const resp = await db.query("SELECT * FROM projects");
+  const resp = await db.query("SELECT * FROM projects ORDER BY archived, title");
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
