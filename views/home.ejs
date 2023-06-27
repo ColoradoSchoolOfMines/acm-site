@@ -23,7 +23,7 @@
 				<br><br>
 				<% if (meetings.length > 0) { %>
 					<strong>Next meeting</strong>: 
-					<%= meetings[0].title %>, <%= meetings[0].date %>, <%= meetings[0].duration %> in <%= meetings[0].location %>
+					<%= meetings[0].title %>, <%= meetings[0].date %>, from <%= meetings[0].duration %> in <%= meetings[0].location %>
 				<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
 				<% } else { %>
 					<strong>No upcoming meetings right now, check back soon!</strong>

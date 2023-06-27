@@ -102,7 +102,14 @@ app.get('/', async (req, res) => {
 
   let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
   for(let meeting in meetings.rows) {
-    meetings.rows[meeting].date = formatDate(meetings.rows[meeting].date);
+    let originalDate = meetings.rows[meeting].date;
+    meetings.rows[meeting].date = formatDate(originalDate);
+    
+    let endTime = new Date(new Date(originalDate).getTime() + parseInt(meetings.rows[meeting].duration));
+    let newDuration = originalDate.toLocaleDateString('en-US', { hour: 'numeric' }).split(", ")[1] + " to " 
+      + endTime.toLocaleDateString('en-US', { hour: 'numeric' }).split(", ")[1];
+
+    meetings.rows[meeting].duration = newDuration;
   }
   res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
 });
@@ -114,7 +121,7 @@ formatDate = (date) => {
     year: 'numeric', 
     month: 'long', 
     day: 'numeric',
-    hour: 'numeric'
+    // hour: 'numeric'
     // timeStyle: 'short'
   });
 }
@@ -188,12 +195,13 @@ app.post('/meetings', isAdminAuthenticated, async(req, res) => {
 
   // TODO figure out how to better handle meeting durations
 
+  // duration: convert hours -> milliseconds
   await db.query("INSERT INTO meetings VALUES ('" + 
       uuid.v4() + "', '" +
       req.body.title + "', '" + 
       req.body.description + "', '" +
       req.body.date + "', '" +
-      req.body.duration + "', '" +
+      (req.body.duration * 3600000) + "', '" +
       req.body.location + "', '" +
       req.body.type + "')")
 
