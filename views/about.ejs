@@ -24,8 +24,8 @@
     
     <% for(let person of people) { %>
     <div class="team-card">
-        <% if(person.picture) { %>
-            <img class="team-picture" src="uploads/<%= person.picture %>"/>
+        <% if(person.avatar_id) { %>
+            <img class="team-picture" src="uploads/<%= person.avatar_id %>"/>
         <% } else { %>
             <img class="team-picture" src="/static/images/default_user.png"/>
         <% } %>

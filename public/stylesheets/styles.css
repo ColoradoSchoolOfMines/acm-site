@@ -95,9 +95,15 @@ p {
     vertical-align: middle;
 }
 
-.team-picture {
+.profile-picture {
     border-radius: 10%;
     width: 10%;
+    margin-bottom: 20px;
+}
+
+.team-picture {
+    border-radius: 10%;
+    width: 40%;
     margin-bottom: 20px;
 }
 
