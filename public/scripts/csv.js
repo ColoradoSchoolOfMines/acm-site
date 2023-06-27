@@ -26,4 +26,3 @@ generateCSV = (attendanceData) => {
     document.body.appendChild(link);
     link.click();
 }
-onclick="generateCSV(<%= meeting.attendance %>)"
