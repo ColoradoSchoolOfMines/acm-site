@@ -31,10 +31,15 @@
 			</p>
 		</div>
 		<div class="col-lg-6">
-			<img src="uploads/<%= image.url %>" class="header-image shadow" />
-			<p class="image-caption">
-				<%= image.caption %>
-			</p>
+			<% if(typeof image == 'object' && image) { %> 
+				<img src="uploads/<%= image.url %>" class="header-image shadow" />
+				<p class="image-caption">
+					<%= image.caption %>
+				</p>
+			<% } else { %>
+				<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
+				<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
+			<% } %>
 		</div>
 	</div>
 </div>

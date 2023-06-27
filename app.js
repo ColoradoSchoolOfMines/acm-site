@@ -99,17 +99,13 @@ app.use('/', authRoutes);
 app.use('/', attendRoutes);
 
 app.get('/', async (req, res) => {
+  let image = false;
+
   const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
   if (resp.rows.length > 0) {
     image = {
       url: resp.rows[0].url,
       caption: resp.rows[0].caption
-    }
-  }
-  else {
-    image = {
-      url: "default_acm.jpeg",
-      caption: "ACM officers at the 2021 Celebration of Mines."
     }
   }
 
