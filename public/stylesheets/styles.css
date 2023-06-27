@@ -198,12 +198,12 @@ p {
 }
 
 .meeting-scroll {
-    height: 50vh;
+    height: 75vh;
     overflow: scroll;
 }
 
 .projects-scroll {
-    height: 50vh;
+    height: 75vh;
     overflow: scroll;
 }
 
