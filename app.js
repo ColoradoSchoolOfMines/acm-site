@@ -165,6 +165,7 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
     req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
   }
   const resp = await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
+  fs.unlinkSync("uploads/" + req.user.avatarId)
   req.user.avatarId = req.file.filename;
   res.redirect('/profile');
 });
@@ -203,6 +204,7 @@ app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res
 
 app.get('/uploads/:id', (req, res) => {
   let image = fs.readFileSync("uploads/" + req.params.id);
+  // TODO: Actually give a correct mime type
   res.contentType('image/jpeg');
   res.send(Buffer.from(image.toString('base64'), 'base64'));
 });
