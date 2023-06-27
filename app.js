@@ -163,7 +163,7 @@ app.get('/profile', isLoggedIn, (req, res) => {
 
 app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
   if (req.file) {
-    const resp = await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
+    await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
     fs.unlinkSync("uploads/" + req.user.avatarId);
     req.user.avatarId = req.file.filename;
     req.flash('success', 'Profile picture uploaded successfully!');
