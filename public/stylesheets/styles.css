@@ -102,8 +102,8 @@ p {
 }
 
 .team-picture {
-    border-radius: 10%;
-    width: 40%;
+    border-radius: 75px;
+    width: 50%;
     margin-bottom: 20px;
 }
 
