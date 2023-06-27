@@ -147,6 +147,12 @@ p {
     margin: 0;
 }
 
+.project-image {
+    width: 20%;
+    min-height: 100%;
+    border-radius: 10%;
+}
+
 .meeting {
     border-bottom: 1px solid lightgray;
     padding-bottom: 1%;

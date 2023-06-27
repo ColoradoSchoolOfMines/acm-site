@@ -141,14 +141,20 @@ app.get('/projects', async (req, res) => {
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
-app.post('/projects', async (req, res) => {
+app.post('/projects', upload.single('image'), async (req, res) => {  
+  if (!req.file) {
+    req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+    return
+  }
+
   await db.query("INSERT INTO projects VALUES ('" + 
       uuid.v4() + "', '" +
       req.body.title + "', '" + 
       req.body.description + "', '" +
       req.body.website + "', '" +
       req.body.repository + "', '" +
-      (req.body.archived !== undefined).toString() + "')");
+      (req.body.archived !== undefined).toString() + "', '" +
+      req.file.filename + "')");
   req.flash('success', 'Successfully added project!');
   res.redirect('projects');
 });

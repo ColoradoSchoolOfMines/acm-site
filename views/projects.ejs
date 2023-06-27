@@ -6,19 +6,22 @@
         and learn new skills with our variety of projects.</p>
     <div class="projects-scroll mt-3">
         <% for(let project of projects) { %>
-            <div class="large-card">
-                <h2 class="project-title">
-                    <%= project.title %>
-                    <!-- TODO: Make a style for this-->
-                    <% if (project.archived) { %>
-                        <span class="project-archived">(Inactive)</span>
-                    <% } %>
-                </h2>
-                <p class="project-desc"><%= project.description %></p>
-                <div class="d-inline-block mt-2">
-                    <a class="d-block" href="<%= project.website %>">Website</a>
-                    <a class="d-block"  href="<%= project.repository %>">Repository</a>
+            <div class="large-card row">
+                <div class="col">
+                    <h2 class="project-title">
+                        <%= project.title %>
+                        <!-- TODO: Make a style for this-->
+                        <% if (project.archived) { %>
+                            <span class="project-archived">(Inactive)</span>
+                        <% } %>
+                    </h2>
+                    <p class="project-desc"><%= project.description %></p>
+                    <div class="d-inline-block mt-2">
+                        <a class="d-block" href="<%= project.website %>">Website</a>
+                        <a class="d-block"  href="<%= project.repository %>">Repository</a>
+                    </div>
                 </div>
+                <img src="uploads/<%= project.image_id %>" class="project-image" />
             </div>
         <% } %> 
     </div>
@@ -36,7 +39,7 @@
                         <h5 class="modal-title" id="newProjectModalLabel">Project Details</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="/projects">
+                    <form method="POST" action="/projects" enctype="multipart/form-data" >
                         <div class="modal-body">
                             <label class="d-block py-1" for="title">Title</label>
                             <input name="title" type="text" required />
@@ -55,6 +58,9 @@
         
                             <label class="d-block py-1" for="archived">Archived</label>
                             <input name="archived" type="checkbox" />
+        
+                            <label class="d-block py-1" for="image">Image</label>
+                            <input name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
