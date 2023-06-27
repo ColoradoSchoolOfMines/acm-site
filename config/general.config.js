@@ -1,5 +1,6 @@
 const multer = require('multer');
 const session = require('express-session');
+const uuid = require('uuid')
 
 /* Multer File Upload Configuration */
 const multerConfig = {
@@ -8,7 +9,7 @@ const multerConfig = {
       cb(null, "uploads/")
     },
     filename: function (req, file, cb) {
-      cb(null, req.user.avatar_id)
+      cb(null, uuid.v4())
     }
   }),
   limits: {

@@ -7,8 +7,11 @@
             <h2><%= user.title%></h2>
         <% } %>
 
-        <img class="team-picture" src="uploads/<%= user.avatar_id %>" />
-        
+        <% if (user.avatarId) { %>
+            <img class="team-picture" src="uploads/<%= user.avatarId %>" />
+        <% } else { %>
+            <img class="team-picture" src="static/images/default_user.png" />
+        <% } %>
         <h5>Update Profile Picture</h5>
         <form method="POST" action="/profile" enctype="multipart/form-data" accept="image/png,image/jpg,image/jpeg">
             <input class="d-inline-block mb-1" type="file" name="avatar" />

@@ -38,8 +38,7 @@ passport.use(new GoogleStrategy({
   if (profile.email.endsWith("@mines.edu")) {
     await db.query("INSERT INTO users VALUES ('" + profile.email + "', '"
       + profile.given_name + "', '"
-      + profile.family_name + "', '', '"
-      + uuid.v4() + "') ON CONFLICT DO NOTHING");
+      + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
 
     // get user by email
     const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
@@ -50,7 +49,7 @@ passport.use(new GoogleStrategy({
       "email": resp.rows[0].email,
       "title": resp.rows[0].title,
       "isAdmin": resp.rows[0].title.length > 0,
-      "avatar_id": resp.rows[0].avatar_id
+      "avatarId": resp.rows[0].avatar_id
     }
     req.flash('success', 'Successfully logged in!');
     done(null, user);
@@ -172,6 +171,8 @@ app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
   else {
     req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
   }
+  const resp = await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
+  req.user.avatarId = req.file.filename;
   res.redirect('/profile');
 });
 
@@ -203,17 +204,12 @@ app.post('/meetings', isAdminAuthenticated, async(req, res) => {
 });
 
 app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res) => {
-  await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "', false)");
+  await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "')");
   res.redirect('/admin');
 });
 
 app.get('/uploads/:id', (req, res) => {
-  let image = undefined; 
-  try {
-    image = fs.readFileSync("uploads/" + req.params.id);
-  } catch (e) {
-    image = fs.readFileSync("public/static/images/default_user.png")
-  }
+  let image = fs.readFileSync("uploads/" + req.params.id);
   res.contentType('image/jpeg');
   res.send(Buffer.from(image.toString('base64'), 'base64'));
 });
