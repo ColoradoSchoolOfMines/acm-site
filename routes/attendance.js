@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 
-// TODO on get routes, just send a boolean if user has submitted already so they can't submit again
-
 router.get('/rsvp', async(req, res) => {
   if(req.query.meeting) {
     // Find next meeting and show it to user
@@ -35,6 +33,12 @@ router.post('/rsvp', async(req, res) => {
     name = req.user.full;
   }
 
+  // If email or name is still null, something went very wrong
+  if(email === undefined || name === undefined) {
+    req.flash('error', 'Something went wrong when trying to track your RSVP! Please contact a site administrator.');
+    res.redirect('/');
+  }
+
   // Check if user has RSVP'ed already
   const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1", [req.user.email]);
   if(rsvp.rows.length > 0) {
@@ -49,7 +53,7 @@ router.post('/rsvp', async(req, res) => {
 });
 
 router.get('/attend', async (req, res) => {
-  // Find active meeting if possible; TODO: use more precise date (hours)?
+  // Find active meeting if possible (assumes 1 meeting per day)
   const resp = await db.query("SELECT * FROM meetings WHERE date = current_date");
   if(resp.rows.length > 0) {
     res.render('attend', { title: 'Attend', meeting: resp.rows[0] });
@@ -60,8 +64,6 @@ router.get('/attend', async (req, res) => {
 });
 
 router.post('/attend', async(req, res) => {
-  // TODO abstract this common functionality with /rsvp and also check for error cases
-
   // use logged in credentials if possible
   let email;
   let name;
@@ -76,7 +78,13 @@ router.post('/attend', async(req, res) => {
     name = req.user.full;
   }
 
-  // check if submitted already
+  // If email or name is still null, something went very wrong
+  if(email === undefined || name === undefined) {
+    req.flash('error', 'Something went wrong when trying to track your form attendance! Please contact a site administrator.');
+    res.redirect('/');
+  }
+
+  // Check if submitted already
   const attendance = await db.query("SELECT 1 FROM attendance WHERE user = $1 AND meeting = $2", [email, req.body.meetingId]);
   if(attendance.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
