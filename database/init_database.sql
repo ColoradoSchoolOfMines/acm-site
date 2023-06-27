@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS meetings (
     "duration"    INTEGER,
     "location"    TEXT,
     "type"        TEXT
-    -- "closes"  TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS attendance (

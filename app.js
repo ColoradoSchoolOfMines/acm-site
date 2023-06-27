@@ -113,16 +113,22 @@ app.get('/', async (req, res) => {
     }
   }
 
-  const meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
-
-  //clientside JS 'formatDate()' or just format it as text when putting it into the DB?  
-  // reformat meeting date: TODO figure out best way to pass it through
-
-  // let date = new Date(meetings.rows[0].date);
-  // console.log(date.toUTCString());
-
+  let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
+  for(let meeting in meetings.rows) {
+    meetings.rows[meeting].date = formatDate(meetings.rows[meeting].date);
+  }
   res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
 });
+
+// TODO figure out where all this is needed or if there's a better way
+formatDate = (date) => {
+  return new Date(date).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
 
 app.get('/about', async (req, res) => {
   const resp = await db.query("SELECT * FROM users WHERE title != ''");
