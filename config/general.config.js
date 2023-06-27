@@ -27,7 +27,7 @@ const multerConfig = {
 /* Content Security Policy Configuration */
 const cspDirectives = {
     defaultSrc: ["'self'", "https://discord.com/"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
     styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
     imgSrc: ["'self'", "data:"],
 };

@@ -15,10 +15,7 @@
                         <p><strong>Type</strong>: <%= meeting.type %></p>
                         <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
                         <% if(meeting.attendance.length > 0) { %>
-                            <p><strong>Students attended</strong>:</p>
-                            <% for(let attendance of meeting.attendance) { %>
-                                <p><%= attendance.user %></p>
-                            <% } %>
+                            <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
                         <% } %>
                     </div>
                 <% } %>
@@ -43,13 +40,6 @@
             </div>
         </div>
     </div>
-    
-    <div class="large-card">
-        <h2>Attendance</h2>
-
-        <!-- this may or may not be needed depending on what data is in the meetings section above -->
-        <!-- TODO: export attendance stats to CSV; meeting, attendance, type, date -->
-    </div>
 
     <div class="large-card">
         <h2>Officers</h2>
@@ -71,3 +61,5 @@
         </form>
     </div>
 </div>
+
+<script src="/scripts/csv.js"></script>
