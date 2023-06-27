@@ -126,7 +126,9 @@ formatDate = (date) => {
     weekday: 'long',
     year: 'numeric', 
     month: 'long', 
-    day: 'numeric' 
+    day: 'numeric',
+    hour: 'numeric'
+    // timeStyle: 'short'
   });
 }
 
@@ -189,6 +191,9 @@ app.get('/admin', isAdminAuthenticated, async(req, res) => {
 });
 
 app.post('/meetings', isAdminAuthenticated, async(req, res) => {
+
+  // TODO figure out how to better handle meeting durations
+
   await db.query("INSERT INTO meetings VALUES ('" + 
       uuid.v4() + "', '" +
       req.body.title + "', '" + 
