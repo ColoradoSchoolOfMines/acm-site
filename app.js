@@ -98,15 +98,8 @@ app.use('/', authRoutes);
 app.use('/', attendRoutes);
 
 app.get('/', async (req, res) => {
-  let image = false;
-
   const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
-  if (resp.rows.length > 0) {
-    image = {
-      url: resp.rows[0].url,
-      caption: resp.rows[0].caption
-    }
-  }
+  let image = resp.rows[0];
 
   let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
   for(let meeting in meetings.rows) {

@@ -31,8 +31,8 @@
 			</p>
 		</div>
 		<div class="col-lg-6">
-			<% if(typeof image == 'object' && image) { %> 
-				<img src="uploads/<%= image.url %>" class="header-image shadow" />
+			<% if (image) { %> 
+				<img src="uploads/<%= image.id %>" class="header-image shadow" />
 				<p class="image-caption">
 					<%= image.caption %>
 				</p>
