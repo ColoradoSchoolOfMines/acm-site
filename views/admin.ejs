@@ -53,9 +53,9 @@
         <h2>Images</h2>
         <p>Upload new image to be displayed randomly on the front page of the site.</p>
         <form method="POST" action="/admin" enctype="multipart/form-data">
-            <input class="d-inline-block" type="file" name="image" />
+            <input class="d-inline-block" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
             <br>
-            <input class="d-inline-block" type="text" name="caption" placeholder="Caption.." />
+            <input class="d-inline-block" type="text" name="caption" placeholder="Caption.." required />
             <br>
             <button class="btn d-inline-block btn-primary">Submit</button>
         </form>

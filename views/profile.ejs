@@ -13,10 +13,10 @@
             <img class="team-picture" src="static/images/default_user.png" />
         <% } %>
         <h5>Update Profile Picture</h5>
-        <form method="POST" action="/profile" enctype="multipart/form-data" accept="image/png,image/jpg,image/jpeg">
-            <input class="d-inline-block mb-1" type="file" name="avatar" />
+        <form method="POST" action="/profile" enctype="multipart/form-data">
+            <input class="d-inline-block mb-1" type="file" name="avatar" accept="image/png,image/jpg,image/jpeg" required />
             <br>
-            <button class="btn d-inline-block btn-primary mt-1">Submit</button>
+            <button class="btn d-inline-block btn-primary mt-1" accept="image/png,image/jpg,image/jpeg">Submit</button>
         </form>
     </div>
 </div>

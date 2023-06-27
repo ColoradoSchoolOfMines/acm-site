@@ -158,15 +158,14 @@ app.get('/profile', isLoggedIn, (req, res) => {
 });
 
 app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
-  if (req.file) {
-    req.flash('success', 'Profile picture uploaded successfully!');
-  }
-  else {
+  if (!req.file) {
     req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+    return
   }
   const resp = await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-  fs.unlinkSync("uploads/" + req.user.avatarId)
+  fs.unlinkSync("uploads/" + req.user.avatarId);
   req.user.avatarId = req.file.filename;
+  req.flash('success', 'Profile picture uploaded successfully!');
   res.redirect('/profile');
 });
 
@@ -198,6 +197,10 @@ app.post('/meetings', isAdminAuthenticated, async(req, res) => {
 });
 
 app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res) => {
+  if (!req.file) {
+    req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+    return
+  }
   await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "')");
   res.redirect('/admin');
 });
