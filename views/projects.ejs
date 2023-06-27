@@ -4,27 +4,7 @@
     <h1>Projects</h1>
     <p>Projects are a great way to get involved with Mines ACM! Apply existing knowledge
         and learn new skills with our variety of projects.</p>
-    <div class="projects-scroll mt-3">
-        <% for(let project of projects) { %>
-            <div class="large-card row">
-                <div class="col">
-                    <h2 class="project-title">
-                        <%= project.title %>
-                        <!-- TODO: Make a style for this-->
-                        <% if (project.archived) { %>
-                            <span class="project-archived">(Inactive)</span>
-                        <% } %>
-                    </h2>
-                    <p class="project-desc"><%= project.description %></p>
-                    <div class="d-inline-block mt-2">
-                        <a class="d-block" href="<%= project.website %>">Website</a>
-                        <a class="d-block"  href="<%= project.repository %>">Repository</a>
-                    </div>
-                </div>
-                <img src="uploads/<%= project.image_id %>" class="project-image" />
-            </div>
-        <% } %> 
-    </div>
+
     <!-- Button trigger modal -->
     <% if (user.is_admin) { %>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">
@@ -51,7 +31,7 @@
                             <input name="repository" type="url" required />
         
                             <label class="d-block py-1" for="website">Website Link</label>
-                            <input name="website" type="url" required />
+                            <input name="website" type="url" />
         
                             <label class="d-block py-1" for="authors">Authors</label>
                             <input name="authors" type="text" required />
@@ -71,5 +51,31 @@
             </div>
         </div>
     <% } %>
-  
+
+    <div class="projects-scroll mt-3">
+        <% for(let project of projects) { %>
+            <div class="large-card row">
+                <div class="col">
+                    <h2 class="project-title">
+                        <%= project.title %>
+                        <!-- TODO: Make a style for this-->
+                        <% if (project.archived) { %>
+                            <span class="project-archived">(Inactive)</span>
+                        <% } %>
+                    </h2>
+                    <p class="project-desc"><%= project.description %></p>
+                    <div class="d-inline-block mt-2">
+                        <% if(project.website) { %>
+                            <a class="d-block" href="<%= project.website %>">Website</a>
+                        <% } %>
+                        <a class="d-block"  href="<%= project.repository %>">Repository</a>
+                    </div>
+                </div>
+                <% if(project.image_id) { %>
+                    <img src="uploads/<%= project.image_id %>" class="project-image" />
+                <% } %>
+            </div>
+        <% } %> 
+    </div>
+    
 </div>

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS projects (
     "website"      TEXT,
     "repository"   TEXT,
     "archived"     BOOLEAN DEFAULT FALSE,
-    "image_id"     TEXT NOT NULL
+    "image_id"     TEXT
 );
 
 CREATE TABLE IF NOT EXISTS user_projects (

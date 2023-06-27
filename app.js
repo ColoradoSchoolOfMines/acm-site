@@ -40,7 +40,6 @@ passport.use(new GoogleStrategy({
       + profile.given_name + "', '"
       + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
 
-    // get user by email
     const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
     user = {
       "first": resp.rows[0].first_name,
