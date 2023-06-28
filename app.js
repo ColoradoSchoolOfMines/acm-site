@@ -219,8 +219,7 @@ app.post('/meetings', isAdminAuthenticated, async(req, res) => {
 
 app.get('/uploads/:id', (req, res) => {
   let image = fs.readFileSync("uploads/" + req.params.id);
-  // TODO: Actually give a correct mime type
-  res.contentType('image/jpeg');
+  res.contentType('image/*');
   res.send(Buffer.from(image.toString('base64'), 'base64'));
 });
 
