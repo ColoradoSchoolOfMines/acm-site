@@ -71,7 +71,11 @@
                         <div class="row row-cols-auto mt-2">
                             <% for (let user of project.users) { %>
                                 <div class="chip">
-                                    <img class="d-inline-block project-user-image" src="static/images/default_user.png">
+                                    <% if (user.avatar_id) { %>
+                                        <img class="d-inline-block project-user-image" src="uploads/<%= user.avatar_id %>">
+                                    <% } else { %>
+                                        <img class="d-inline-block project-user-image" src="static/images/default_user.png">
+                                    <% } %>
                                     <p class="d-inline-block"><%= user.full %></p>
                                 </div>
                             <% } %>
