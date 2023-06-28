@@ -16,6 +16,7 @@ const upload = multer(multerConfig);
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
+const { formatDate, formatDuration } = require('./util.js');
 const app = express();
 
 app.engine('ejs', ejsMate);
@@ -98,33 +99,16 @@ app.use('/', attendRoutes);
 
 app.get('/', async (req, res) => {
   const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
-  let image = resp.rows[0];
+  const image = resp.rows[0];
 
   let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
   for(let meeting in meetings.rows) {
-    let originalDate = meetings.rows[meeting].date;
-    meetings.rows[meeting].date = formatDate(originalDate);
-    
-    let endTime = new Date(new Date(originalDate).getTime() + parseInt(meetings.rows[meeting].duration));
-    let newDuration = originalDate.toLocaleDateString('en-US', { hour: 'numeric' }).split(", ")[1] + " to " 
-      + endTime.toLocaleDateString('en-US', { hour: 'numeric' }).split(", ")[1];
-
-    meetings.rows[meeting].duration = newDuration;
+    const originalDate = meetings.rows[meeting].date;
+    meetings.rows[meeting].date = formatDate(originalDate);    
+    meetings.rows[meeting].duration = formatDuration(originalDate, meetings.rows[meeting].duration);
   }
   res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
 });
-
-// TODO figure out where all this is needed or if there's a better way
-formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric',
-    // hour: 'numeric'
-    // timeStyle: 'short'
-  });
-}
 
 app.get('/about', async (req, res) => {
   const resp = await db.query("SELECT * FROM users WHERE title != ''");
@@ -195,26 +179,14 @@ app.get('/admin', isAdminAuthenticated, async(req, res) => {
   for(let meeting in meetings.rows) {
     const attendance = await db.query("SELECT attendance.user FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
     meetings.rows[meeting].attendance = attendance.rows;
+    
+    const originalDate = meetings.rows[meeting].date;
+    meetings.rows[meeting].date = formatDate(originalDate);    
+    meetings.rows[meeting].duration = formatDuration(originalDate, meetings.rows[meeting].duration);
   }
 
   const officers = await db.query("SELECT * FROM users WHERE title != ''");
   res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows });
-});
-
-app.post('/meetings', isAdminAuthenticated, async(req, res) => {
-  // TODO figure out how to better handle meeting durations
-
-  // duration: convert hours -> milliseconds
-  await db.query("INSERT INTO meetings VALUES ('" + 
-      uuid.v4() + "', '" +
-      req.body.title + "', '" + 
-      req.body.description + "', '" +
-      req.body.date + "', '" +
-      (req.body.duration * 3600000) + "', '" +
-      req.body.location + "', '" +
-      req.body.type + "')")
-
-  res.redirect('/admin');
 });
 
 app.post('/admin', isAdminAuthenticated, async (req, res) => {
@@ -229,6 +201,20 @@ app.post('/admin', isAdminAuthenticated, async (req, res) => {
     }
     res.redirect('/admin');
   });
+});
+
+app.post('/meetings', isAdminAuthenticated, async(req, res) => {
+  await db.query("INSERT INTO meetings VALUES ('" + 
+      uuid.v4() + "', '" +
+      req.body.title + "', '" + 
+      req.body.description + "', '" +
+      req.body.date + "', '" +
+      // convert hours -> milliseconds
+      (req.body.duration * 3600000) + "', '" +
+      req.body.location + "', '" +
+      req.body.type + "')")
+
+  res.redirect('/admin');
 });
 
 app.get('/uploads/:id', (req, res) => {

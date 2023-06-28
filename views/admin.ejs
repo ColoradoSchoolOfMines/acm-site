@@ -10,10 +10,9 @@
                     <div class="meeting">
                         <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
                         <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <%= meeting.date %></p>
+                        <p><strong>Date</strong>: <%= meeting.date %> from <%= meeting.duration %></p>
                         <p><strong>Location</strong>: <%= meeting.location %></p>
                         <p><strong>Type</strong>: <%= meeting.type %></p>
-                        <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
                         <% if(meeting.attendance.length > 0) { %>
                             <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
                         <% } %>
