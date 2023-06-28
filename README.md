@@ -31,6 +31,7 @@ docker compose up -d
 - Test uploads vulnerability and other security stuff
 - Webhook or API with discord bot to display meetings
 - Navbar moves slightly when dropdown is clicked
+- Determine if firstname/lastname columns should be merged in DB (depends on final design of pages)
 
 ## Design Choices
 Given that this is intended to be continuously maintained by students
