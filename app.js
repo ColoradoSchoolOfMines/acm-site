@@ -128,6 +128,17 @@ app.get('/presentations', async (req, res) => {
 
 app.get('/projects', async (req, res) => {
   const resp = await db.query("SELECT * FROM projects ORDER BY archived, title");
+  for (let project of resp.rows) {
+    const users = await db.query("SELECT users.first_name, users.last_name, users.avatar_id " + 
+      "FROM users JOIN user_projects ON users.email = user_projects.user_id " + 
+      "JOIN projects ON user_projects.project_id = projects.id " + 
+      "WHERE projects.id = '" + project.id + "';");
+    project.users = users.rows.map((user) => ({
+      full: user.first_name + ' ' + user.last_name,
+      avatar_id: user.avatar_id
+    }));
+  }
+  // console.log(project.users)
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
