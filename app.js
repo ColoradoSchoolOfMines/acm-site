@@ -147,37 +147,47 @@ app.get('/projects', async (req, res) => {
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
-app.post('/projects', upload.single('image'), async (req, res) => {  
-  if (req.file) {
-    await db.query("INSERT INTO projects VALUES ('" + 
-        uuid.v4() + "', '" +
-        req.body.title + "', '" + 
-        req.body.description + "', '" +
-        req.body.website + "', '" +
-        req.body.repository + "', '" +
-        (req.body.archived !== undefined).toString() + "', '" +
-        req.file.filename + "')");
-    req.flash('success', 'Successfully added project!');
-  } else {
-    req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-  }
-  res.redirect('projects');
+app.post('/projects', async (req, res) => {
+  const uploadImage = upload.single('image');
+  uploadImage(req, res, async(err) => {
+    if (err instanceof multer.MulterError) {
+      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+    } else if (err) {
+      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
+    } else {
+      await db.query("INSERT INTO projects VALUES ('" + 
+          uuid.v4() + "', '" +
+          req.body.title + "', '" + 
+          req.body.description + "', '" +
+          req.body.website + "', '" +
+          req.body.repository + "', '" +
+          (req.body.archived !== undefined).toString() + "', '" +
+          req.file.filename + "')");
+      req.flash('success', 'Successfully added project!');
+    }
+    res.redirect('/projects');
+  });
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile', { title: req.user.first + ' ' + req.user.last });
 });
 
-app.post('/profile', isLoggedIn, upload.single('avatar'), async (req, res) => {
-  if (req.file) {
-    await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-    fs.unlinkSync("uploads/" + req.user.avatarId);
-    req.user.avatarId = req.file.filename;
-    req.flash('success', 'Profile picture uploaded successfully!');
-  } else {
-    req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-  }
-  res.redirect('/profile');
+app.post('/profile', isLoggedIn, async (req, res) => {
+  const uploadAvatar = upload.single('avatar');
+  uploadAvatar(req, res, async(err) => {
+    if (err instanceof multer.MulterError) {
+      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+    } else if (err) {
+      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
+    } else {
+      await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
+      fs.unlinkSync("uploads/" + req.user.avatarId);
+      req.user.avatarId = req.file.filename;
+      req.flash('success', 'Profile picture uploaded successfully!');
+    }
+    res.redirect('/profile');
+  });
 });
 
 app.get('/admin', isAdminAuthenticated, async(req, res) => {
@@ -192,7 +202,6 @@ app.get('/admin', isAdminAuthenticated, async(req, res) => {
 });
 
 app.post('/meetings', isAdminAuthenticated, async(req, res) => {
-
   // TODO figure out how to better handle meeting durations
 
   // duration: convert hours -> milliseconds
@@ -208,13 +217,18 @@ app.post('/meetings', isAdminAuthenticated, async(req, res) => {
   res.redirect('/admin');
 });
 
-app.post('/admin', isAdminAuthenticated, upload.single('image'), async (req, res) => {
-  if (req.file) {
-    await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "')");
+app.post('/admin', isAdminAuthenticated, async (req, res) => {
+  let uploadImage = upload.single('image');
+  uploadImage(req, res, async(err) => {
+    if (err instanceof multer.MulterError) {
+      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+    } else if (err) {
+      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
+    } else {
+      await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "')");
+    }
     res.redirect('/admin');
-  } else {
-    req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-  }
+  });
 });
 
 app.get('/uploads/:id', (req, res) => {
