@@ -54,28 +54,37 @@
 
     <div class="projects-scroll mt-3">
         <% for(let project of projects) { %>
-            <div class="large-card row">
-                <div class="col">
-                    <h2 class="project-title">
-                        <%= project.title %>
-                        <!-- TODO: Make a style for this-->
-                        <% if (project.archived) { %>
-                            <span class="project-archived">(Inactive)</span>
-                        <% } %>
-                    </h2>
-                    <p class="project-desc"><%= project.description %></p>
-                    <div class="d-inline-block mt-2">
+            <div class="large-card container">
+                <div class="row row-cols-2 align-items-center">
+                    <div class="col ">
+                        <h2 class="project-title">
+                            <%= project.title %>
+                            <% if (project.archived) { %>
+                                <span class="project-archived">(Inactive)</span>
+                            <% } %>
+                        </h2>
+                        <p class="project-desc mb-2"><%= project.description %></p>
                         <% if(project.website) { %>
                             <a class="d-block" href="<%= project.website %>">Website</a>
                         <% } %>
                         <a class="d-block"  href="<%= project.repository %>">Repository</a>
+                        <div class="row row-cols-auto mt-2">
+                            <% for (let user of project.users) { %>
+                                <div class="chip">
+                                    <img class="d-inline-block project-user-image" src="static/images/default_user.png">
+                                    <p class="d-inline-block"><%= user.full %></p>
+                                </div>
+                            <% } %>
+                        </div>
                     </div>
+
+                    <% if(project.image_id) { %>
+                        <div class="col">
+                            <img src="uploads/<%= project.image_id %>" class="project-image" />
+                        </div>
+                    <% } %>
                 </div>
-                <% if(project.image_id) { %>
-                    <img src="uploads/<%= project.image_id %>" class="project-image" />
-                <% } %>
             </div>
         <% } %> 
     </div>
-    
 </div>
