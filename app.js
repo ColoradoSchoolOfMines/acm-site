@@ -203,6 +203,24 @@ app.post('/admin', isAdminAuthenticated, async (req, res) => {
   });
 });
 
+app.post('/officers', isAdminAuthenticated, async (req, res) => {
+  await db.query("UPDATE users SET title = $1 WHERE email = $2", [req.body.title, req.body.email]);
+  req.flash('success', 'Successfully added officer role for ' + req.body.email + '.');
+  res.redirect('/admin');
+});
+
+app.post('/officers/edit', isAdminAuthenticated, async (req, res) => {
+  await db.query("UPDATE users SET title = $1 WHERE email = $2", [req.body.title, req.body.email]);
+  req.flash('success', 'Successfully edited officer ' + req.body.email + '.');
+  res.redirect('/admin');
+});
+
+app.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
+  await db.query("UPDATE users SET title = $1 WHERE email = $2", ['', req.body.email]);
+  req.flash('success', 'Successfully removed ' + req.body.email + ' as an officer.');
+  res.redirect('/admin');
+});
+
 app.post('/meetings', isAdminAuthenticated, async(req, res) => {
   await db.query("INSERT INTO meetings VALUES ('" + 
       uuid.v4() + "', '" +
