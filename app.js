@@ -11,11 +11,12 @@ const passport = require('passport');
 const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
-const { isLoggedIn, isAdminAuthenticated } = require('./middleware');
+const { isLoggedIn } = require('./middleware');
 const upload = multer(multerConfig);
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
+const adminRoutes = require('./routes/admin');
 const { formatDate, formatDuration } = require('./util.js');
 const app = express();
 
@@ -96,6 +97,7 @@ app.use((req, res, next) => {
 
 app.use('/', authRoutes);
 app.use('/', attendRoutes);
+app.use('/', adminRoutes);
 
 app.get('/', async (req, res) => {
   const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
@@ -172,67 +174,6 @@ app.post('/profile', isLoggedIn, async (req, res) => {
     }
     res.redirect('/profile');
   });
-});
-
-app.get('/admin', isAdminAuthenticated, async(req, res) => {
-  let meetings = await db.query("SELECT * FROM meetings ORDER BY date");  
-  for(let meeting in meetings.rows) {
-    const attendance = await db.query("SELECT attendance.user FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
-    meetings.rows[meeting].attendance = attendance.rows;
-    
-    const originalDate = meetings.rows[meeting].date;
-    meetings.rows[meeting].date = formatDate(originalDate);    
-    meetings.rows[meeting].duration = formatDuration(originalDate, meetings.rows[meeting].duration);
-  }
-
-  const officers = await db.query("SELECT * FROM users WHERE title != ''");
-  res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows });
-});
-
-app.post('/admin', isAdminAuthenticated, async (req, res) => {
-  let uploadImage = upload.single('image');
-  uploadImage(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "')");
-    }
-    res.redirect('/admin');
-  });
-});
-
-app.post('/officers', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE users SET title = $1 WHERE email = $2", [req.body.title, req.body.email]);
-  req.flash('success', 'Successfully added officer role for ' + req.body.email + '.');
-  res.redirect('/admin');
-});
-
-app.post('/officers/edit', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE users SET title = $1 WHERE email = $2", [req.body.title, req.body.email]);
-  req.flash('success', 'Successfully edited officer ' + req.body.email + '.');
-  res.redirect('/admin');
-});
-
-app.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE users SET title = $1 WHERE email = $2", ['', req.body.email]);
-  req.flash('success', 'Successfully removed ' + req.body.email + ' as an officer.');
-  res.redirect('/admin');
-});
-
-app.post('/meetings', isAdminAuthenticated, async(req, res) => {
-  await db.query("INSERT INTO meetings VALUES ('" + 
-      uuid.v4() + "', '" +
-      req.body.title + "', '" + 
-      req.body.description + "', '" +
-      req.body.date + "', '" +
-      // convert hours -> milliseconds
-      (req.body.duration * 3600000) + "', '" +
-      req.body.location + "', '" +
-      req.body.type + "')")
-
-  res.redirect('/admin');
 });
 
 app.get('/uploads/:id', (req, res) => {
