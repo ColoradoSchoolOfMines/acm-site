@@ -1,5 +1,53 @@
 <% layout('layouts/base')%>
 
+<div class="modal fade" id="addOfficerModal" tabindex="-1" aria-labelledby="addOfficerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addOfficerModalLabel">Add Officer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/officers">
+                <div class="modal-body">
+                    <label class="d-block py-1" for="email">Email</label>
+                    <input name="email" type="text" required />
+
+                    <label class="d-block py-1" for="title">Title</label>
+                    <input name="title" type="text" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editOfficerModal" tabindex="-1" aria-labelledby="editOfficerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editOfficerModalLabel">Edit Officer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/officers/edit">
+                <div class="modal-body">
+                    <label class="d-block py-1" for="email">Email</label>
+                    <input name="email" type="text" required />
+
+                    <label class="d-block py-1" for="title">Title</label>
+                    <input name="title" type="text" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="content">
     <h1>Admin</h1>
     <div class="large-card">
@@ -45,12 +93,18 @@
         <% for(let officer of officers) { %>
             <p><%= officer.first_name %> <%= officer.last_name %> | <%= officer.title %></p>
             <p><%= officer.email %></p>
-        <% } %>
 
-        <!-- TODO: add/edit/remove officer functionality -->
+            <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editOfficerModal">Edit</button>
+            <form class="d-inline-block" method="POST" action="/officers/remove">
+                <input type="hidden" name="email" value="<%= officer.email %>">
+                <button class="btn d-inline-block btn-outline-danger">Delete</button>
+            </form>
+        <% } %>
+        <br><br>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOfficerModal">Add Officer</button>
     </div>
 
-    <div class="large-card">    
+    <div class="large-card">
         <h2>Images</h2>
         <p>Upload new image to be displayed randomly on the front page of the site.</p>
         <form method="POST" action="/admin" enctype="multipart/form-data">
