@@ -54,7 +54,7 @@ router.post('/rsvp', async(req, res) => {
 
 router.get('/attend', async (req, res) => {
   // Find active meeting if possible (assumes 1 meeting per day)
-  const resp = await db.query("SELECT * FROM meetings WHERE date >= NOW()");
+  const resp = await db.query("SELECT * FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 day'");
   if(resp.rows.length > 0) {
     res.render('attend', { title: 'Attend', meeting: resp.rows[0] });
   }
