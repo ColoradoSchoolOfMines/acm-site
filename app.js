@@ -17,6 +17,7 @@ const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
 const adminRoutes = require('./routes/admin');
+const profileRoutes = require('./routes/profile');
 const projectsRoutes = require('./routes/projects');
 const { formatDate, formatDuration } = require('./util.js');
 const app = express();
@@ -99,6 +100,7 @@ app.use((req, res, next) => {
 app.use('/', authRoutes);
 app.use('/', attendRoutes);
 app.use('/', adminRoutes);
+app.use('/', profileRoutes);
 app.use('/', projectsRoutes);
 
 app.get('/', async (req, res) => {
@@ -140,27 +142,6 @@ app.get('/schedule', async(req, res) => {
 app.get('/presentations', async (req, res) => {
   const resp = await db.query("SELECT * FROM presentations");
   res.render('presentations', { title: 'Presentations', presentations: resp.rows });
-});
-
-app.get('/profile', isLoggedIn, (req, res) => {
-  res.render('profile', { title: req.user.first + ' ' + req.user.last });
-});
-
-app.post('/profile', isLoggedIn, async (req, res) => {
-  const uploadAvatar = upload.single('avatar');
-  uploadAvatar(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-      fs.unlinkSync("uploads/" + req.user.avatarId);
-      req.user.avatarId = req.file.filename;
-      req.flash('success', 'Profile picture uploaded successfully!');
-    }
-    res.redirect('/profile');
-  });
 });
 
 app.get('/uploads/:id', (req, res) => {
