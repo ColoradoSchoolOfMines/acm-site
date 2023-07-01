@@ -30,7 +30,7 @@ router.post('/rsvp', async(req, res) => {
   }
   else {
     email = req.user.email;
-    name = req.user.full;
+    name = req.user.name;
   }
 
   // If email or name is still null, something went very wrong

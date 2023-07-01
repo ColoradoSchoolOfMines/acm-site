@@ -11,7 +11,7 @@
         <p>Please fill out the following form so we can log your attendance!</p>
         
         <% if(typeof user == 'object' && user) { %>
-            <p>You're logged in already, so we'll submit your form as <strong><%= user.full %></strong>.</p>
+            <p>You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.</p>
             <form method="POST" action="/attend">
                 <input type="hidden" name="meetingId" value="<%= meeting.id %>">
                 <button class="btn d-inline-block btn-primary">Submit</button>
