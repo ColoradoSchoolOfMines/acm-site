@@ -1,4 +1,4 @@
-cCREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS users (
     "email"      TEXT NOT NULL PRIMARY KEY,
     "name"       TEXT NOT NULL,
     "title"      TEXT,
