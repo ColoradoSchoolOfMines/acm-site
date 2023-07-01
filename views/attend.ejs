@@ -12,7 +12,7 @@
         
         <% if(typeof user == 'object' && user) { %>
             <p>You're logged in already, so we'll submit your form as <strong><%= user.full %></strong>.</p>
-            <form method="POST" action="/rsvp">
+            <form method="POST" action="/attend">
                 <input type="hidden" name="meetingId" value="<%= meeting.id %>">
                 <button class="btn d-inline-block btn-primary">Submit</button>
             </form>

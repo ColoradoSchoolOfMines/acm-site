@@ -54,7 +54,7 @@ router.post('/rsvp', async(req, res) => {
 
 router.get('/attend', async (req, res) => {
   // Find active meeting if possible (assumes 1 meeting per day)
-  const resp = await db.query("SELECT * FROM meetings WHERE date = current_date");
+  const resp = await db.query("SELECT * FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 day'");
   if(resp.rows.length > 0) {
     res.render('attend', { title: 'Attend', meeting: resp.rows[0] });
   }
@@ -66,26 +66,23 @@ router.get('/attend', async (req, res) => {
 router.post('/attend', async(req, res) => {
   // use logged in credentials if possible
   let email;
-  let name;
 
-  if(req.body.name && req.body.email) {
+  if(req.body.email) {
     // user is submitting with form data
     email = req.body.email;
-    name = req.body.name;
   }
   else {
     email = req.user.email;
-    name = req.user.full;
   }
 
   // If email or name is still null, something went very wrong
-  if(email === undefined || name === undefined) {
+  if(email === undefined) {
     req.flash('error', 'Something went wrong when trying to track your form attendance! Please contact a site administrator.');
     res.redirect('/');
   }
 
   // Check if submitted already
-  const attendance = await db.query("SELECT 1 FROM attendance WHERE user = $1 AND meeting = $2", [email, req.body.meetingId]);
+  const attendance = await db.query("SELECT 1 FROM attendance WHERE email = $1 AND meeting = $2", [email, req.body.meetingId]);
   if(attendance.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
     res.redirect('/');
