@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require('../database/db');
 const { isAdminAuthenticated } = require('../middleware');
 const { formatDate, formatDuration } = require('../util.js');
+const uuid = require('uuid');
 
 router.get('/admin', isAdminAuthenticated, async(req, res) => {
   let meetings = await db.query("SELECT * FROM meetings ORDER BY date");  
