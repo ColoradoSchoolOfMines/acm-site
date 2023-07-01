@@ -177,8 +177,11 @@ app.post('/profile', isLoggedIn, async (req, res) => {
       req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
     } else {
       await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-      fs.unlinkSync("uploads/" + req.user.avatarId);
-      req.user.avatarId = req.file.filename;
+      if (req.user.avatar_id) {
+        // Free the space taken up by the now-unused profile picture
+        fs.unlinkSync("uploads/" + req.user.avatar_id);
+      }
+      req.user.avatar_id = req.file.filename;
       req.flash('success', 'Profile picture uploaded successfully!');
     }
     res.redirect('/profile');
