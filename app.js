@@ -44,9 +44,7 @@ passport.use(new GoogleStrategy({
 
     const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
     user = {
-      "first": resp.rows[0].first_name,
-      "last": resp.rows[0].last_name,
-      "full": resp.rows[0].first_name + ' ' + resp.rows[0].last_name,
+      "name": resp.rows[0].name,
       "email": resp.rows[0].email,
       "title": resp.rows[0].title,
       "is_admin": resp.rows[0].title.length > 0,

@@ -13,7 +13,7 @@
             <p><strong>Location</strong>: <%= meeting.location %></p>
             <p><%= meeting.duration %></p>
             <% if(typeof user == 'object' && user) { %>
-                <p>You're logged in already, so we'll submit your RSVP as <strong><%= user.full %></strong>.</p>
+                <p>You're logged in already, so we'll submit your RSVP as <strong><%= user.name %></strong>.</p>
                 <form method="POST" action="/rsvp">
                     <input type="hidden" name="meetingId" value="<%= meeting.id %>">
                     <button class="btn d-inline-block btn-primary">Submit</button>

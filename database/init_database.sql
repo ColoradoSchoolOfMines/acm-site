@@ -1,7 +1,6 @@
-CREATE TABLE IF NOT EXISTS users (
+cCREATE TABLE IF NOT EXISTS users (
     "email"      TEXT NOT NULL PRIMARY KEY,
-    "first_name" TEXT NOT NULL,
-    "last_name"  TEXT NOT NULL,
+    "name"       TEXT NOT NULL,
     "title"      TEXT,
     "avatar_id"  TEXT
 );
@@ -34,7 +33,7 @@ CREATE TABLE IF NOT EXISTS meetings (
 
 CREATE TABLE IF NOT EXISTS attendance (
     "meeting" TEXT REFERENCES meetings(id),
-    "email"   TEXT REFERENCES users(email)
+    "user"    TEXT REFERENCES users(email)
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
