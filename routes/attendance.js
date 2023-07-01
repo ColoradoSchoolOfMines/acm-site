@@ -76,13 +76,13 @@ router.post('/attend', async(req, res) => {
   }
 
   // If email or name is still null, something went very wrong
-  if(email === undefined || name === undefined) {
+  if(email === undefined) {
     req.flash('error', 'Something went wrong when trying to track your form attendance! Please contact a site administrator.');
     res.redirect('/');
   }
 
   // Check if submitted already
-  const attendance = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [email, req.body.meetingId]);
+  const attendance = await db.query("SELECT 1 FROM attendance WHERE email = $1 AND meeting = $2", [email, req.body.meetingId]);
   if(attendance.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
     res.redirect('/');

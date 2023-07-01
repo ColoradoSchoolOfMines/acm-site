@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS meetings (
 
 CREATE TABLE IF NOT EXISTS attendance (
     "meeting" TEXT REFERENCES meetings(id),
-    -- "user"    TEXT REFERENCES users(email)
     "email"   TEXT REFERENCES users(email)
 );
 
