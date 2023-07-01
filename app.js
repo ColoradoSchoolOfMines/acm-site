@@ -39,8 +39,7 @@ passport.use(new GoogleStrategy({
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
     await db.query("INSERT INTO users VALUES ('" + profile.email + "', '"
-      + profile.given_name + "', '"
-      + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
+      + profile.displayName + "', '', '') ON CONFLICT DO NOTHING");
 
     const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
     user = {
@@ -166,7 +165,7 @@ app.post('/projects', async (req, res) => {
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
-  res.render('profile', { title: req.user.first + ' ' + req.user.last });
+  res.render('profile', { title: req.user.name });
 });
 
 app.post('/profile', isLoggedIn, async (req, res) => {
