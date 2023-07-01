@@ -118,8 +118,20 @@ app.get('/about', async (req, res) => {
 });
 
 app.get('/schedule', async(req, res) => {
-  const upcoming = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date LIMIT 2");
-  const previous = await db.query("SELECT * FROM meetings WHERE date <= NOW() ORDER BY date DESC");
+  let upcoming = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date LIMIT 2");
+  for(let meeting in upcoming.rows) {
+    const originalDate = upcoming.rows[meeting].date;
+    upcoming.rows[meeting].date = formatDate(originalDate);    
+    upcoming.rows[meeting].duration = formatDuration(originalDate, upcoming.rows[meeting].duration);
+  }
+
+  let previous = await db.query("SELECT * FROM meetings WHERE date <= NOW() ORDER BY date DESC");
+  for(let meeting in previous.rows) {
+    const originalDate = previous.rows[meeting].date;
+    previous.rows[meeting].date = formatDate(originalDate);    
+    previous.rows[meeting].duration = formatDuration(originalDate, previous.rows[meeting].duration);
+  }
+
   res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows, previous: previous.rows });
 });
 
