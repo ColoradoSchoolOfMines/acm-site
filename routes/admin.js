@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
-const { isAdminAuthenticated } = require('../middleware');
+const multer = require('multer');
+const { isAdminAuthenticated, upload } = require('../middleware');
 const { formatDate, formatDuration } = require('../util.js');
 const uuid = require('uuid');
 

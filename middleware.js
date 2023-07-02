@@ -1,3 +1,7 @@
+const multer = require('multer');
+const { multerConfig } = require("./config/general.config.js");
+const upload = multer(multerConfig);
+
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.returnTo = req.originalUrl;
@@ -21,3 +25,5 @@ module.exports.isAdminAuthenticated = (req, res, next) => {
     next();
   }
 }
+
+module.exports.upload = multer(multerConfig);
