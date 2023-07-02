@@ -1,10 +1,6 @@
 const multer = require('multer');
-<<<<<<< HEAD
 const { multerConfig } = require('./config/general.config');
-=======
-const { multerConfig } = require("./config/general.config.js");
 const upload = multer(multerConfig);
->>>>>>> main
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -30,9 +26,6 @@ module.exports.isAdminAuthenticated = (req, res, next) => {
   }
 }
 
-<<<<<<< HEAD
-module.exports.upload = multer(multerConfig);
-=======
 module.exports.upload = (id) => ( 
   async (req, res, next) => {
     const impl = upload.single(id);
@@ -49,4 +42,3 @@ module.exports.upload = (id) => (
     })
   }
 )
->>>>>>> main
