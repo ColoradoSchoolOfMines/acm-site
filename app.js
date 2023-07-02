@@ -6,17 +6,16 @@ const session = require('express-session');
 const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
-const uuid = require('uuid');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { cspConfig, sessionConfig } = require('./config/general.config');
-const { isLoggedIn, isAdminAuthenticated, upload } = require('./middleware');
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
 const adminRoutes = require('./routes/admin');
 const profileRoutes = require('./routes/profile');
 const projectsRoutes = require('./routes/projects');
+const presentationsRoutes = require('./routes/presentations');
 const { formatDate, formatDuration } = require('./util.js');
 const app = express();
 
@@ -90,9 +89,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', authRoutes);
-app.use('/', attendRoutes);
 app.use('/', adminRoutes);
+app.use('/', attendRoutes);
+app.use('/', authRoutes);
+app.use('/', presentationsRoutes);
 app.use('/', profileRoutes);
 app.use('/', projectsRoutes);
 
@@ -130,11 +130,6 @@ app.get('/schedule', async(req, res) => {
   }
 
   res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows, previous: previous.rows });
-});
-
-app.get('/presentations', async (req, res) => {
-  const resp = await db.query("SELECT * FROM presentations");
-  res.render('presentations', { title: 'Presentations', presentations: resp.rows });
 });
 
 app.get('/uploads/:id', (req, res) => {
