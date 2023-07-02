@@ -6,17 +6,16 @@ const session = require('express-session');
 const helmet = require('helmet');
 const path = require('path');
 const fs = require('fs');
-const uuid = require('uuid');
 const passport = require('passport');
-const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
-const { isLoggedIn } = require('./middleware');
-const upload = multer(multerConfig);
+const { cspConfig, sessionConfig } = require('./config/general.config');
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
 const adminRoutes = require('./routes/admin');
+const profileRoutes = require('./routes/profile');
+const projectsRoutes = require('./routes/projects');
+const presentationsRoutes = require('./routes/presentations');
 const { formatDate, formatDuration } = require('./util.js');
 const app = express();
 
@@ -38,11 +37,8 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    await db.query("INSERT INTO users VALUES ('" + profile.email + "', '"
-      + profile.given_name + "', '"
-      + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
-
-    const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
+    await db.query("INSERT INTO users VALUES ($1, $2, '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
+    const resp = await db.query("SELECT * FROM users WHERE email = $1", [profile.email])
     user = {
       "name": resp.rows[0].name,
       "email": resp.rows[0].email,
@@ -91,11 +87,14 @@ app.use((req, res, next) => {
   }
 
   next();
-})
+});
 
-app.use('/', authRoutes);
-app.use('/', attendRoutes);
 app.use('/', adminRoutes);
+app.use('/', attendRoutes);
+app.use('/', authRoutes);
+app.use('/', presentationsRoutes);
+app.use('/', profileRoutes);
+app.use('/', projectsRoutes);
 
 app.get('/', async (req, res) => {
   const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
@@ -131,59 +130,6 @@ app.get('/schedule', async(req, res) => {
   }
 
   res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows, previous: previous.rows });
-});
-
-app.get('/presentations', async (req, res) => {
-  const resp = await db.query("SELECT * FROM presentations");
-  res.render('presentations', { title: 'Presentations', presentations: resp.rows });
-});
-
-app.get('/projects', async (req, res) => {
-  const resp = await db.query("SELECT * FROM projects ORDER BY archived, title");
-  res.render('projects', { title: "Projects", projects: resp.rows });
-});
-
-app.post('/projects', async (req, res) => {
-  const uploadImage = upload.single('image');
-  uploadImage(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query("INSERT INTO projects VALUES ('" + 
-          uuid.v4() + "', '" +
-          req.body.title + "', '" + 
-          req.body.description + "', '" +
-          req.body.website + "', '" +
-          req.body.repository + "', '" +
-          (req.body.archived !== undefined).toString() + "', '" +
-          req.file.filename + "')");
-      req.flash('success', 'Successfully added project!');
-    }
-    res.redirect('/projects');
-  });
-});
-
-app.get('/profile', isLoggedIn, (req, res) => {
-  res.render('profile', { title: req.user.first + ' ' + req.user.last });
-});
-
-app.post('/profile', isLoggedIn, async (req, res) => {
-  const uploadAvatar = upload.single('avatar');
-  uploadAvatar(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
-      fs.unlinkSync("uploads/" + req.user.avatarId);
-      req.user.avatarId = req.file.filename;
-      req.flash('success', 'Profile picture uploaded successfully!');
-    }
-    res.redirect('/profile');
-  });
 });
 
 app.get('/uploads/:id', (req, res) => {

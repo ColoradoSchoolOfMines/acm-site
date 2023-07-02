@@ -6,11 +6,17 @@
             <div class="profile-text-content">
                 <h1><%= user.first %> <%= user.last %></h1>
                 <% if(user.title.length > 0) { %>
-                    <h5><%= user.title%></h5>
+                    <h4><%= user.title%></h4>
                 <% } %>
+                <br>
                 <h4>Projects</h4>
+                <br>
                 <!-- Button trigger modal -->
                 <button class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#profile-modal">View Meetings Attended</button>
+                <br>
+                <hr>
+
+                <h4>About</h4>
                 
                 <!-- Modal -->
                 <div class="modal fade" id="profile-modal" tabindex="-1" aria-labelledby="profile-modal-label" aria-hidden="true">
@@ -36,13 +42,11 @@
                 <% } else { %>
                     <img class="profile-picture" src="static/images/default_user.png" />
                 <% } %>
-                <!--
                 <form method="POST" action="/profile" enctype="multipart/form-data">
                     <input class="d-inline-block mb-1" type="file" name="avatar" accept="image/png,image/jpg,image/jpeg" required />
                     <br>
                     <button class="btn d-inline-block btn-primary mt-1" accept="image/png,image/jpg,image/jpeg">Submit</button>
                 </form>
-                -->
             </div>
         </div>
     </div>

@@ -88,7 +88,7 @@ router.post('/attend', async(req, res) => {
     res.redirect('/');
   }
   else {
-    await db.query("INSERT INTO attendance VALUES ('" + req.body.meetingId + "', '" + email + "') ON CONFLICT DO NOTHING");
+    await db.query("INSERT INTO attendance VALUES ($1, $2) ON CONFLICT DO NOTHING", [req.body.meetingId, email]);
     req.flash('success', 'Your attendance has been logged! Thanks for coming.')
     res.redirect('/');
   }
