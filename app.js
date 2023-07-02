@@ -88,7 +88,7 @@ app.use((req, res, next) => {
   }
 
   next();
-})
+});
 
 app.use('/', authRoutes);
 app.use('/', attendRoutes);
