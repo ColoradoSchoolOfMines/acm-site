@@ -95,10 +95,23 @@ p {
     vertical-align: middle;
 }
 
+.profile-container {
+    display: flex;
+}
+
+.profile-text-content {
+    flex: 2;
+}
+
+.profile-picture-content {
+    flex: 1;
+}
+
 .profile-picture {
     border-radius: 10%;
-    width: 10%;
+    width: 90%;
     margin-bottom: 20px;
+    float: right;
 }
 
 .team-picture {
@@ -217,6 +230,11 @@ p {
 .projects-scroll {
     height: 75vh;
     overflow: scroll;
+}
+
+/* Modals */
+.modal-footer {
+    justify-content: left;
 }
 
 /* Buttons */
