@@ -8,11 +8,9 @@ const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid');
 const passport = require('passport');
-const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
-const { isLoggedIn } = require('./middleware');
-const upload = multer(multerConfig);
+const { cspConfig, sessionConfig } = require('./config/general.config');
+const { isLoggedIn, isAdminAuthenticated, upload } = require('./middleware');
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
@@ -40,15 +38,10 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    await db.query("INSERT INTO users VALUES ('" + profile.email + "', '"
-      + profile.given_name + "', '"
-      + profile.family_name + "', '', '') ON CONFLICT DO NOTHING");
-
-    const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
+    await db.query("INSERT INTO users VALUES ($1, $2, '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
+    const resp = await db.query("SELECT * FROM users WHERE email = $1", [profile.email])
     user = {
-      "first": resp.rows[0].first_name,
-      "last": resp.rows[0].last_name,
-      "full": resp.rows[0].first_name + ' ' + resp.rows[0].last_name,
+      "name": resp.rows[0].name,
       "email": resp.rows[0].email,
       "title": resp.rows[0].title,
       "is_admin": resp.rows[0].title.length > 0,
@@ -95,7 +88,7 @@ app.use((req, res, next) => {
   }
 
   next();
-})
+});
 
 app.use('/', authRoutes);
 app.use('/', attendRoutes);

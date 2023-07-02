@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
     "email"      TEXT NOT NULL PRIMARY KEY,
-    "first_name" TEXT NOT NULL,
-    "last_name"  TEXT NOT NULL,
+    "name"       TEXT NOT NULL,
     "title"      TEXT,
     "avatar_id"  TEXT
 );
