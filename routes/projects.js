@@ -1,6 +1,6 @@
 const express = require('express');
 const db = require('../database/db');
-const { upload } = require('../middleware')
+const { isAdminAuthenticated, upload } = require('../middleware');
 const router = express.Router();
 
 router.get('/projects', async (req, res) => {
