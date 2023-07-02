@@ -4,7 +4,7 @@
     <div class="large-card">
         <div class="profile-container">
             <div class="profile-text-content">
-                <h1><%= user.first %> <%= user.last %></h1>
+                <h1><%= user.name %></h1>
                 <% if(user.title.length > 0) { %>
                     <%= user.title%>
                 <% } else { %>
@@ -12,12 +12,8 @@
                 <% } %>
                 <hr>
                 <h5>Projects</h5>
-                    <p> - ACM Site: Contributor</p>
-                    <p> - Bebop Pilot: Captain</p>
-                    <p> - Computer: Engineer?</p>
                 <br>
                 <h5>About</h5>
-                <p>Why, hello there!</p>
                 <br>
 
                 <!-- Meetings Attended Modal -->
@@ -25,11 +21,10 @@
                     <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="meetings-modal-label"><%= user.first %>'s Attended Meetings %></h5>
+                            <h5 class="modal-title" id="meetings-modal-label"><%= user.name %>'s Attended Meetings %></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe ullam, fuga tenetur expedita est quos, provident deserunt, repellendus necessitatibus error cupiditate aspernatur. Error, sed? Sequi, ipsum. Nostrum, molestias deserunt laboriosam hic aut odit excepturi quas nihil officia nisi ab quidem, reiciendis non nesciunt tempora rerum, suscipit eos! Dicta, doloremque distinctio. Provident a quasi eaque, similique atque recusandae corrupti quibusdam laudantium quaerat inventore aliquam sint officiis natus maiores dolor eveniet animi aliquid quos sapiente consequuntur excepturi. Molestias enim exercitationem minima quidem optio commodi fugit autem, nemo, odio ea vero consectetur, consequatur officiis molestiae quis rerum beatae sint illo doloremque ducimus ipsam temporibus velit! Officiis repudiandae blanditiis quidem labore enim? Consequatur vitae iusto tenetur repudiandae odit porro facere excepturi ullam quas quidem obcaecati reprehenderit ipsum nobis ex aspernatur dolores, sit qui? Provident odio ratione tempora quaerat officiis, saepe iure perferendis ullam esse, autem sint vel iusto voluptatem et sequi. Consequatur, optio officia. Placeat, autem? Dolore, totam? Voluptatem, et sunt eveniet nisi quos necessitatibus, maiores nam ea blanditiis, quas quidem laudantium vitae. Sunt, enim corrupti dignissimos perferendis libero est quod fugiat dicta unde cum veniam maiores impedit doloremque facere voluptatem nostrum ratione quasi. Nostrum rerum asperiores laboriosam, consectetur error expedita placeat cumque consequuntur.
                             </div>
                             <div class="modal-footer meetings-footer">
                                 Total Number of Meetings Attended: 
