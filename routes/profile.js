@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const db = require('../database/db');
-const { isLoggedIn, upload } = require('../middleware')
+const { isLoggedIn, upload } = require('../middleware');
 const router = express.Router();
 
 router.get('/profile', isLoggedIn, (req, res) => {
