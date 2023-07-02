@@ -1,5 +1,5 @@
 const multer = require('multer');
-const { multerConfig } = require("./config/general.config.js");
+const { multerConfig } = require('./config/general.config');
 const upload = multer(multerConfig);
 
 module.exports.isLoggedIn = (req, res, next) => {
