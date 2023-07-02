@@ -38,10 +38,8 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    await db.query("INSERT INTO users VALUES ('" + profile.email + "', '"
-      + profile.displayName + "', '', '') ON CONFLICT DO NOTHING");
-
-    const resp = await db.query("SELECT * FROM users WHERE email = '" + profile.email + "'")
+    await db.query("INSERT INTO users VALUES ($1, $2, '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
+    const resp = await db.query("SELECT * FROM users WHERE email = $1", [profile.email])
     user = {
       "name": resp.rows[0].name,
       "email": resp.rows[0].email,
@@ -150,14 +148,10 @@ app.post('/projects', async (req, res) => {
     } else if (err) {
       req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
     } else {
-      await db.query("INSERT INTO projects VALUES ('" + 
-          uuid.v4() + "', '" +
-          req.body.title + "', '" + 
-          req.body.description + "', '" +
-          req.body.website + "', '" +
-          req.body.repository + "', '" +
-          (req.body.archived !== undefined).toString() + "', '" +
-          req.file.filename + "')");
+      await db.query(
+        "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        [uuid.v4(), req.body.title, req.body.description, req.body.website, req.body.repository, 
+          (req.body.archived !== undefined).toString(), req.file.filename]);
       req.flash('success', 'Successfully added project!');
     }
     res.redirect('/projects');
@@ -176,7 +170,7 @@ app.post('/profile', isLoggedIn, async (req, res) => {
     } else if (err) {
       req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
     } else {
-      await db.query("UPDATE users SET avatar_id = '" + req.file.filename + "' WHERE email = '" + req.user.email + "'");
+      await db.query("UPDATE users SET avatar_id = $1 WHERE email = $2", [req.file.filename, req.user.email]);
       if (req.user.avatar_id) {
         // Free the space taken up by the now-unused profile picture
         fs.unlinkSync("uploads/" + req.user.avatar_id);
