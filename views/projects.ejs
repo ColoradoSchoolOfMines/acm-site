@@ -6,7 +6,7 @@
         and learn new skills with our variety of projects.</p>
 
     <!-- Button trigger modal -->
-    <% if (user.is_admin) { %>
+    <% if (typeof user == 'object' && user && user.is_admin) { %>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">
             New Project
         </button>
