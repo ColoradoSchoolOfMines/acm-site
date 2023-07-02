@@ -20,7 +20,7 @@ router.get('/admin', isAdminAuthenticated, async(req, res) => {
   res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows });
 });
 
-router.post('/admin', isAdminAuthenticated, upload('image', '/admin'), async (req, res) => {
+router.post('/admin', isAdminAuthenticated, upload('image'), async (req, res) => {
   await db.query("INSERT INTO images VALUES ($1, $2)", [req.file.filename, req.body.caption]);
   req.flash('success', 'Successfully uploaded image!');
   res.redirect('/admin');

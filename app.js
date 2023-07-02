@@ -138,7 +138,7 @@ app.get('/projects', async (req, res) => {
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
-app.post('/projects', isAdminAuthenticated, upload('image', '/projects'), async (req, res) => {
+app.post('/projects', isAdminAuthenticated, upload('image'), async (req, res) => {
   await db.query(
     "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
     [uuid.v4(), req.body.title, req.body.description, req.body.website, req.body.repository, 
@@ -151,7 +151,7 @@ app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile', { title: req.user.name });
 });
 
-app.post('/profile', isLoggedIn, upload('avatar', '/profile'), async (req, res) => {
+app.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
     await db.query("UPDATE users SET avatar_id = $1 WHERE email = $2", [req.file.filename, req.user.email]);
     if (req.user.avatar_id) {
       // Free the space taken up by the now-unused profile picture
