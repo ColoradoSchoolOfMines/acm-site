@@ -22,12 +22,6 @@ docker compose build
 docker compose up -d
 ```
 
-## Roadmap
-- Frontend accessibility checks
-- Blog page
-- Webhook or API with discord bot to display meetings
-- Determine if firstname/lastname columns should be merged in DB (depends on final design of pages)
-
 ## Design Choices
 Given that this is intended to be continuously maintained by students
 in the future, I (Ethan Richards) as the original architect would like to

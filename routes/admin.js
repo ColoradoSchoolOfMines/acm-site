@@ -28,7 +28,7 @@ router.post('/admin', isAdminAuthenticated, async (req, res) => {
     } else if (err) {
       req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
     } else {
-      await db.query("INSERT INTO images VALUES ('" + req.file.filename + "', '" + req.body.caption + "')");
+      await db.query("INSERT INTO images VALUES ($1, $2)", [req.file.filename, req.body.caption]);
     }
     res.redirect('/admin');
   });
@@ -53,16 +53,10 @@ router.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
 });
 
 router.post('/meetings', isAdminAuthenticated, async(req, res) => {
-  await db.query("INSERT INTO meetings VALUES ('" + 
-      uuid.v4() + "', '" +
-      req.body.title + "', '" + 
-      req.body.description + "', '" +
-      req.body.date + "', '" +
+  await db.query("INSERT INTO meetings VALUES ($1, $2, $3, $4, $5, $6, $7)", [
+      uuid.v4(), req.body.title, req.body.description, req.body.date,
       // convert hours -> milliseconds
-      (req.body.duration * 3600000) + "', '" +
-      req.body.location + "', '" +
-      req.body.type + "')")
-
+      (req.body.duration * 3600000), req.body.location, req.body.type]);
   res.redirect('/admin');
 });
 
