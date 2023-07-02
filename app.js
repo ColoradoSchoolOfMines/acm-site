@@ -8,11 +8,9 @@ const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid');
 const passport = require('passport');
-const multer = require('multer');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { cspConfig, multerConfig, sessionConfig } = require('./config/general.config');
-const { isLoggedIn } = require('./middleware');
-const upload = multer(multerConfig);
+const { cspConfig, sessionConfig } = require('./config/general.config');
+const { isLoggedIn, isAdminAuthenticated, upload } = require('./middleware');
 const db = require('./database/db');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
@@ -140,46 +138,28 @@ app.get('/projects', async (req, res) => {
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
-app.post('/projects', async (req, res) => {
-  const uploadImage = upload.single('image');
-  uploadImage(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query(
-        "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
-        [uuid.v4(), req.body.title, req.body.description, req.body.website, req.body.repository, 
-          (req.body.archived !== undefined).toString(), req.file.filename]);
-      req.flash('success', 'Successfully added project!');
-    }
-    res.redirect('/projects');
-  });
+app.post('/projects', isAdminAuthenticated, upload('image'), async (req, res) => {
+  await db.query(
+    "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [uuid.v4(), req.body.title, req.body.description, req.body.website, req.body.repository, 
+      (req.body.archived !== undefined).toString(), req.file.filename]);
+  req.flash('success', 'Successfully added project!');
+  res.redirect('/projects');
 });
 
 app.get('/profile', isLoggedIn, (req, res) => {
   res.render('profile', { title: req.user.name });
 });
 
-app.post('/profile', isLoggedIn, async (req, res) => {
-  const uploadAvatar = upload.single('avatar');
-  uploadAvatar(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query("UPDATE users SET avatar_id = $1 WHERE email = $2", [req.file.filename, req.user.email]);
-      if (req.user.avatar_id) {
-        // Free the space taken up by the now-unused profile picture
-        fs.unlinkSync("uploads/" + req.user.avatar_id);
-      }
-      req.user.avatar_id = req.file.filename;
-      req.flash('success', 'Profile picture uploaded successfully!');
+app.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
+    await db.query("UPDATE users SET avatar_id = $1 WHERE email = $2", [req.file.filename, req.user.email]);
+    if (req.user.avatar_id) {
+      // Free the space taken up by the now-unused profile picture
+      fs.unlinkSync("uploads/" + req.user.avatar_id);
     }
+    req.user.avatar_id = req.file.filename;
+    req.flash('success', 'Profile picture uploaded successfully!');
     res.redirect('/profile');
-  });
 });
 
 app.get('/uploads/:id', (req, res) => {

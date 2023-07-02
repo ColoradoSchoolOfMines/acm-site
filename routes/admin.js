@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
-const { isAdminAuthenticated } = require('../middleware');
+const { isAdminAuthenticated, upload } = require('../middleware');
 const { formatDate, formatDuration } = require('../util.js');
 const uuid = require('uuid');
 
@@ -20,18 +20,10 @@ router.get('/admin', isAdminAuthenticated, async(req, res) => {
   res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows });
 });
 
-router.post('/admin', isAdminAuthenticated, async (req, res) => {
-  let uploadImage = upload.single('image');
-  uploadImage(req, res, async(err) => {
-    if (err instanceof multer.MulterError) {
-      req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-    } else if (err) {
-      req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-    } else {
-      await db.query("INSERT INTO images VALUES ($1, $2)", [req.file.filename, req.body.caption]);
-    }
-    res.redirect('/admin');
-  });
+router.post('/admin', isAdminAuthenticated, upload('image'), async (req, res) => {
+  await db.query("INSERT INTO images VALUES ($1, $2)", [req.file.filename, req.body.caption]);
+  req.flash('success', 'Successfully uploaded image!');
+  res.redirect('/admin');
 });
 
 router.post('/officers', isAdminAuthenticated, async (req, res) => {
