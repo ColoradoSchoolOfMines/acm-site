@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS projects (
 CREATE TABLE IF NOT EXISTS user_projects (
     "user_id"    TEXT REFERENCES users(email),
     "project_id" TEXT REFERENCES projects(id),
-    PRIMARY KEY (user_id, project_id)
+    PRIMARY KEY ("user_id", "project_id")
 );
 
 CREATE TABLE IF NOT EXISTS meetings (
@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS meetings (
 
 CREATE TABLE IF NOT EXISTS attendance (
     "meeting" TEXT REFERENCES meetings(id),
-    "email"   TEXT PRIMARY KEY REFERENCES users(email)
+    "email"   TEXT REFERENCES users(email),
+    PRIMARY KEY ("meeting", "email")
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
