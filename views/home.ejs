@@ -24,7 +24,12 @@
 				<% if (meetings.length > 0) { %>
 					<strong>Next meeting</strong>: 
 					<%= meetings[0].title %>, <%= meetings[0].date %>, from <%= meetings[0].duration %> in <%= meetings[0].location %>
-				<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
+				
+					<% if(meetings[0].rsvped) { %>
+						(RSVP'ed)
+					<% } else { %>
+						<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
+					<% } %>
 				<% } else { %>
 					<strong>No upcoming meetings right now, check back soon!</strong>
 				<% } %>
@@ -61,17 +66,20 @@
 					<% for(let meeting of meetings) { %>
 					<div class="meeting">
 						<p class="meeting-title"><%= meeting.title %>
-
-							<!-- check if RSVP'ed already -->
-
-							<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+							<% if(meeting.rsvped) { %>
+								(RSVP'ed)
+							<% } else { %>
+								<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+							<% } %>
 						</p>
 						<p class="meeting-info"><strong><%= meeting.date %></strong> in <strong><%= meeting.location %></strong></p>
 						<p class="meeting-description"><%= meeting.description %></p>
 					</div>
 					<% } %>
 				<% } else { %> 
-					<p>No upcoming meetings! Check back soon for more.</p>
+					<div class="meeting">
+						<p>No upcoming meetings! Check back soon for more.</p>
+					</div>
 				<% } %>
 				<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
 			</div>

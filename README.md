@@ -22,16 +22,6 @@ docker compose build
 docker compose up -d
 ```
 
-## Roadmap
-- Figure out mailing list subscribe
-- Admin panel where current officers can be modified
-- Better dark mode support
-- Frontend accessibility checks
-- Blog page
-- Test uploads vulnerability and other security stuff
-- Webhook or API with discord bot to display meetings
-- Navbar moves slightly when dropdown is clicked
-
 ## Design Choices
 Given that this is intended to be continuously maintained by students
 in the future, I (Ethan Richards) as the original architect would like to

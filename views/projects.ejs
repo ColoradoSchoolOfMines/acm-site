@@ -6,7 +6,7 @@
         and learn new skills with our variety of projects.</p>
 
     <!-- Button trigger modal -->
-    <% if (user.is_admin) { %>
+    <% if (typeof user == 'object' && user && user.is_admin) { %>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">
             New Project
         </button>
@@ -22,25 +22,26 @@
                     <form method="POST" action="/projects" enctype="multipart/form-data" >
                         <div class="modal-body">
                             <label class="d-block py-1" for="title">Title</label>
-                            <input name="title" type="text" required />
-        
+                            <input id="title" name="title" type="text" required />
+                            
                             <label class="d-block py-1" for="description">Description</label>
-                            <input name="description" type="text" required />
-        
+                            <input id="description" name="description" type="text" required />
+         
                             <label class="d-block py-1" for="repository">Repository Link</label>
-                            <input name="repository" type="url" required />
-        
+                            <input id="repository" name="repository" type="url" required />
+         
                             <label class="d-block py-1" for="website">Website Link</label>
-                            <input name="website" type="url" />
-        
+                            <input id="website" name="website" type="url" />
+         
                             <label class="d-block py-1" for="authors">Authors</label>
-                            <input name="authors" type="text" required />
-        
+                            <input id="authors" name="authors" type="text" required />
+         
                             <label class="d-block py-1" for="archived">Archived</label>
-                            <input name="archived" type="checkbox" />
-        
+                            <input id="archived" name="archived" type="checkbox" />
+         
                             <label class="d-block py-1" for="image">Image</label>
-                            <input name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
+                            <input id="image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
+                            <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
