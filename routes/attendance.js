@@ -7,7 +7,13 @@ router.get('/rsvp', async(req, res) => {
     // Find next meeting and show it to user
     const resp = await db.query("SELECT * FROM meetings WHERE id = $1", [req.query.meeting]);
     if(resp.rows.length > 0) {
-      res.render('rsvp', { title: 'RSVP', meeting: resp.rows[0] });
+      const rsvp = await db.query("SELECT * FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.email, req.query.meeting]);
+      let rsvped = false;
+
+      if(rsvp.rows.length > 0) {
+        rsvped = true;
+      }
+      res.render('rsvp', { title: 'RSVP', meeting: resp.rows[0], rsvped: rsvped });
     }
     else {
       res.render('rsvp', { title: 'RSVP', meeting: false });
@@ -56,7 +62,13 @@ router.get('/attend', async (req, res) => {
   // Find active meeting if possible (assumes 1 meeting per day)
   const resp = await db.query("SELECT * FROM meetings WHERE date >= NOW() and date <= NOW() + INTERVAL '1 day'");
   if(resp.rows.length > 0) {
-    res.render('attend', { title: 'Attend', meeting: resp.rows[0] });
+    const rsvp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [req.user.email, resp.rows[0].id]);
+    let rsvped = false;
+   
+    if(rsvp.rows.length > 0) {
+      rsvped = true;
+    }
+    res.render('attend', { title: 'Attend', meeting: resp.rows[0], rsvped: rsvped });
   }
   else {
     res.render('attend', { title: 'Attend', meeting: false });
