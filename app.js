@@ -16,7 +16,6 @@ const adminRoutes = require('./routes/admin');
 const profileRoutes = require('./routes/profile');
 const projectsRoutes = require('./routes/projects');
 const presentationsRoutes = require('./routes/presentations');
-const { formatDate, formatDuration } = require('./util.js');
 const app = express();
 
 app.engine('ejs', ejsMate);

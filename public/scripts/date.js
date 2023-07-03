@@ -1,8 +1,7 @@
 let dates = document.getElementsByClassName("date");
 for(let i = 0; i < dates.length; i++) {
-	let date = new Date(dates[i].innerHTML.split(",")[0]);
-	let duration = dates[i].innerHTML.split(",")[1];
-
+	const date = new Date(dates[i].innerHTML.split(",")[0]);
+	const duration = dates[i].innerHTML.split(",")[1];
 	const endTime = new Date(date.getTime() + parseInt(duration));
 	const newDuration = " from " + date.toLocaleDateString('en-US', { hour: 'numeric' }).split(", ")[1] 
 		+ " to " + endTime.toLocaleDateString('en-US', { hour: 'numeric' }).split(", ")[1];
