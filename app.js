@@ -105,7 +105,18 @@ app.get('/', async (req, res) => {
     const originalDate = meetings.rows[meeting].date;
     meetings.rows[meeting].date = formatDate(originalDate);    
     meetings.rows[meeting].duration = formatDuration(originalDate, meetings.rows[meeting].duration);
+    
+    if(req.user) {
+      const rsvp = await db.query("SELECT * FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.email, meetings.rows[meeting].id]);
+      if(rsvp.rows.length > 0) {
+        meetings.rows[meeting].rsvped = true;
+      }
+    }
+    else {
+      meetings.rows[meeting].rsvped = false;
+    }
   }
+
   res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
 });
 
