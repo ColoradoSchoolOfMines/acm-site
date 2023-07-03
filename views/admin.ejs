@@ -109,6 +109,7 @@
         <p>Upload new image to be displayed randomly on the front page of the site.</p>
         <form method="POST" action="/admin" enctype="multipart/form-data">
             <input class="d-inline-block" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
+            <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
             <br>
             <input class="d-inline-block" type="text" name="caption" placeholder="Caption.." required />
             <br>
