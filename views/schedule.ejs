@@ -12,7 +12,7 @@
         <% for(let meeting of upcoming) { %>
             <div class="meeting">
                 <p><strong><%= meeting.title %></strong>: <%= meeting.description %></p>
-                <p><strong>Date</strong>: <%= meeting.date %> from <%= meeting.duration %></p>
+                <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
                 <p><strong>Location</strong>: <%= meeting.location %></p>
                 <p><strong>Type</strong>: <%= meeting.type %></p>
                 <% if(meeting.rsvped) { %>
@@ -29,7 +29,7 @@
         <% for(let meeting of previous) { %>
             <div class="meeting">
                 <p><strong><%= meeting.title %></strong>: <%= meeting.description %></p>
-                <p><strong>Date</strong>: <%= meeting.date %> from <%= meeting.duration %></p>
+                <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
                 <p><strong>Location</strong>: <%= meeting.location %></p>
                 <p><strong>Type</strong>: <%= meeting.type %></p>
                 <p><strong>Duration</strong>: <%= meeting.duration %> hour(s)</p>
@@ -37,3 +37,5 @@
         <% } %>
     </div>
 </div>
+
+<script src="/scripts/date.js"></script>

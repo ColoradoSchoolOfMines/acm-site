@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 const { isAdminAuthenticated, upload } = require('../middleware');
-const { formatDate, formatDuration } = require('../util.js');
 const uuid = require('uuid');
 
 router.get('/admin', isAdminAuthenticated, async(req, res) => {
@@ -10,10 +9,6 @@ router.get('/admin', isAdminAuthenticated, async(req, res) => {
   for(let meeting in meetings.rows) {
     const attendance = await db.query("SELECT attendance.email FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
     meetings.rows[meeting].attendance = attendance.rows;
-    
-    const originalDate = meetings.rows[meeting].date;
-    meetings.rows[meeting].date = formatDate(originalDate);    
-    meetings.rows[meeting].duration = formatDuration(originalDate, meetings.rows[meeting].duration);
   }
 
   const officers = await db.query("SELECT * FROM users WHERE title != ''");
