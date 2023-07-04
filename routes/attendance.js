@@ -46,7 +46,7 @@ router.post('/rsvp', async(req, res) => {
   }
 
   // Check if user has RSVP'ed already
-  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1", [req.user.email]);
+  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.email, req.body.meetingId]);
   if(rsvp.rows.length > 0) {
     req.flash('error', 'You have already RSVP\'ed for this event!');
     res.redirect('/');
