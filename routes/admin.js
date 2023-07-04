@@ -12,7 +12,8 @@ router.get('/admin', isAdminAuthenticated, async(req, res) => {
   }
 
   const officers = await db.query("SELECT * FROM users WHERE title != ''");
-  res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows });
+  const feedback = await db.query("SELECT * FROM feedback");
+  res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows, feedbackData: feedback.rows });
 });
 
 router.post('/admin', isAdminAuthenticated, upload('image'), async (req, res) => {
@@ -36,6 +37,12 @@ router.post('/officers/edit', isAdminAuthenticated, async (req, res) => {
 router.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
   await db.query("UPDATE users SET title = $1 WHERE email = $2", ['', req.body.email]);
   req.flash('success', 'Successfully removed ' + req.body.email + ' as an officer.');
+  res.redirect('/admin');
+});
+
+router.post('/feedback/remove', isAdminAuthenticated, async (req, res) => {
+  await db.query("DELETE FROM feedback WHERE email = $1 and feedback = $2", [req.body.email, req.body.feedback]);
+  req.flash('success', 'Successfully removed feedback from ' + req.body.email + '.');
   res.redirect('/admin');
 });
 
