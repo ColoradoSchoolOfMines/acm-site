@@ -16,6 +16,10 @@
             <% } else { %>
                 <p>You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.</p>
                 <form method="POST" action="/attend">
+                    <br>
+                    <p>Do you have any suggestions, feedback, or questions about the club?</p>
+                    <input class="d-inline-block" type="text" name="feedback" placeholder="Feedback.." />
+                    <br>
                     <input type="hidden" name="meetingId" value="<%= meeting.id %>">
                     <button class="btn d-inline-block btn-primary">Submit</button>
                 </form>
@@ -27,6 +31,9 @@
                 <br>
                 <p>Email</p>
                 <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
+                <br>
+                <p>Do you have any suggestions, feedback, or questions about the club?</p>
+                <input class="d-inline-block" type="text" name="feedback" placeholder="Feedback.." />
                 <br>
                 <input type="hidden" name="meetingId" value="<%= meeting.id %>">
                 <button class="btn d-inline-block btn-primary">Submit</button>
