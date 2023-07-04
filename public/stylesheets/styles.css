@@ -162,7 +162,7 @@ p {
 .meeting {
     border-bottom: 1px solid lightgray;
     padding-bottom: 1%;
-    padding-top: 2%;
+    padding-top: 1%;
     line-height: 30px;
 }
 
@@ -174,10 +174,6 @@ p {
 
 .meeting-info {
     margin: 0;
-}
-
-.rsvp {
-    margin-left: 1%;
 }
 
 .header-description {
