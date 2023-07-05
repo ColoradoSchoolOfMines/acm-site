@@ -206,7 +206,7 @@ p {
 }
 
 .meeting-scroll {
-    height: 75vh;
+    height: 50vh;
     overflow: scroll;
 }
 
