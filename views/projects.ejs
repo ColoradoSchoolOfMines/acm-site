@@ -5,18 +5,16 @@
     <p>Projects are a great way to get involved with Mines ACM! Apply existing knowledge
         and learn new skills with our variety of projects.</p>
 
-    <!-- Button trigger modal -->
     <% if (typeof user == 'object' && user && user.is_admin) { %>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">
+        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newProjectModal">
             New Project
         </button>
         
-        <!-- Modal -->
         <div class="modal fade" id="newProjectModal" tabindex="-1" aria-labelledby="newProjectModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newProjectModalLabel">New Project</h5>
+                        <h5 class="modal-title" id="newProjectModalLabel">New </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST" action="/projects" enctype="multipart/form-data" >
@@ -71,11 +69,36 @@
                         <a class="d-block"  href="<%= project.repository %>">Repository</a>
                     </div>
                     <% if (typeof user == 'object' && user && user.is_admin) { %>
-                        <button type="button" class="btn btn-primary d-block mt-2" data-bs-toggle="modal" data-bs-target="#editProject<%= project.id %>Modal">
-                            Edit Project
-                        </button>
+                        <div class="d-block mt-2">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProject<%= project.id %>Modal">
+                                Edit Project
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProject<%= project.id %>Modal">
+                                Delete Project
+                            </button>
+                        </div>
                         
-                        <!-- Modal -->
+                        <div class="modal fade" id="deleteProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="deleteProject<%= project.id %>ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteProject<%= project.id %>ModalLabel">Delete Project</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="POST" action="/projects/delete">
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete the <strong><%= project.title %></strong> project?</p>
+                                            <input type="hidden" name="id" value="<%= project.id %>">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger">Yes</button>
+                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="modal fade" id="editProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="editProject<%= project.id %>ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -114,12 +137,13 @@
                                             <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
                                             <button type="submit" class="btn btn-primary">Save</button>
+                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
                                         </div>
                                     </form>
                                 </div>
-                            </div>
+                            </div>                       
+
                         </div>
                     <% } %>
                 </div>
