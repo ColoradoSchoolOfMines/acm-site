@@ -16,7 +16,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newProjectModalLabel">Project Details</h5>
+                        <h5 class="modal-title" id="newProjectModalLabel">New Project</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST" action="/projects" enctype="multipart/form-data" >
@@ -80,7 +80,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editProject<%= project.id %>ModalLabel">Project Details</h5>
+                                        <h5 class="modal-title" id="editProject<%= project.id %>ModalLabel">Edit Project</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <form method="POST" action="/projects/edit" enctype="multipart/form-data" >
