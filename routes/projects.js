@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../database/db');
-const fs = require('fs')
+const fs = require('fs');
+const uuid = require('uuid');
 const { isAdminAuthenticated, upload } = require('../middleware');
 const router = express.Router();
 
