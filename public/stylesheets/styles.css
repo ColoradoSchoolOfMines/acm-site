@@ -69,8 +69,8 @@ p {
 
 /* Components */
 .container {
-    padding-top: 2%;
-    padding-bottom: 2%;
+    padding-top: 3%;
+    padding-bottom: 3%;
     margin-left: 0;
     margin-right: 0;
     width: 100%;
@@ -119,12 +119,9 @@ p {
     color: goldenrod;
 }
 
-.col-gold {
-    border-left: 4px solid goldenrod;
-    padding-left: 1%;
-}
-
 .highlight {
+    border-left: 4px solid goldenrod;
+    padding-left: 3%;
     font-size: 18px;
 }
 
@@ -246,7 +243,13 @@ p {
 
 /* Footer */
 .footer {
-    background-color: #f8f9fa;
+    background-color: #0083c5;
+    color: white;
+}
+
+.footer .container {
+    padding-top: 2%;
+    padding-bottom: 1%;
 }
 
 /* Animations */
