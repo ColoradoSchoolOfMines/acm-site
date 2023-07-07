@@ -2,7 +2,7 @@
 
 <div class="container bg-light">
 	<div class="row">
-		<div class="col col-left">
+		<div class="col me-5">
 			<h1 class="big-header">Mines ACM</h1>
 			<p class="header-description">
 				Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
@@ -34,12 +34,10 @@
 				<% } %>
 			</p>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-6 text-center">
 			<% if (image) { %> 
 				<img src="uploads/<%= image.id %>" class="header-image shadow" />
-				<p class="image-caption">
-					<%= image.caption %>
-				</p>
+				<p class="image-caption"><%= image.caption %></p>
 			<% } else { %>
 				<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
 				<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
@@ -48,18 +46,18 @@
 	</div>
 </div>
 
+<!-- image stuff doesn't work if no images are in DB? -->
 <div class="container">
 	<div class="row">
-		<!-- TODO better solution here for column headers + don't use inline styling -->
-		<div class="col" style="margin-left: 9%; margin-right: 2.5%;">
+		<div class="col me-5">
 			<h1 class="big-header-2">Upcoming Meetings</h1>
 		</div>
-		<div class="col" style="margin-left: 2.5%; margin-right: 10%;">
+		<div class="col">
 			<h1 class="big-header-2">Our Events</h1>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col col-gold" style="margin-left: 10%; margin-right: 2.5%;">
+		<div class="col me-5">
 			<div class="highlight">
 				<% if(meetings.length > 0) { %>
 					<% for(let meeting of meetings) { %>
@@ -85,7 +83,7 @@
 				<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
 			</div>
 		</div>
-		<div class="col col-gold" style="margin-left: 2.5%; margin-right: 10%;">
+		<div class="col">
 			<div class="highlight">
 				<div class="event">
 					<p class="meeting-title">Tech Talks</p>
