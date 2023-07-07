@@ -77,12 +77,6 @@ p {
     min-width: 100%;
 }
 
-.col-left {
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 10%;
-}
-
 .team-card {
     display: inline-block;
     text-align: center;
@@ -177,18 +171,16 @@ p {
 }
 
 .header-description {
-    margin-right: 10%;
     font-size: 20px;
     border-left: 4px solid #0083c5;
     padding-left: 3%;
 }
 
 .header-image {
-    max-width: 75%;
+    max-width: 90%;
     border-radius: 25px;
     margin-left: auto;
     margin-right: auto;
-    display: block;
 }
 
 .image-caption {
@@ -215,6 +207,10 @@ p {
     overflow: scroll;
 }
 
+.acm-blue {
+    color: #0083c5;
+}
+
 /* Buttons */
 .btn-outline-primary:hover {
     background-color: transparent;
@@ -225,30 +221,32 @@ p {
 /* Navigation */
 .navbar {
     font-size: 20px;
-    padding: 20px;
+    padding: 10px;
     font-family: 'Overpass', sans-serif;
 }
 
 .navbar-brand {
-    margin-left: 5%;
     margin-right: 5%;
 }
 
 .nav-item {
     margin-top: auto;
     margin-bottom: auto;
-    padding-right: 2%;
+    margin-right: 5%;
+}
+
+.nav-link {
+    color: white;
+}
+
+.row {
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 /* Footer */
 .footer {
     background-color: #f8f9fa;
-}
-
-.footer .container {
-    margin-left: auto;
-    margin-right: auto;
-    min-width: inherit;
 }
 
 /* Animations */
