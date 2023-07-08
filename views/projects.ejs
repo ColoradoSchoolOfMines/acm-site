@@ -67,20 +67,22 @@
                             <a class="d-block mt-2" href="<%= project.website %>">Website</a>
                         <% } %>
                         <a class="d-block"  href="<%= project.repository %>">Repository</a>
-                        <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
-                            <div class="col">
-                                <div class="chip">
-                                    <img src="static/images/default_user.png" class="d-inline project-user-image" />
-                                    <p class="d-inline project-user-name">User 1</p>
-                                </div>
+                        <% if (project.users.length > 0) { %>
+                            <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
+                                <% for (user of project.users) { %>
+                                    <div class="col">
+                                        <div class="chip">
+                                            <% if (user.avatar_id) { %>
+                                                <img src="uploads/<%= user.avatar_id %>" class="d-inline project-user-image" />
+                                            <% } else { %>
+                                                <img src="static/images/default_user.png" class="d-inline project-user-image" />
+                                            <% } %>
+                                            <p class="d-inline project-user-name ms-1"><%= user.name %></p>
+                                        </div>
+                                    </div>
+                                <% } %>
                             </div>
-                            <div class="col">                                
-                                <div class="chip">
-                                    <img src="static/images/default_user.png" class="d-inline project-user-image" />
-                                    <p class="d-inline project-user-name">User 2</p>
-                                </div>
-                            </div>
-                        </div>
+                        <% } %>
                         <% if (typeof user == 'object' && user && user.is_admin) { %>
                             <div class="row row-cols-auto align-items-start mx-0 mt-2 gx-1 gy-1">
                                 <div class="col">

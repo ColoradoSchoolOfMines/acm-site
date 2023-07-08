@@ -15,6 +15,16 @@ const clearProjectImage = async (req) => {
 
 router.get('/projects', async (req, res) => {
   const resp = await db.query("SELECT * FROM projects ORDER BY archived, title");
+  for (let project of resp.rows) {
+    const users = await db.query("SELECT users.name, users.avatar_id " + 
+      "FROM users JOIN user_projects ON users.email = user_projects.user_id " + 
+      "JOIN projects ON user_projects.project_id = projects.id " + 
+      "WHERE projects.id = $1", [project.id]);
+    project.users = users.rows.map((user) => ({
+      name: user.name,
+      avatar_id: user.avatar_id
+    }));
+  }
   res.render('projects', { title: "Projects", projects: resp.rows });
 });
 
@@ -31,12 +41,12 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), async
   // Image uploading is optional when editing projects, so we need to perform different queries
   // for the different states.
   if (req.file) {
-      // Free the space taken up by the now-unused project image.
-      await clearProjectImage(req);
-      await db.query(
-        "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
-        [req.body.title, req.body.description, req.body.website, req.body.repository, 
-          getDBArchivedValue(req), req.file.filename, req.body.id])
+    // Free the space taken up by the now-unused project image.
+    await clearProjectImage(req);
+    await db.query(
+      "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
+      [req.body.title, req.body.description, req.body.website, req.body.repository, 
+        getDBArchivedValue(req), req.file.filename, req.body.id])
   } else {
     // No image specified, leave it unchanged and only commit the rest.
     await db.query(
