@@ -67,7 +67,7 @@ p {
     margin-bottom: 0;
 }
 
-/* Components */
+/* Container */
 .container {
     padding-top: 3%;
     padding-bottom: 3%;
@@ -77,6 +77,12 @@ p {
     min-width: 100%;
 }
 
+.row {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+/* Components */
 .team-card {
     display: inline-block;
     text-align: center;
@@ -236,9 +242,13 @@ p {
     color: white;
 }
 
-.row {
-    margin-left: 10%;
-    margin-right: 10%;
+.nav-link:focus, .nav-link:hover {
+    font-weight: bold;
+    color: white;
+}
+
+.active {
+    font-weight: bold;
 }
 
 /* Footer */
