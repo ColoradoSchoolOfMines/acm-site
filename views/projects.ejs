@@ -5,18 +5,16 @@
     <p>Projects are a great way to get involved with Mines ACM! Apply existing knowledge
         and learn new skills with our variety of projects.</p>
 
-    <!-- Button trigger modal -->
     <% if (typeof user == 'object' && user && user.is_admin) { %>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProjectModal">
+        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newProjectModal">
             New Project
         </button>
         
-        <!-- Modal -->
         <div class="modal fade" id="newProjectModal" tabindex="-1" aria-labelledby="newProjectModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newProjectModalLabel">Project Details</h5>
+                        <h5 class="modal-title" id="newProjectModalLabel">New </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST" action="/projects" enctype="multipart/form-data" >
@@ -33,8 +31,8 @@
                             <label class="d-block py-1" for="website">Website Link</label>
                             <input id="website" name="website" type="url" />
          
-                            <label class="d-block py-1" for="authors">Authors</label>
-                            <input id="authors" name="authors" type="text" required />
+   <!--                          <label class="d-block py-1" for="authors">Authors</label>
+                            <input id="authors" name="authors" type="text" required /> -->
          
                             <label class="d-block py-1" for="archived">Archived</label>
                             <input id="archived" name="archived" type="checkbox" />
@@ -44,7 +42,7 @@
                             <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </form>
@@ -65,29 +63,97 @@
                             <% } %>
                         </h2>
                         <p class="project-desc mb-2"><%= project.description %></p>
-                        <% if(project.website) { %>
-                            <a class="d-block" href="<%= project.website %>">Website</a>
-                        <% } %>
-                        <a class="d-block"  href="<%= project.repository %>">Repository</a>
-                        <div class="row row-cols-auto mt-2">
-                            <% for (let user of project.users) { %>
-                                <div class="chip">
-                                    <% if (user.avatar_id) { %>
-                                        <img class="d-inline-block project-user-image" src="uploads/<%= user.avatar_id %>">
-                                    <% } else { %>
-                                        <img class="d-inline-block project-user-image" src="static/images/default_user.png">
-                                    <% } %>
-                                    <p class="d-inline-block"><%= user.full %></p>
-                                </div>
+                        <div class="d-inline-block mt-2">
+                            <% if(project.website) { %>
+                                <a class="d-block" href="<%= project.website %>">Website</a>
                             <% } %>
+                            <a class="d-block"  href="<%= project.repository %>">Repository</a>
                         </div>
+                        <% if (typeof user == 'object' && user && user.is_admin) { %>
+                            <div class="d-block mt-2">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProject<%= project.id %>Modal">
+                                    Edit Project
+                                </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProject<%= project.id %>Modal">
+                                    Delete Project
+                                </button>
+                            </div>
+                            
+                            <div class="modal fade" id="deleteProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="deleteProject<%= project.id %>ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteProject<%= project.id %>ModalLabel">Delete Project</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST" action="/projects/delete">
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete the <strong><%= project.title %></strong> project?</p>
+                                                <input type="hidden" name="id" value="<%= project.id %>">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="editProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="editProject<%= project.id %>ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editProject<%= project.id %>ModalLabel">Edit Project</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST" action="/projects/edit" enctype="multipart/form-data" >
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" value="<%= project.id %>">
+
+                                                <label class="d-block py-1" for="title">Title</label>
+                                                <input id="title" name="title" type="text" required value="<%= project.title %>" />
+                                                
+                                                <label class="d-block py-1" for="description">Description</label>
+                                                <input id="description" name="description" type="text" required value="<%= project.description %>" />
+                             
+                                                <label class="d-block py-1" for="repository">Repository Link</label>
+                                                <input id="repository" name="repository" type="url" required value="<%= project.repository %>" />
+                             
+                                                <label class="d-block py-1" for="website">Website Link</label>
+                                                <input id="website" name="website" type="url" required value="<%= project.website %>" />
+                             
+    <!--                                             <label class="d-block py-1" for="authors">Authors</label>
+                                                <input id="authors" name="authors" type="text" required />
+                              -->
+                                                <label class="d-block py-1" for="archived">Archived</label>
+                                                <% if (project.archived) { %>
+                                                    <input id="archived" name="archived" type="checkbox" checked>
+                                                <% } else { %>
+                                                    <input id="archived" name="archived" type="checkbox">
+                                                <% } %>
+                             
+                                                <label class="d-block py-1" for="image">Image</label>
+                                                <input id="image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" />
+                                                <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>      
+                            </div>
+                        <% } %>
                     </div>
 
                     <% if(project.image_id) { %>
                         <div class="col">
                             <img src="uploads/<%= project.image_id %>" class="project-image" />
-                        </div>
                     <% } %>
+
+
                 </div>
             </div>
         <% } %> 

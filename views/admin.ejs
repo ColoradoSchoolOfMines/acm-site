@@ -58,7 +58,7 @@
                     <div class="meeting">
                         <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
                         <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <%= meeting.date %> from <%= meeting.duration %></p>
+                        <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
                         <p><strong>Location</strong>: <%= meeting.location %></p>
                         <p><strong>Type</strong>: <%= meeting.type %></p>
                         <% if(meeting.attendance.length > 0) { %>
@@ -76,7 +76,7 @@
                     <br>
                     <input class="d-inline-block" type="datetime-local" name="date">
                     <br>
-                    <input class="d-inline-block" type="text" name="duration" placeholder="Duration (hours) as an integer" />
+                    <input class="d-inline-block" type="number" name="duration" placeholder="Duration (hours)" />
                     <br>
                     <input class="d-inline-block" type="text" name="location" placeholder="Location.." />
                     <br>
@@ -86,6 +86,21 @@
                 </form>
             </div>
         </div>
+    </div>
+
+    <div class="large-card">
+        <h2>Feedback</h2>
+        <% for(let feedback of feedbackData) { %>
+            <div class="meeting">
+                <p><strong>User</strong>: <%= feedback.email %></p>
+                <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
+                <form class="d-inline-block" method="POST" action="/feedback/remove">
+                    <input type="hidden" name="email" value="<%= feedback.email %>">
+                    <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
+                    <button class="btn d-inline-block btn-outline-danger">Delete</button>
+                </form>
+            </div>
+        <% } %>
     </div>
 
     <div class="large-card">
@@ -119,3 +134,4 @@
 </div>
 
 <script src="/scripts/csv.js"></script>
+<script src="/scripts/date.js"></script>
