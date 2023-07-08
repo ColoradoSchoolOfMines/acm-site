@@ -30,9 +30,10 @@
          
                             <label class="d-block py-1" for="website">Website Link</label>
                             <input id="website" name="website" type="url" />
-         
-   <!--                          <label class="d-block py-1" for="authors">Authors</label>
-                            <input id="authors" name="authors" type="text" required /> -->
+        
+                            <label class="d-block py-1">Authors</label>
+                            <input class="author" name="author1" type="text" required />
+                            <input class="author" name="author2" type="text" required />
          
                             <label class="d-block py-1" for="archived">Archived</label>
                             <input id="archived" name="archived" type="checkbox" />
@@ -67,17 +68,17 @@
                             <a class="d-block mt-2" href="<%= project.website %>">Website</a>
                         <% } %>
                         <a class="d-block"  href="<%= project.repository %>">Repository</a>
-                        <% if (project.users.length > 0) { %>
+                        <% if (project.authors.length > 0) { %>
                             <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
-                                <% for (user of project.users) { %>
+                                <% for (author of project.authors) { %>
                                     <div class="col">
                                         <div class="chip">
-                                            <% if (user.avatar_id) { %>
+                                            <% if (author.avatar_id) { %>
                                                 <img src="uploads/<%= user.avatar_id %>" class="d-inline project-user-image" />
                                             <% } else { %>
                                                 <img src="static/images/default_user.png" class="d-inline project-user-image" />
                                             <% } %>
-                                            <p class="d-inline project-user-name ms-1"><%= user.name %></p>
+                                            <p class="d-inline project-user-name ms-1"><%= author.name %></p>
                                         </div>
                                     </div>
                                 <% } %>
