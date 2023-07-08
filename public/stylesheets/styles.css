@@ -210,11 +210,6 @@ p {
     overflow: scroll;
 }
 
-.error-scroll {
-    width: 100%;
-    height: 50vh;
-}
-
 .acm-blue {
     color: #0083c5;
 }
