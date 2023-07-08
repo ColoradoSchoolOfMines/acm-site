@@ -151,9 +151,8 @@ p {
 }
 
 .chip {
-    padding: 10px;
-    margin-left: 10px;
-    background-color: lightblue;
+    padding: 3px 10px 5px 10px;
+    background-color: #99DDFF;
     border-radius: 10px;
 }
 
@@ -164,9 +163,13 @@ p {
 }
 
 .project-user-image {
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+}
+
+.project-user-name {
+    vertical-align: middle;
 }
 
 .meeting {

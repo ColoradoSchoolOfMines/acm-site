@@ -55,28 +55,44 @@
         <% for(let project of projects) { %>
             <div class="large-card container">
                 <div class="row row-cols-2 align-items-center">
-                    <div class="col ">
+                    <div class="col">
                         <h2 class="project-title">
                             <%= project.title %>
                             <% if (project.archived) { %>
                                 <span class="project-archived">(Inactive)</span>
                             <% } %>
                         </h2>
-                        <p class="project-desc mb-2"><%= project.description %></p>
-                        <div class="d-inline-block mt-2">
-                            <% if(project.website) { %>
-                                <a class="d-block" href="<%= project.website %>">Website</a>
-                            <% } %>
-                            <a class="d-block"  href="<%= project.repository %>">Repository</a>
+                        <p class="project-desc"><%= project.description %></p>
+                        <% if(project.website) { %>
+                            <a class="d-block mt-2" href="<%= project.website %>">Website</a>
+                        <% } %>
+                        <a class="d-block"  href="<%= project.repository %>">Repository</a>
+                        <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
+                            <div class="col">
+                                <div class="chip">
+                                    <img src="static/images/default_user.png" class="d-inline project-user-image" />
+                                    <p class="d-inline project-user-name">User 1</p>
+                                </div>
+                            </div>
+                            <div class="col">                                
+                                <div class="chip">
+                                    <img src="static/images/default_user.png" class="d-inline project-user-image" />
+                                    <p class="d-inline project-user-name">User 2</p>
+                                </div>
+                            </div>
                         </div>
                         <% if (typeof user == 'object' && user && user.is_admin) { %>
-                            <div class="d-block mt-2">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProject<%= project.id %>Modal">
-                                    Edit Project
-                                </button>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProject<%= project.id %>Modal">
-                                    Delete Project
-                                </button>
+                            <div class="row row-cols-auto align-items-start mx-0 mt-2 gx-1 gy-1">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProject<%= project.id %>Modal">
+                                        Edit Project
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProject<%= project.id %>Modal">
+                                        Delete Project
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="modal fade" id="deleteProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="deleteProject<%= project.id %>ModalLabel" aria-hidden="true">
