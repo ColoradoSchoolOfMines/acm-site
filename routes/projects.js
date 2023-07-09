@@ -33,10 +33,9 @@ const clearProjectImage = async (req) => {
 router.get('/projects', async (req, res) => {
   const projectResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
   for (let project of projectResp.rows) {
-    // TODO: Make database schema use authors naming
     const authorResp = await db.query("SELECT users.email, users.name, users.avatar_id " + 
-      "FROM users JOIN user_projects ON users.email = user_projects.user_id " + 
-      "JOIN projects ON user_projects.project_id = projects.id " + 
+      "FROM users JOIN project_authors ON users.email = project_authors.author_email " + 
+      "JOIN projects ON project_authors.project_id = projects.id " + 
       "WHERE projects.id = $1", [project.id]);
     project.authors = authorResp.rows;
   }
@@ -55,7 +54,7 @@ router.post('/projects', isAdminAuthenticated, upload('image'), async (req, res)
 
     for (let author of authors) {
       await db.query(
-        "INSERT INTO user_projects VALUES ($1, $2)", [author, id])
+        "INSERT INTO project_authors VALUES ($1, $2)", [id, project])
     } 
 
     req.flash('success', 'Successfully added project!');
@@ -87,10 +86,10 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), async
           getArchived(req), req.body.id])
     }
 
-    await db.query("DELETE FROM user_projects WHERE project_id = $1", [req.body.id]);
+    await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.id]);
     for (let author of authors) {
       await db.query(
-        "INSERT INTO user_projects VALUES ($1, $2)", [author, req.body.id])
+        "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, author])
     } 
 
     req.flash('success', 'Successfully updated project!');
@@ -104,7 +103,7 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), async
 router.post('/projects/delete', isAdminAuthenticated, async (req, res) => {
   // Free the space taken up by the now-unused project image.
   await clearProjectImage(req);
-  await db.query("DELETE FROM user_projects WHERE project_id = $1", [req.body.id]);
+  await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.id]);
   await db.query("DELETE FROM projects WHERE id = $1", [req.body.id]);
   req.flash('success', 'Successfully deleted project!');
   res.redirect('/projects');
