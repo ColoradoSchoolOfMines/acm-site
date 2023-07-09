@@ -17,7 +17,7 @@
                         <h5 class="modal-title" id="newProjectModalLabel">New </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" action="/projects" enctype="multipart/form-data" >
+                    <form class="project-form" method="POST" action="/projects" enctype="multipart/form-data" >
                         <div class="modal-body">
                             <label class="d-block py-1" for="title">Title</label>
                             <input id="title" name="title" type="text" required />
@@ -30,11 +30,25 @@
          
                             <label class="d-block py-1" for="website">Website Link</label>
                             <input id="website" name="website" type="url" />
-        
-                            <label class="d-block py-1">Authors</label>
-                            <input class="author" name="author1" type="text" required />
-                            <input class="author" name="author2" type="text" required />
-         
+
+                            <div id="author-1" class="author">
+                                <label class="d-block py-1" for="author-name-1">Author 1</label>
+                                <input id="author-name-1" name="author1" type="email" required />
+                            </div>
+
+                            <div class="row row-cols-auto align-items-start mx-0 mt-1 mb-2 gx-1 gy-1">
+                                <div class="col">
+                                    <button id="author-add" type="button" class="btn btn-outline-primary">
+                                        Add Author
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button id="author-remove" type="button" class="btn btn-outline-danger">
+                                        Remove Author
+                                    </button>
+                                </div>
+                            </div>
+
                             <label class="d-block py-1" for="archived">Archived</label>
                             <input id="archived" name="archived" type="checkbox" />
          
@@ -126,7 +140,7 @@
                                             <h5 class="modal-title" id="editProject<%= project.id %>ModalLabel">Edit Project</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form method="POST" action="/projects/edit" enctype="multipart/form-data" >
+                                        <form class="project-form" method="POST" action="/projects/edit" enctype="multipart/form-data" >
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" value="<%= project.id %>">
 
@@ -142,9 +156,26 @@
                                                 <label class="d-block py-1" for="website">Website Link</label>
                                                 <input id="website" name="website" type="url" required value="<%= project.website %>" />
                              
-    <!--                                             <label class="d-block py-1" for="authors">Authors</label>
-                                                <input id="authors" name="authors" type="text" required />
-                              -->
+                                                <% for (let i = 0; i < project.authors.length; ++i) { %>
+                                                    <div id="author-<%= i + 1 %>" class="author">
+                                                        <label class="d-block py-1" for="author-name-<%= i + 1 %>">Author <%= i + 1 %></label>
+                                                        <input id="author-name-<%= i + 1 %>" name="author<%= i + 1 %>" type="email" value="<%= project.authors[i].email %>" required />
+                                                    </div>
+                                                <% } %>
+
+                                                <div class="row row-cols-auto align-items-start mx-0 mt-1 mb-2 gx-1 gy-1">
+                                                    <div class="col">
+                                                        <button id="author-add" type="button" class="btn btn-outline-primary">
+                                                            Add Author
+                                                        </button>
+                                                    </div>
+                                                    <div class="col">
+                                                        <button id="author-remove" type="button" class="btn btn-outline-danger">
+                                                            Remove Author
+                                                        </button>
+                                                    </div>
+                                                </div>
+
                                                 <label class="d-block py-1" for="archived">Archived</label>
                                                 <% if (project.archived) { %>
                                                     <input id="archived" name="archived" type="checkbox" checked>
@@ -178,3 +209,5 @@
         <% } %> 
     </div>
 </div>
+
+<script src="/scripts/projects.js"></script>
