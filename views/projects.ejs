@@ -17,48 +17,32 @@
                         <h5 class="modal-title" id="new-project-modal-label">New Project</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form class="project-form" method="POST" action="/projects" enctype="multipart/form-data" >
+                    <form class="project-form" data-project-authors-id="new-project-authors" method="POST" action="/projects" enctype="multipart/form-data" >
                         <div class="modal-body">
-                            <label class="d-block py-1" for="title">Title</label>
-                            <input id="title" name="title" type="text" required />
+                            <label class="d-block py-1" for="new-project-title">Title</label>
+                            <input id="new-project-title" name="title" type="text" required />
                             
-                            <label class="d-block py-1" for="description">Description</label>
-                            <input id="description" name="description" type="text" required />
+                            <label class="d-block py-1" for="new-project-description">Description</label>
+                            <input id="new-project-description" name="description" type="text" required />
          
-                            <label class="d-block py-1" for="repository">Repository Link</label>
-                            <input id="repository" name="repository" type="url" required />
+                            <label class="d-block py-1" for="new-project-repository">Repository Link</label>
+                            <input id="new-project-repository" name="repository" type="url" required />
          
-                            <label class="d-block py-1" for="website">Website Link</label>
-                            <input id="website" name="website" type="url" />
+                            <label class="d-block py-1" for="new-project-website">Website Link</label>
+                            <input id="new-project-website" name="website" type="url" />
 
-                            <div id="author-1" class="author">
-                                <label class="d-block py-1" for="author-name-1">Author 1</label>
-                                <input id="author-name-1" name="author1" type="email" required />
-                            </div>
+                            <div id="new-project-authors" data-project-authors-value="<%= JSON.stringify(['']) %>"></div>
 
-                            <div class="row row-cols-auto align-items-start mx-0 mt-1 mb-2 gx-1 gy-1">
-                                <div class="col">
-                                    <button id="author-add" type="button" class="btn btn-outline-primary">
-                                        Add Author
-                                    </button>
-                                </div>
-                                <div class="col">
-                                    <button id="author-remove" type="button" class="btn btn-outline-danger">
-                                        Remove Author
-                                    </button>
-                                </div>
-                            </div>
-
-                            <label class="d-block py-1" for="archived">Archived</label>
-                            <input id="archived" name="archived" type="checkbox" />
+                            <label class="d-block py-1" for="new-project-archived">Archived</label>
+                            <input id="new-project-archived" name="archived" type="checkbox" />
          
-                            <label class="d-block py-1" for="image">Image</label>
-                            <input id="image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
+                            <label class="d-block py-1" for="new-project-image">Image</label>
+                            <input id="new-project-image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
                             <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
                         </div>
                         <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Add</button>
                             <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </form>
                 </div>
@@ -140,41 +124,23 @@
                                             <h5 class="modal-title" id="edit-project-<%= project.id %>-modal-label">Edit Project</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form class="project-form" method="POST" action="/projects/edit" enctype="multipart/form-data" >
+                                        <form class="project-form" data-project-authors-id="edit-project-<%= project.id %>-authors" method="POST" action="/projects/edit" enctype="multipart/form-data" >
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" value="<%= project.id %>">
 
-                                                <label class="d-block py-1" for="title">Title</label>
-                                                <input id="title" name="title" type="text" required value="<%= project.title %>" />
+                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-title">Title</label>
+                                                <input id="edit-project-<%= project.id %>-title" name="title" type="text" required value="<%= project.title %>" />
                                                 
-                                                <label class="d-block py-1" for="description">Description</label>
-                                                <input id="description" name="description" type="text" required value="<%= project.description %>" />
+                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-description">Description</label>
+                                                <input id="edit-project-<%= project.id %>-description" name="description" type="text" required value="<%= project.description %>" />
                              
-                                                <label class="d-block py-1" for="repository">Repository Link</label>
-                                                <input id="repository" name="repository" type="url" required value="<%= project.repository %>" />
+                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-repository">Repository Link</label>
+                                                <input id="edit-project-<%= project.id %>-repository" name="repository" type="url" required value="<%= project.repository %>" />
                              
-                                                <label class="d-block py-1" for="website">Website Link</label>
-                                                <input id="website" name="website" type="url" required value="<%= project.website %>" />
-                             
-                                                <% for (let i = 0; i < project.authors.length; ++i) { %>
-                                                    <div id="author-<%= i + 1 %>" class="author">
-                                                        <label class="d-block py-1" for="author-name-<%= i + 1 %>">Author <%= i + 1 %></label>
-                                                        <input id="author-name-<%= i + 1 %>" name="author<%= i + 1 %>" type="email" value="<%= project.authors[i].email %>" required />
-                                                    </div>
-                                                <% } %>
+                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-website">Website Link</label>
+                                                <input id="edit-project-<%= project.id %>-website" name="website" type="url" required value="<%= project.website %>" />
 
-                                                <div class="row row-cols-auto align-items-start mx-0 mt-1 mb-2 gx-1 gy-1">
-                                                    <div class="col">
-                                                        <button id="author-add" type="button" class="btn btn-outline-primary">
-                                                            Add Author
-                                                        </button>
-                                                    </div>
-                                                    <div class="col">
-                                                        <button id="author-remove" type="button" class="btn btn-outline-danger">
-                                                            Remove Author
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                <div id="edit-project-<%= project.id %>-authors" data-project-authors-value="<%= JSON.stringify(project.authors.map((a) => a.email)) %>"></div>
 
                                                 <label class="d-block py-1" for="archived">Archived</label>
                                                 <% if (project.archived) { %>
@@ -183,8 +149,8 @@
                                                     <input id="archived" name="archived" type="checkbox">
                                                 <% } %>
                              
-                                                <label class="d-block py-1" for="image">Image</label>
-                                                <input id="image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" />
+                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-image">Image</label>
+                                                <input id="edit-project-<%= project.id %>-image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" />
                                                 <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
                                             </div>
                                             <div class="modal-footer">
@@ -201,9 +167,8 @@
                     <% if(project.image_id) { %>
                         <div class="col">
                             <img src="uploads/<%= project.image_id %>" class="project-image" />
+                        </div>
                     <% } %>
-
-
                 </div>
             </div>
         <% } %> 

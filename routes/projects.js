@@ -11,7 +11,7 @@ const getAuthors = (req) => {
   const getAuthorValue = (req, i) => req.body[`author${i}`]
 
   let emails = [];
-  for (let i = 1; getAuthorValue(req, i); ++i) {
+  for (let i = 0; getAuthorValue(req, i); ++i) {
     const email = getAuthorValue(req, i);
     if (!email.endsWith("@mines.edu")) {
       return null;

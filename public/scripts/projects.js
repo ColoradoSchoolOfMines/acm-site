@@ -1,51 +1,64 @@
 const configureForm = (form) => {
-	const authorAdd = form.querySelector('#author-add');
-	authorAdd.addEventListener('click', () => addAuthorTo(form));
-	const authorRemove = form.querySelector('#author-remove');
-	authorRemove.addEventListener('click', () => removeAuthorFrom(form));
-	let initialAuthors = form.querySelectorAll('.author');
-	form.addEventListener('reset', () => resetAuthors(form, initialAuthors));
-}
-
-const addAuthorTo = (form) => {
-	let authors = form.querySelectorAll('.author');
-	
-	let tail;
-	if (authors) {
-		tail = authors[authors.length - 1];
-	} else {
-		tail = form.querySelectorAll('#website');
+	const authors = form.querySelector(`#${form.getAttribute('data-project-authors-id')}`);
+	if (!authors) {
+		return;
 	}
 
-	let n = authors.length + 1;
- 	tail.insertAdjacentHTML(
-		'afterend', 
-		`
-        <div id="author-${n}" class="author">
-            <label class="d-block py-1" for="author-name-${n}">Author ${n}</label>
-            <input id="author-name-${n}" name="author${n}" type="email" required />
-        </div>
-		`
+	authors.innerHTML =
+        `<div id="${authors.id}-control" class="row row-cols-auto align-items-start mx-0 mt-1 mb-2 gx-1 gy-1">
+            <div class="col">
+                <button id="${authors.id}-add" type="button" class="btn btn-outline-primary">
+                    Add Author
+                </button>
+            </div>
+            <div class="col">
+                <button id="${authors.id}-remove" type="button" class="btn btn-outline-danger">
+                    Remove Author
+                </button>
+            </div>
+        </div>`
+
+    populateAuthors(authors);
+	authors.querySelector(`#${authors.id}-add`).addEventListener('click', () => addAuthor(authors, ""));
+	authors.querySelector(`#${authors.id}-remove`).addEventListener('click', () => removeAuthor(authors));
+	form.addEventListener('reset', () => resetAuthors(authors));
+}
+
+const addAuthor = (authors, value) => {
+	let control = authors.querySelector(`#${authors.id}-control`);
+	let n = authors.querySelectorAll('.author-input').length
+ 	control.insertAdjacentHTML(
+ 		'beforebegin',
+		`<div id="author-input-${n}" class="author-input">
+            <label class="d-block py-1" for="${authors.id}-${n}">Author ${n + 1}</label>
+            <input id="${authors.id}-${n}" name="author${n}" type="email" value="${value}" required />
+        </div>`
 	);
 }
 
-const removeAuthorFrom = (form) => {
-	let authors = form.querySelectorAll('.author');
-	if (authors.length > 1) {
-		let author = authors[authors.length - 1];
-		author.parentElement.removeChild(author);
+const removeAuthor = (authors) => {
+	let inputs = authors.querySelectorAll('.author-input');
+	if (inputs.length > 1) {
+		authors.removeChild(inputs[inputs.length - 1]);
 	}
 }
 
-const resetAuthors = (form, to) => {
-	// TODO: Need to handle if there were less authors than original
-	let authors = form.querySelectorAll('.author');
-	let container = authors[0].parentElement
-	for (author of authors) {
-		author.parentElement.removeChild(author);
+const resetAuthors = (authors, values) => {
+	destroyAuthors(authors);
+	populateAuthors(authors, values);
+}
+
+const populateAuthors = (authors) => {
+	let authorValues = JSON.parse(authors.getAttribute(`data-project-authors-value`));
+	for (let i = 0; i < authorValues.length; ++i) {
+		addAuthor(authors, authorValues[i]);
 	}
-	for (author of to) {
-		container.removeChild(author);
+}
+
+const destroyAuthors = (authors, to) => {
+	let inputs = authors.querySelectorAll('.author-input');
+	for (let i = 0; i < inputs.length; ++i) {
+		authors.removeChild(inputs[i]);
 	}
 }
 
