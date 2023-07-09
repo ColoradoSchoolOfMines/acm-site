@@ -115,6 +115,11 @@ p {
     margin-top: 2%;
 }
 
+.center-content {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 .big-header {
     font-size: 60px;
     color: #0083c5;
@@ -154,6 +159,20 @@ p {
     width: 20%;
     min-height: 100%;
     border-radius: 10%;
+}
+
+/* meeting specific to schedule page */
+.schedule-meeting {
+    border-bottom: 4px solid #336699;
+    padding: 25px;
+    margin-bottom: 2.5%;
+    background-color: white;
+}
+
+.previous-meetings {
+    border-bottom: 4px solid #336699;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .meeting {
@@ -212,6 +231,10 @@ p {
 
 .acm-blue {
     color: #0083c5;
+}
+
+.acm-secondary {
+    color: #336699;
 }
 
 /* Buttons */
