@@ -1,66 +1,42 @@
 <% layout('layouts/base')%>
 
-<div class="container bg-light">
-    <div class="center-content">
-        <h1 class="acm-blue">Upcoming Meetings</h1>
-        <% for(let meeting of upcoming) { %>
-            <div class="meeting-box shadow">
-                <div class="meeting-box-header">
-                    <p class="d-inline-block"><%= meeting.title %></p>
-                </div>
-
-                <div style="padding: 25px;">
-                    <p><%= meeting.description %></p>
-                </div>
-
-                <div class="meeting-box-footer">
-                    <p style="color: black; text-align: center; font-size: 18px;">
-                        <span class="date"><%= meeting.date %>,<%= meeting.duration %></span> in <%= meeting.location %>
+<div class="container" style="background-color: #ecf0f1;">
+    <div class="center-content">        
+        <div class="row">
+            <h1 class="acm-secondary pb-2">Upcoming Meetings</h1>
+            <!-- <p>
+                Sync our calendar with yours! <code>https://acm.mines.edu/schedule/ical.ics</code>
+                <a target="_blank" href="https://support.google.com/calendar/answer/37100#add_via_link">(Instructions)</a>
+            </p> -->
+            <% for(let meeting of upcoming) { %>
+                <div class="schedule-meeting shadow">
+                    <h3 class="acm-secondary"><%= meeting.title %>
                         <% if(meeting.rsvped) { %>
                             <p>(RSVP'ed)</p>
                         <% } else { %>
-                            <button class="d-inline-block btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+                            <button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
                         <% } %>
-                    </p>
-                </div>
-            </div>
-        <% } %>
-        <p>
-            Sync our calendar with yours! <code>https://acm.mines.edu/schedule/ical.ics</code>
-            <a target="_blank" href="https://support.google.com/calendar/answer/37100#add_via_link">(Instructions)</a>
-        </p>
-    </div>
-
-    <!-- <div class="row">
-        <h1 style="color: #0083c5">Upcoming Meetings</h1>
-        <% for(let meeting of upcoming) { %>
-            <div class="col-lg-6">
-                <div style="border: 1px solid goldenrod; margin-bottom: 1%; border-radius: 25px; padding: 25px;">
-                    <h3 style="color: goldenrod;"><%= meeting.title %></h3>
+                    </h3>
                     <p><%= meeting.description %></p>
                     <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
                     <p><strong>Location</strong>: <%= meeting.location %></p>
-                    <% if(meeting.rsvped) { %>
-                        <p>(RSVP'ed)</p>
-                    <% } else { %>
-                        <button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
-                    <% } %>
                 </div>
-            </div>
-        <% } %> 
-    </div> -->
-</div>
+            <% } %> 
+        </div> 
 
-<div class="content">
-    <h1>Previous Meetings</h1>
-    <div class="meeting-scroll">
-        <% for(let meeting of previous) { %>   
-            <div class="meeting">
-                <p><strong><%= meeting.title %></strong> - <%= meeting.description %></p>
-                <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
-                <p><strong>Location</strong>: <%= meeting.location %></p>
+        <div class="row pt-4">
+            <h1 class="acm-secondary pb-2">Previous Meetings</h1>
+            <div class="meeting-scroll previous-meetings shadow">
+                <% for(let meeting of previous) { %>   
+                    <div class="meeting p-4 bg-white">
+                        <p><strong><%= meeting.title %></strong></p>
+                        <p><strong>Description</strong>: <%= meeting.description %></p>
+                        <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                        <p><strong>Location</strong>: <%= meeting.location %></p>
+                    </div>
+                <% } %>
             </div>
-        <% } %>    
+        </div>
     </div>
 </div>
 
