@@ -14,19 +14,16 @@ const clearProjectImage = async (req) => {
 }
 
 router.get('/projects', async (req, res) => {
-  const resp = await db.query("SELECT * FROM projects ORDER BY archived, title");
-  for (let project of resp.rows) {
+  const projectResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
+  for (let project of projectResp.rows) {
     // TODO: Make database schema use authors naming
-    const authors = await db.query("SELECT users.name, users.avatar_id " + 
+    const authorResp = await db.query("SELECT users.email, users.name, users.avatar_id " + 
       "FROM users JOIN user_projects ON users.email = user_projects.user_id " + 
       "JOIN projects ON user_projects.project_id = projects.id " + 
       "WHERE projects.id = $1", [project.id]);
-    project.authors = authors.rows.map((author) => ({
-      name: author.name,
-      avatar_id: author.avatar_id
-    }));
+    project.authors = authorResp.rows;
   }
-  res.render('projects', { title: "Projects", projects: resp.rows });
+  res.render('projects', { title: "Projects", projects: projectResp.rows });
 });
 
 router.post('/projects', isAdminAuthenticated, upload('image'), async (req, res) => {
