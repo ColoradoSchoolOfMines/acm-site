@@ -33,6 +33,7 @@ const removeAuthorFrom = (form) => {
 }
 
 const resetAuthors = (form, to) => {
+	// TODO: Need to handle if there were less authors than original
 	let authors = form.querySelectorAll('.author');
 	for (author of authors) {
 		let found = false;

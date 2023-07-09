@@ -5,7 +5,9 @@ const uuid = require('uuid');
 const { isAdminAuthenticated, upload } = require('../middleware');
 const router = express.Router();
 
-const getDBArchivedValue = (req) => (req.body.archived !== undefined).toString()
+const getAuthorValue = (req, i) => req.body[`author${i}`]
+
+const getArchivedValue = (req) => (req.body.archived !== undefined).toString()
 
 const clearProjectImage = async (req) => {
   // We don't have access to the image id from the request usually, query it from the db.
@@ -27,10 +29,18 @@ router.get('/projects', async (req, res) => {
 });
 
 router.post('/projects', isAdminAuthenticated, upload('image'), async (req, res) => {
+  let id = uuid.v4();
   await db.query(
     "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
-    [uuid.v4(), req.body.title, req.body.description, req.body.website, req.body.repository, 
-      getDBArchivedValue(req), req.file.filename]);
+    [id, req.body.title, req.body.description, req.body.website, req.body.repository, 
+      getArchivedValue(req), req.file.filename]);
+  let i = 1;
+  while (getAuthorValue(req, i)) {
+    let email = getAuthorValue(req, i);
+    await db.query(
+      "INSERT INTO user_projects (user_id, project_id) VALUES ($1, $2)", [email, id])
+    ++i;
+  }
   req.flash('success', 'Successfully added project!');
   res.redirect('/projects');
 });
@@ -44,13 +54,13 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), async
     await db.query(
       "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
       [req.body.title, req.body.description, req.body.website, req.body.repository, 
-        getDBArchivedValue(req), req.file.filename, req.body.id])
+        getArchivedValue(req), req.file.filename, req.body.id])
   } else {
     // No image specified, leave it unchanged and only commit the rest.
     await db.query(
       "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5 WHERE id = $6",
       [req.body.title, req.body.description, req.body.website, req.body.repository, 
-        getDBArchivedValue(req), req.body.id])
+        getArchivedValue(req), req.body.id])
   }
   req.flash('success', 'Successfully updated project!');
   res.redirect('/projects');
