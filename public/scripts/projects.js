@@ -1,6 +1,4 @@
-const forms = document.querySelectorAll('.project-form');
-
-for (form of forms) {
+const configureForm = (form) => {
 	const authorAdd = form.querySelector('#author-add');
 	authorAdd.addEventListener('click', () => addAuthorTo(form));
 	const authorRemove = form.querySelector('#author-remove');
@@ -11,9 +9,16 @@ for (form of forms) {
 
 const addAuthorTo = (form) => {
 	let authors = form.querySelectorAll('.author');
-	let n = authors.length + 1;
+	
+	let tail;
+	if (authors) {
+		tail = authors[authors.length - 1];
+	} else {
+		tail = form.querySelectorAll('#website');
+	}
 
-	authors[authors.length - 1].insertAdjacentHTML(
+	let n = authors.length + 1;
+ 	tail.insertAdjacentHTML(
 		'afterend', 
 		`
         <div id="author-${n}" class="author">
@@ -35,17 +40,16 @@ const removeAuthorFrom = (form) => {
 const resetAuthors = (form, to) => {
 	// TODO: Need to handle if there were less authors than original
 	let authors = form.querySelectorAll('.author');
+	let container = authors[0].parentElement
 	for (author of authors) {
-		let found = false;
-		for (other of to) {
-			if (author.id == other.id) {
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) {
-			author.parentElement.removeChild(author);
-		}
+		author.parentElement.removeChild(author);
 	}
+	for (author of to) {
+		container.removeChild(author);
+	}
+}
+
+const forms = document.querySelectorAll('.project-form');
+for (form of forms) {
+	configureForm(form);
 }
