@@ -44,7 +44,8 @@ passport.use(new GoogleStrategy({
       "email": resp.rows[0].email,
       "title": resp.rows[0].title,
       "is_admin": resp.rows[0].title.length > 0,
-      "avatar_id": resp.rows[0].avatar_id
+      "avatar_id": resp.rows[0].avatar_id,
+      "about": resp.rows[0].about
     }
     req.flash('success', 'Successfully logged in!');
     done(null, user);

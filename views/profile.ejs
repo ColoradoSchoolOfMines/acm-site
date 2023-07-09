@@ -6,15 +6,47 @@
             <div class="profile-text-content">
                 <h1><%= user.name %></h1>
                 <% if(user.title.length > 0) { %>
-                    <%= user.title%>
+                    <h5><%= user.title%><h5>
                 <% } else { %>
 					<h5>Member</h5>
                 <% } %>
                 <hr>
                 <h5>Projects</h5>
+                    <% if (projects.length > 0) { %>
+                        <% for(let project of projects) { %>
+                            <p> - <%= project.title %>: <a href="<%= project.repository %>" target="blank">View Repository</a></p>
+                        <% } %>
+                    <% } else { %>
+                        <p>This user is not currently involved in any ACM projects.<p>
+                    <% } %>
                 <br>
                 <h5>About</h5>
+                    <% if (user.about.length > 0) { %>
+                        <p><%= user.about%> <a href="#" data-bs-toggle="modal" data-bs-target="#about-modal">Edit</a></p>
+                    <% } else { %>
+                        <p>It looks a little empty here! <a href="#" data-bs-toggle="modal" data-bs-target="#about-modal">Add</a> an 'About' section.<p>
+                    <% } %>
                 <br>
+
+                <!-- Edit About Section Modal -->
+                <div class="modal fade" id="about-modal" tabindex="-1" aria-labelledby="about-modal-label" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="about-modal-label">About</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-edit-about">
+                                <textarea rows="5" cols="60" name="about-text"><%= user.about %></textarea>
+                                <br/>
+                            </div>
+                            <div class="modal-footer pfp-footer">
+                                <!-- TODO: Add 'POST' form to update 'About' section in the backend -->
+                                <button class="btn d-inline-block btn-primary mt-1">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Meetings Attended Modal -->
                 <div class="modal fade" id="meetings-modal" tabindex="-1" aria-labelledby="meetings-modal-label" aria-hidden="true">
@@ -25,9 +57,12 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
+                                <% for(let meeting of meetings) { %>
+                                    <p><%= meeting.title %> - <%= meeting.date %></p>
+                                <% } %>
                             </div>
                             <div class="modal-footer meetings-footer">
-                                Total Number of Meetings Attended: 
+                                Total Number of Meetings Attended: <%= meetings.length %> 
                             </div>
                         </div>
                     </div>

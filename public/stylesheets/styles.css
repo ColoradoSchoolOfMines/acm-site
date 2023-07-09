@@ -249,6 +249,12 @@ p {
     padding-top: 20px;
 }
 
+.modal-edit-about {
+    text-align: center;
+    padding-top: 18px;
+    padding-bottom: 10px;
+}
+
 /* Buttons */
 .btn-outline-primary:hover {
     background-color: transparent;
