@@ -115,6 +115,11 @@ p {
     margin-top: 2%;
 }
 
+.center-content {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 .big-header {
     font-size: 60px;
     color: #0083c5;
@@ -212,6 +217,32 @@ p {
 
 .acm-blue {
     color: #0083c5;
+}
+
+/* Schedule Page */
+.meeting-box {
+    position: relative;
+    margin-right: 1.5%;
+    vertical-align: middle;
+    height: 45vh;
+    width: 25%;
+    display: inline-block;
+    margin-bottom: 1%;
+}
+
+.meeting-box-header {
+    background-color: #0083c5;
+    width: 100%;
+    padding: 15px 25px;
+    color: white;
+    font-size: 24px;
+}
+
+.meeting-box-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 25px;
 }
 
 /* Buttons */
