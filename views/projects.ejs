@@ -6,15 +6,15 @@
         and learn new skills with our variety of projects.</p>
 
     <% if (typeof user == 'object' && user && user.is_admin) { %>
-        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newProjectModal">
+        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-project-modal">
             New Project
         </button>
         
-        <div class="modal fade" id="newProjectModal" tabindex="-1" aria-labelledby="newProjectModalLabel" aria-hidden="true">
+        <div class="modal fade" id="new-project-modal" tabindex="-1" aria-labelledby="new-project-modal-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newProjectModalLabel">New </h5>
+                        <h5 class="modal-title" id="new-project-modal-label">New Project</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form class="project-form" method="POST" action="/projects" enctype="multipart/form-data" >
@@ -101,22 +101,22 @@
                         <% if (typeof user == 'object' && user && user.is_admin) { %>
                             <div class="row row-cols-auto align-items-start mx-0 mt-2 gx-1 gy-1">
                                 <div class="col">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProject<%= project.id %>Modal">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-project-<%= project.id %>-modal">
                                         Edit Project
                                     </button>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProject<%= project.id %>Modal">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-project-<%= project.id %>-modal">
                                         Delete Project
                                     </button>
                                 </div>
                             </div>
                             
-                            <div class="modal fade" id="deleteProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="deleteProject<%= project.id %>ModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="delete-project-<%= project.id %>-modal" tabindex="-1" aria-labelledby="delete-project-<%= project.id %>-modal-label" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteProject<%= project.id %>ModalLabel">Delete Project</h5>
+                                            <h5 class="modal-title" id="delete-project-<%= project.id %>-modal-label">Delete Project</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form method="POST" action="/projects/delete">
@@ -133,11 +133,11 @@
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="editProject<%= project.id %>Modal" tabindex="-1" aria-labelledby="editProject<%= project.id %>ModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="edit-project-<%= project.id %>-modal" tabindex="-1" aria-labelledby="edit-project-<%= project.id %>-modal-label" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="editProject<%= project.id %>ModalLabel">Edit Project</h5>
+                                            <h5 class="modal-title" id="edit-project-<%= project.id %>-modal-label">Edit Project</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form class="project-form" method="POST" action="/projects/edit" enctype="multipart/form-data" >
