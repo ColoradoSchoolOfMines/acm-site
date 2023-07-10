@@ -7,22 +7,28 @@ const router = express.Router();
 
 // Methods to help parse project queries
 
-const parseAuthors = (req, res) => {
+const parseAuthors = async (req, res) => {
   const getAuthorValue = (i) => req.body[`author${i}`]
   req.body.authors = [];
   for (let i = 0; getAuthorValue(i); ++i) {
-    const email = getAuthorValue(i);
-    if (!email.endsWith("@mines.edu")) {
+    const author = getAuthorValue(i);
+    if (!author.endsWith("@mines.edu")) {
       req.flash('error', 'Project authors can only have @mines.edu addresses!');
       return false;
     }
-    req.body.authors.push(email);
+    let resp = await db.query("SELECT FROM users WHERE email = $1", [author]);
+    if (resp.rows.length == 0) {
+      req.flash('error', 'Project authors must have created an account prior!');
+      return false;
+    }
+    req.body.authors.push(author);
   }
   return true;
 }
 
-const transformProjectRequest = (req, res, next) => {
-  if (!parseAuthors(req, res)) {
+const transformProjectRequest = async (req, res, next) => {
+  let response = await parseAuthors(req, res);
+  if (!response) {
     // Multer needs to be ran first to parse the request, but that will also
     // lead to an upload sticking around even if an error occurs. Make sure
     // that this upload is removed.
@@ -99,7 +105,7 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), trans
       "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
   } 
 
-  req.flash('success', 'Successfully updated project!');
+  req.flash('success', 'Successfully edited project!');
   res.redirect('/projects');
 });
 
