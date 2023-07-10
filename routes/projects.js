@@ -30,8 +30,8 @@ const transformProjectRequest = async (req, res, next) => {
   let response = await parseAuthors(req, res);
   if (!response) {
     // Multer needs to be ran first to parse the request, but that will also
-    // lead to an upload sticking around even if an error occurs. Fix this
-    // by removing it ourselves.
+    // lead to an upload sticking around even if an error occurs. Make sure
+    // that this upload is removed.
     if (req.file) {
       fs.unlinkSync("uploads/" + req.file.filename);
     }
