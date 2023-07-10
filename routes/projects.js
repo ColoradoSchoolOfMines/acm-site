@@ -7,26 +7,39 @@ const router = express.Router();
 
 // Methods to help parse project queries
 
-const getAuthors = (req) => {
-  const getAuthorValue = (req, i) => req.body[`author${i}`]
-
-  let emails = [];
-  for (let i = 0; getAuthorValue(req, i); ++i) {
-    const email = getAuthorValue(req, i);
+const parseAuthors = (req, res) => {
+  const getAuthorValue = (i) => req.body[`author${i}`]
+  req.body.authors = [];
+  for (let i = 0; getAuthorValue(i); ++i) {
+    const email = getAuthorValue(i);
     if (!email.endsWith("@mines.edu")) {
-      return null;
+      req.flash('error', 'Project authors can only have @mines.edu addresses!');
+      return false;
     }
-    emails.push(email);
+    req.body.authors.push(email);
   }
-
-  return emails;
+  return true;
 }
 
-const getArchived = (req) => (req.body.archived !== undefined).toString()
+const transformProjectRequest = (req, res, next) => {
+  if (!parseAuthors(req, res)) {
+    // Multer needs to be ran first to parse the request, but that will also
+    // lead to an upload sticking around even if an error occurs. Make sure
+    // that this upload is removed.
+    if (req.file) {
+      fs.unlinkSync("uploads/" + req.file.filename);
+    }
+    res.redirect('/projects');
+    return;
+  }
+
+  req.body.archived = (req.body.archived !== undefined);
+  next();
+}
 
 const clearProjectImage = async (req) => {
   // We don't have access to the image id from the request usually, query it from the db.
-  let resp = await db.query("SELECT image_id FROM projects WHERE id = $1", [req.body.id]);
+  const resp = await db.query("SELECT image_id FROM projects WHERE id = $1", [req.body.id]);
   fs.unlinkSync("uploads/" + resp.rows[0].image_id);
 }
 
@@ -42,61 +55,51 @@ router.get('/projects', async (req, res) => {
   res.render('projects', { title: "Projects", projects: projectResp.rows });
 });
 
-router.post('/projects', isAdminAuthenticated, upload('image'), async (req, res) => {
-  // Must validate authors here to avoid partially writing projects
-  let authors = getAuthors(req);
-  if (authors) {
-    let id = uuid.v4();
+router.post('/projects', isAdminAuthenticated, upload('image'), transformProjectRequest, async (req, res) => {
+  const id = uuid.v4();
+  await db.query(
+    "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    [id, req.body.title, req.body.description, req.body.website, req.body.repository, 
+      req.body.archived, req.file.filename]);
+
+  // Insert the author relations from the query. These were already validated to
+  // be present in the users DB earlier, so they can be inserted directly.
+  for (let i = 0; i < req.body.authors.length; ++i) {
     await db.query(
-      "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
-      [id, req.body.title, req.body.description, req.body.website, req.body.repository, 
-        getArchived(req), req.file.filename]);
+      "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
+  } 
 
-    for (let author of authors) {
-      await db.query(
-        "INSERT INTO project_authors VALUES ($1, $2)", [id, project])
-    } 
-
-    req.flash('success', 'Successfully added project!');
-  } else {
-    req.flash('error', "Project authors can only have @mines.edu addresses!");
-  }
-
+  req.flash('success', 'Successfully added project!');
   res.redirect('/projects');
 });
 
-router.post('/projects/edit', isAdminAuthenticated, upload('image', true), async (req, res) => {
-  // Must validate here to avoid partially writing project edits even with invalid authors
-  let authors = getAuthors(req);
-  if (authors) {
-    // Image uploading is optional when editing projects, so we need to perform different queries
-    // for the different states.
-    if (req.file) {
-      // Free the space taken up by the now-unused project image.
-      await clearProjectImage(req);
-      await db.query(
-        "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
-        [req.body.title, req.body.description, req.body.website, req.body.repository, 
-          getArchivedValue(req), req.file.filename, req.body.id])
-    } else {
-      // No image specified, leave it unchanged and only commit the rest.
-      await db.query(
-        "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5 WHERE id = $6",
-        [req.body.title, req.body.description, req.body.website, req.body.repository, 
-          getArchived(req), req.body.id])
-    }
-
-    await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.id]);
-    for (let author of authors) {
-      await db.query(
-        "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, author])
-    } 
-
-    req.flash('success', 'Successfully updated project!');
+router.post('/projects/edit', isAdminAuthenticated, upload('image', true), transformProjectRequest, async (req, res) => {
+  // Image uploading is optional when editing projects, so we need to perform different queries
+  // for the different states.
+  if (req.file) {
+    // Free the space taken up by the now-unused project image.
+    await clearProjectImage(req);
+    await db.query(
+      "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
+      [req.body.title, req.body.description, req.body.website, req.body.repository, 
+        req.body.archived, req.file.filename, req.body.id])
   } else {
-    req.flash('error', "Project authors can only have @mines.edu addresses!");
+    // No image specified, leave it unchanged and only commit the rest.
+    await db.query(
+      "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5 WHERE id = $6",
+      [req.body.title, req.body.description, req.body.website, req.body.repository, 
+        req.body.archived, req.body.id])
   }
 
+  // Since the author amount could have changed in length, just wipe the prior relations
+  // and insert ones to avoid stray entries.
+  await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.id]);
+  for (let i = 0; i < req.body.authors.length; ++i) {
+    await db.query(
+      "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
+  } 
+
+  req.flash('success', 'Successfully updated project!');
   res.redirect('/projects');
 });
 
