@@ -57,6 +57,8 @@ body {
     -o-animation: fadein 1s;
     /* Opera < 12.1 */
     animation: fadein 1s;
+
+    font-family: 'Poppins', sans-serif;
 }
 
 a {
@@ -115,6 +117,11 @@ p {
     margin-top: 2%;
 }
 
+.center-content {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 .big-header {
     font-size: 60px;
     color: #0083c5;
@@ -170,6 +177,20 @@ p {
 
 .project-user-name {
     vertical-align: middle;
+}
+
+/* meeting specific to schedule page */
+.schedule-meeting {
+    border-bottom: 4px solid #336699;
+    padding: 25px;
+    margin-bottom: 2.5%;
+    background-color: white;
+}
+
+.previous-meetings {
+    border-bottom: 4px solid #336699;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .meeting {
@@ -230,6 +251,10 @@ p {
     color: #0083c5;
 }
 
+.acm-secondary {
+    color: #336699;
+}
+
 /* Buttons */
 .btn-outline-primary:hover {
     background-color: transparent;
@@ -241,7 +266,6 @@ p {
 .navbar {
     font-size: 20px;
     padding: 10px;
-    font-family: 'Overpass', sans-serif;
 }
 
 .navbar-brand {
@@ -260,11 +284,12 @@ p {
 
 .nav-link:focus, .nav-link:hover {
     font-weight: bold;
-    color: white;
+    background-color: white;
+    color: #0083c5;
 }
 
 .active {
-    font-weight: bold;
+    text-decoration: underline;
 }
 
 /* Footer */
