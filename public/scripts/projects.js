@@ -19,19 +19,22 @@ const configureForm = (form) => {
         </div>`
 
     populateAuthors(authors);
-	authors.querySelector(`#${authors.id}-add`).addEventListener('click', () => addAuthor(authors, ""));
+	authors.querySelector(`#${authors.id}-add`).addEventListener('click', () => addAuthor(authors));
 	authors.querySelector(`#${authors.id}-remove`).addEventListener('click', () => removeAuthor(authors));
 	form.addEventListener('reset', () => resetAuthors(authors));
 }
 
-const addAuthor = (authors, value) => {
+const addAuthor = (authors, value = {name: '', email: '', hasProfile: false}) => {
+	console.log(value);
 	let control = authors.querySelector(`#${authors.id}-control`);
 	let n = authors.querySelectorAll('.author-input').length
  	control.insertAdjacentHTML(
  		'beforebegin',
 		`<div id="author-input-${n}" class="author-input">
-            <label class="d-block py-1" for="${authors.id}-${n}">Author ${n + 1}</label>
-            <input id="${authors.id}-${n}" name="author${n}" type="email" value="${value}" required />
+            <label class="d-block py-1" for="${authors.id}-name-${n}">Author ${n + 1} Name</label>
+            <input id="${authors.id}-name-${n}" name="author${n}Name" type="text" value="${value.name}" ${value.hasProfile ? "readonly" : "required"} />
+            <label class="d-block py-1" for="${authors.id}-email-${n}">Author ${n + 1} Email</label>
+            <input id="${authors.id}-email-${n}" name="author${n}Email" type="email" value="${value.email}" required />
         </div>`
 	);
 }
@@ -50,6 +53,10 @@ const resetAuthors = (authors, values) => {
 
 const populateAuthors = (authors) => {
 	let authorValues = JSON.parse(authors.getAttribute(`data-project-authors-value`));
+	if (!authorValues) {
+		addAuthor(authors);
+		return;
+	}
 	for (let i = 0; i < authorValues.length; ++i) {
 		addAuthor(authors, authorValues[i]);
 	}

@@ -31,7 +31,7 @@
                             <label class="d-block py-1" for="new-project-website">Website Link</label>
                             <input id="new-project-website" name="website" type="url" />
 
-                            <div id="new-project-authors" data-project-authors-value="<%= JSON.stringify(['']) %>"></div>
+                            <div id="new-project-authors"></div>
 
                             <label class="d-block py-1" for="new-project-archived">Archived</label>
                             <input id="new-project-archived" name="archived" type="checkbox" />
@@ -140,7 +140,12 @@
                                                 <label class="d-block py-1" for="edit-project-<%= project.id %>-website">Website Link</label>
                                                 <input id="edit-project-<%= project.id %>-website" name="website" type="url" required value="<%= project.website %>" />
 
-                                                <div id="edit-project-<%= project.id %>-authors" data-project-authors-value="<%= JSON.stringify(project.authors.map((a) => a.email)) %>"></div>
+                                                <div id="edit-project-<%= project.id %>-authors" 
+                                                     data-project-authors-value="<%= 
+                                                        JSON.stringify(
+                                                            project.authors.map((a) => { a.avatar_id = undefined; return a })
+                                                        )
+                                                    %>"></div>
 
                                                 <label class="d-block py-1" for="archived">Archived</label>
                                                 <% if (project.archived) { %>
