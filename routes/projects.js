@@ -52,9 +52,9 @@ const clearProjectImage = async (req) => {
 router.get('/projects', async (req, res) => {
   const projectResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
   for (let project of projectResp.rows) {
-    const authorResp = await db.query("SELECT users.email, users.name, users.avatar_id " + 
-      "FROM users JOIN project_authors ON users.email = project_authors.author_email " + 
-      "JOIN projects ON project_authors.project_id = projects.id " + 
+    const authorResp = await db.query("SELECT users.email, users.name, users.avatar_id " +
+      "FROM users JOIN project_authors ON users.email = project_authors.author_email " +
+      "JOIN projects ON project_authors.project_id = projects.id " +
       "WHERE projects.id = $1", [project.id]);
     project.authors = authorResp.rows;
   }
@@ -65,7 +65,7 @@ router.post('/projects', isAdminAuthenticated, upload('image'), transformProject
   const id = uuid.v4();
   await db.query(
     "INSERT INTO projects VALUES ($1, $2, $3, $4, $5, $6, $7)",
-    [id, req.body.title, req.body.description, req.body.website, req.body.repository, 
+    [id, req.body.title, req.body.description, req.body.website, req.body.repository,
       req.body.archived, req.file.filename]);
 
   // Insert the author relations from the query. These were already validated to
@@ -73,7 +73,7 @@ router.post('/projects', isAdminAuthenticated, upload('image'), transformProject
   for (let i = 0; i < req.body.authors.length; ++i) {
     await db.query(
       "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
-  } 
+  }
 
   req.flash('success', 'Successfully added project!');
   res.redirect('/projects');
@@ -87,14 +87,14 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), trans
     await clearProjectImage(req);
     await db.query(
       "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
-      [req.body.title, req.body.description, req.body.website, req.body.repository, 
-        req.body.archived, req.file.filename, req.body.id])
+      [req.body.title, req.body.description, req.body.website, req.body.repository,
+      req.body.archived, req.file.filename, req.body.id])
   } else {
     // No image specified, leave it unchanged and only commit the rest.
     await db.query(
       "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5 WHERE id = $6",
-      [req.body.title, req.body.description, req.body.website, req.body.repository, 
-        req.body.archived, req.body.id])
+      [req.body.title, req.body.description, req.body.website, req.body.repository,
+      req.body.archived, req.body.id])
   }
 
   // Since the author amount could have changed in length, just wipe the prior relations
@@ -103,7 +103,7 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), trans
   for (let i = 0; i < req.body.authors.length; ++i) {
     await db.query(
       "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
-  } 
+  }
 
   req.flash('success', 'Successfully edited project!');
   res.redirect('/projects');

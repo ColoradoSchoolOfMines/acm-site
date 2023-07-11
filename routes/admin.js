@@ -4,9 +4,9 @@ const db = require('../database/db');
 const { isAdminAuthenticated, upload } = require('../middleware');
 const uuid = require('uuid');
 
-router.get('/admin', isAdminAuthenticated, async(req, res) => {
-  let meetings = await db.query("SELECT * FROM meetings ORDER BY date");  
-  for(let meeting in meetings.rows) {
+router.get('/admin', isAdminAuthenticated, async (req, res) => {
+  let meetings = await db.query("SELECT * FROM meetings ORDER BY date");
+  for (let meeting in meetings.rows) {
     const attendance = await db.query("SELECT attendance.email FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
     meetings.rows[meeting].attendance = attendance.rows;
   }
@@ -46,11 +46,11 @@ router.post('/feedback/remove', isAdminAuthenticated, async (req, res) => {
   res.redirect('/admin');
 });
 
-router.post('/meetings', isAdminAuthenticated, async(req, res) => {
+router.post('/meetings', isAdminAuthenticated, async (req, res) => {
   await db.query("INSERT INTO meetings VALUES ($1, $2, $3, $4, $5, $6, $7)", [
-      uuid.v4(), req.body.title, req.body.description, req.body.date,
-      // convert hours -> milliseconds
-      (req.body.duration * 3600000), req.body.location, req.body.type]);
+    uuid.v4(), req.body.title, req.body.description, req.body.date,
+    // convert hours -> milliseconds
+    (req.body.duration * 3600000), req.body.location, req.body.type]);
   res.redirect('/admin');
 });
 

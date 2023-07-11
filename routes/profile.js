@@ -11,14 +11,14 @@ router.get('/profile', isLoggedIn, async (req, res) => {
 });
 
 router.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
-    await db.query("UPDATE users SET avatar_id = $1 WHERE email = $2", [req.file.filename, req.user.email]);
-    if (req.user.avatar_id) {
-      // Free the space taken up by the now-unused profile picture
-      fs.unlinkSync("uploads/" + req.user.avatar_id);
-    }
-    req.user.avatar_id = req.file.filename;
-    req.flash('success', 'Profile picture uploaded successfully!');
-    res.redirect('/profile');
+  await db.query("UPDATE users SET avatar_id = $1 WHERE email = $2", [req.file.filename, req.user.email]);
+  if (req.user.avatar_id) {
+    // Free the space taken up by the now-unused profile picture
+    fs.unlinkSync("uploads/" + req.user.avatar_id);
+  }
+  req.user.avatar_id = req.file.filename;
+  req.flash('success', 'Profile picture uploaded successfully!');
+  res.redirect('/profile');
 });
 
 module.exports = router;

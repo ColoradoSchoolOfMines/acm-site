@@ -23,20 +23,20 @@ const multerConfig = {
 
 /* Content Security Policy Configuration */
 const cspDirectives = {
-    defaultSrc: ["'self'", "https://discord.com/"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-    imgSrc: ["'self'", "data:"],
+  defaultSrc: ["'self'", "https://discord.com/"],
+  scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+  styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+  imgSrc: ["'self'", "data:"],
 };
 
 if (process.env.NODE_ENV === "development") {
-    // This prevents Safari from trying to load localhost over HTTPS.
-    // See https://github.com/helmetjs/helmet/issues/429
-    cspDirectives.upgradeInsecureRequests = null;
+  // This prevents Safari from trying to load localhost over HTTPS.
+  // See https://github.com/helmetjs/helmet/issues/429
+  cspDirectives.upgradeInsecureRequests = null;
 }
 
 const cspConfig = {
-    directives: cspDirectives
+  directives: cspDirectives
 };
 
 /* Cookie & Session Configuration */
@@ -56,7 +56,7 @@ const sessionConfig = {
 };
 
 module.exports = {
-    multerConfig: multerConfig,
-    cspConfig: cspConfig,
-    sessionConfig: sessionConfig
+  multerConfig: multerConfig,
+  cspConfig: cspConfig,
+  sessionConfig: sessionConfig
 };

@@ -1,6 +1,6 @@
 // This is a little goofy, but we need to pass attendance data through the client side
-let csvButtons =  document.getElementsByClassName("attendance-csv");
-for(let i = 0; i < csvButtons.length; i++) {
+let csvButtons = document.getElementsByClassName("attendance-csv");
+for (let i = 0; i < csvButtons.length; i++) {
     csvButtons[i].addEventListener("click", () => {
         let data = csvButtons[i].getAttribute('data-attendance');
         generateCSV(data);
@@ -14,7 +14,7 @@ generateCSV = (attendanceData) => {
     date = attendanceData[1].split('T')[0];
 
     let rows = [["Email"]];
-    for(let user in attendance) {
+    for (let user in attendance) {
         rows.push([attendance[user].user]);
     }
 

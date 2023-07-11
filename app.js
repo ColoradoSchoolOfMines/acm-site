@@ -101,10 +101,10 @@ app.get('/', async (req, res) => {
   const image = resp.rows[0];
 
   let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
-  for(let meeting in meetings.rows) {
-    if(req.user) {
+  for (let meeting in meetings.rows) {
+    if (req.user) {
       const rsvp = await db.query("SELECT * FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.email, meetings.rows[meeting].id]);
-      if(rsvp.rows.length > 0) {
+      if (rsvp.rows.length > 0) {
         meetings.rows[meeting].rsvped = true;
       }
     }
@@ -121,7 +121,7 @@ app.get('/about', async (req, res) => {
   res.render('about', { title: 'About Us', people: resp.rows });
 });
 
-app.get('/schedule', async(req, res) => {
+app.get('/schedule', async (req, res) => {
   const upcoming = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '3 weeks' ORDER BY date");
   const previous = await db.query("SELECT * FROM meetings WHERE date <= NOW() ORDER BY date DESC");
   res.render('schedule', { title: 'Schedule', upcoming: upcoming.rows, previous: previous.rows });
