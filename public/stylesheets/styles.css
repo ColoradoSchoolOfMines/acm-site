@@ -79,11 +79,6 @@ p {
     min-width: 100%;
 }
 
-/* .row {
-    margin-left: 10%;
-    margin-right: 10%;
-} */
-
 /* Components */
 .team-card {
     display: inline-block;
@@ -283,7 +278,7 @@ p {
     color: white;
 }
 
-.nav-link:focus, .nav-link:hover {
+.navbar-nav .nav-link:hover {
     background-color: white;
     color: #0083c5;
     font-weight: bold;
@@ -316,6 +311,13 @@ p {
 .footer .container {
     padding-top: 2%;
     padding-bottom: 1%;
+    margin-right: 20%;
+    margin-left: 20%;
+}
+
+.footer .nav-link:hover {
+    color: white;
+    text-decoration: underline;
 }
 
 /* Animations */
