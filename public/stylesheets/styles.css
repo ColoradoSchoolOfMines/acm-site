@@ -58,7 +58,7 @@ body {
     /* Opera < 12.1 */
     animation: fadein 1s;
 
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
 }
 
 a {
@@ -266,6 +266,7 @@ p {
 .navbar {
     font-size: 20px;
     padding: 10px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .navbar-brand {
@@ -285,10 +286,11 @@ p {
 .nav-link:focus, .nav-link:hover {
     background-color: white;
     color: #0083c5;
+    font-weight: bold;
 }
 
 .active {
-    text-decoration: underline;
+    font-weight: bold;
 }
 
 .dropdown-menu {
