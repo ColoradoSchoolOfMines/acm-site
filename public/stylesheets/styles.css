@@ -58,7 +58,7 @@ body {
     /* Opera < 12.1 */
     animation: fadein 1s;
 
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
 }
 
 a {
@@ -77,11 +77,6 @@ p {
     margin-right: 0;
     width: 100%;
     min-width: 100%;
-}
-
-.row {
-    margin-left: 10%;
-    margin-right: 10%;
 }
 
 /* Components */
@@ -110,14 +105,11 @@ p {
 }
 
 .content {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 2%;
-    margin-top: 2%;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
-.center-content {
+.homepage .row {
     margin-left: 10%;
     margin-right: 10%;
 }
@@ -143,6 +135,7 @@ p {
     line-height: 30px;
 }
 
+/* Project Page */
 .project-title {
     margin: 0;
 }
@@ -158,6 +151,7 @@ p {
 }
 
 .chip {
+    font-size: 18px;
     padding: 8px 10px 10px 10px;
     background-color: #cce5ff;
     border-radius: 10px;
@@ -165,8 +159,9 @@ p {
 
 .project-image {
     width: 100%;
-    height: 100%;
     border-radius: 25px;
+    max-width: 350px;
+    max-height: 350px;
 }
 
 .project-user-image {
@@ -177,6 +172,11 @@ p {
 
 .project-user-name {
     vertical-align: middle;
+}
+
+.projects-scroll {
+    height: 75vh;
+    overflow: scroll;
 }
 
 /* meeting specific to schedule page */
@@ -242,11 +242,6 @@ p {
     overflow: scroll;
 }
 
-.projects-scroll {
-    height: 75vh;
-    overflow: scroll;
-}
-
 .acm-blue {
     color: #0083c5;
 }
@@ -266,6 +261,7 @@ p {
 .navbar {
     font-size: 20px;
     padding: 10px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .navbar-brand {
@@ -282,14 +278,28 @@ p {
     color: white;
 }
 
-.nav-link:focus, .nav-link:hover {
-    font-weight: bold;
+.navbar-nav .nav-link:hover {
     background-color: white;
     color: #0083c5;
+    font-weight: bold;
 }
 
 .active {
-    text-decoration: underline;
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    font-size: 18px;
+    background-color: #0083c5;
+}
+
+.dropdown-menu a {
+    color: white;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: white;
+    color: #0083c5;
 }
 
 /* Footer */
@@ -301,6 +311,13 @@ p {
 .footer .container {
     padding-top: 2%;
     padding-bottom: 1%;
+    margin-right: 20%;
+    margin-left: 20%;
+}
+
+.footer .nav-link:hover {
+    color: white;
+    text-decoration: underline;
 }
 
 /* Animations */

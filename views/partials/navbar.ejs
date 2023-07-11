@@ -3,7 +3,6 @@
 		<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="white" class="bi bi-list" viewBox="0 0 16 16">
 			<path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
 		</svg>
-		<!-- <img width="200" height="auto" src="/static/images/white.png" alt="Mines ACM" /> -->
 	</button>
 
 	<div class="collapse navbar-collapse" id="navbarNav">
@@ -33,10 +32,10 @@
 				<% } %>
 			</li>
 			<li class="nav-item dropdown">
-				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					Resources
 				</a>
-				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<ul class="dropdown-menu shadow-sm" aria-labelledby="resourcesDropdown">
 					<li><a class="dropdown-item" href="/projects">Projects</a></li>
 					<li><a class="dropdown-item" href="/presentations">Presentations</a></li>
 					<li><a class="dropdown-item" href="https://coloradoschoolofmines.github.io">Wiki</a></li>
@@ -44,10 +43,10 @@
 			</li>
 			<% if(typeof user == 'object' && user) { %>
 			<li class="nav-item dropdown">
-				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					<%= user.name %>
 				</a>
-				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<ul class="dropdown-menu shadow-sm" aria-labelledby="userDropdown">
 					<li><a class="dropdown-item" href="/profile">Profile</a></li>
 					<% if(user.is_admin) { %>
 						<li><a class="dropdown-item" href="/admin">Admin</a></li>
