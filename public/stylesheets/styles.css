@@ -283,13 +283,26 @@ p {
 }
 
 .nav-link:focus, .nav-link:hover {
-    font-weight: bold;
     background-color: white;
     color: #0083c5;
 }
 
 .active {
     text-decoration: underline;
+}
+
+.dropdown-menu {
+    font-size: 18px;
+    background-color: #0083c5;
+}
+
+.dropdown-menu a {
+    color: white;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: white;
+    color: #0083c5;
 }
 
 /* Footer */
