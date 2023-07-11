@@ -11,11 +11,19 @@
         <p>Please fill out the following form so we can log your attendance!</p>
         
         <% if(typeof user == 'object' && user) { %>
-            <p>You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.</p>
-            <form method="POST" action="/attend">
-                <input type="hidden" name="meetingId" value="<%= meeting.id %>">
-                <button class="btn d-inline-block btn-primary">Submit</button>
-            </form>
+            <% if(rsvped) { %>
+                <p>You have already filled out an attendance form for this event!</p>
+            <% } else { %>
+                <p>You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.</p>
+                <form method="POST" action="/attend">
+                    <br>
+                    <p>Do you have any suggestions, feedback, or questions about the club?</p>
+                    <input class="d-inline-block" type="text" name="feedback" placeholder="Feedback.." />
+                    <br>
+                    <input type="hidden" name="meetingId" value="<%= meeting.id %>">
+                    <button class="btn d-inline-block btn-primary">Submit</button>
+                </form>
+            <% } %>
         <% } else { %>
             <form method="POST" action="/attend">
                 <p>Name</p>
@@ -23,6 +31,9 @@
                 <br>
                 <p>Email</p>
                 <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
+                <br>
+                <p>Do you have any suggestions, feedback, or questions about the club?</p>
+                <input class="d-inline-block" type="text" name="feedback" placeholder="Feedback.." />
                 <br>
                 <input type="hidden" name="meetingId" value="<%= meeting.id %>">
                 <button class="btn d-inline-block btn-primary">Submit</button>

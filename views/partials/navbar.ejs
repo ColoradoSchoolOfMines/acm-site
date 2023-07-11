@@ -1,19 +1,27 @@
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm">
-	<div class="container-fluid">
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		
-		<div class="collapse navbar-collapse" id="navbarNav">
-		<ul class="navbar-nav" style="vertical-align: middle;">
+<nav class="navbar navbar-expand-lg shadow-sm" style="background-color: #0083c5;">
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="white" class="bi bi-list" viewBox="0 0 16 16">
+			<path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+		</svg>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav mx-auto justify-content-center">
 			<a class="navbar-brand" href="/">
-				<img width="200" height="auto" src="./static/images/logo.png" alt="Mines ACM" />
+				<img width="200" height="auto" src="/static/images/white.png" alt="Mines ACM" />
 			</a>
 			<li class="nav-item">
 				<% if(title === 'Home') { %>
 					<a class="nav-link text-nowrap active" aria-current="page" href="/">Home</a>
 				<% } else { %>
 					<a class="nav-link text-nowrap" href="/">Home</a>
+				<% } %>
+			</li>
+			<li class="nav-item">
+				<% if(title === 'Schedule') { %>
+					<a class="nav-link text-nowrap active" aria-current="page" href="/schedule">Schedule</a>
+				<% } else { %>
+					<a class="nav-link text-nowrap" href="/schedule">Schedule</a>
 				<% } %>
 			</li>
 			<li class="nav-item">
@@ -24,11 +32,10 @@
 				<% } %>
 			</li>
 			<li class="nav-item dropdown">
-				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					Resources
 				</a>
-				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="/schedule">Schedule</a></li>
+				<ul class="dropdown-menu shadow-sm" aria-labelledby="resourcesDropdown">
 					<li><a class="dropdown-item" href="/projects">Projects</a></li>
 					<li><a class="dropdown-item" href="/presentations">Presentations</a></li>
 					<li><a class="dropdown-item" href="https://coloradoschoolofmines.github.io">Wiki</a></li>
@@ -36,10 +43,10 @@
 			</li>
 			<% if(typeof user == 'object' && user) { %>
 			<li class="nav-item dropdown">
-				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link text-nowrap dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 					<%= user.name %>
 				</a>
-				<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<ul class="dropdown-menu shadow-sm" aria-labelledby="userDropdown">
 					<li><a class="dropdown-item" href="/profile">Profile</a></li>
 					<% if(user.is_admin) { %>
 						<li><a class="dropdown-item" href="/admin">Admin</a></li>
@@ -53,6 +60,5 @@
 			</li>
 			<% } %>
 		</ul>
-		</div>
 	</div>
 </nav>

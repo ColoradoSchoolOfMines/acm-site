@@ -1,8 +1,8 @@
 <% layout('layouts/base')%>
 
-<div class="container bg-light">
+<div class="container bg-light homepage">
 	<div class="row">
-		<div class="col col-left">
+		<div class="col me-5">
 			<h1 class="big-header">Mines ACM</h1>
 			<p class="header-description">
 				Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
@@ -23,19 +23,21 @@
 				<br><br>
 				<% if (meetings.length > 0) { %>
 					<strong>Next meeting</strong>: 
-					<%= meetings[0].title %>, <%= meetings[0].date %>, from <%= meetings[0].duration %> in <%= meetings[0].location %>
-				<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
+					<%= meetings[0].title %>, <span class="date"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
+					<% if(meetings[0].rsvped) { %>
+						(RSVP'ed)
+					<% } else { %>
+						<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
+					<% } %>
 				<% } else { %>
 					<strong>No upcoming meetings right now, check back soon!</strong>
 				<% } %>
 			</p>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-lg-6 text-center">
 			<% if (image) { %> 
 				<img src="uploads/<%= image.id %>" class="header-image shadow" />
-				<p class="image-caption">
-					<%= image.caption %>
-				</p>
+				<p class="image-caption"><%= image.caption %></p>
 			<% } else { %>
 				<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
 				<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
@@ -44,29 +46,32 @@
 	</div>
 </div>
 
-<div class="container">
+<!-- image stuff doesn't work if no images are in DB? -->
+<div class="container homepage">
 	<div class="row">
-		<!-- TODO better solution here for column headers + don't use inline styling -->
-		<div class="col" style="margin-left: 9%; margin-right: 2.5%;">
+		<div class="col me-5">
 			<h1 class="big-header-2">Upcoming Meetings</h1>
 		</div>
-		<div class="col" style="margin-left: 2.5%; margin-right: 10%;">
+		<div class="col">
 			<h1 class="big-header-2">Our Events</h1>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col col-gold" style="margin-left: 10%; margin-right: 2.5%;">
+		<div class="col me-5">
 			<div class="highlight">
 				<% if(meetings.length > 0) { %>
 					<% for(let meeting of meetings) { %>
 					<div class="meeting">
 						<p class="meeting-title"><%= meeting.title %>
-
-							<!-- check if RSVP'ed already -->
-
-							<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+							<% if(meeting.rsvped) { %>
+								(RSVP'ed)
+							<% } else { %>
+								<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+							<% } %>
 						</p>
-						<p class="meeting-info"><strong><%= meeting.date %></strong> in <strong><%= meeting.location %></strong></p>
+
+						<p class="meeting-info"><strong><span class="date"><%= meeting.date %>,<%= meeting.duration %></span></strong>
+							in <strong><%= meeting.location %></strong></p>
 						<p class="meeting-description"><%= meeting.description %></p>
 					</div>
 					<% } %>
@@ -78,7 +83,7 @@
 				<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
 			</div>
 		</div>
-		<div class="col col-gold" style="margin-left: 2.5%; margin-right: 10%;">
+		<div class="col">
 			<div class="highlight">
 				<div class="event">
 					<p class="meeting-title">Tech Talks</p>
@@ -105,3 +110,5 @@
 		</div>
 	</div>
 </div>
+
+<script src="/scripts/date.js"></script>
