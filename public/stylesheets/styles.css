@@ -92,10 +92,29 @@ p {
     vertical-align: middle;
 }
 
+.profile-container {
+    display: flex;
+}
+
+.profile-text-content {
+    flex: 2;
+}
+
+.profile-picture-content {
+    flex: 1;
+    text-align: right;
+}
+
+.profile-btns {
+    display: flex;
+    justify-content: space-between;
+}
+
 .profile-picture {
     border-radius: 10%;
-    width: 10%;
+    width: 90%;
     margin-bottom: 20px;
+    float: right;
 }
 
 .team-picture {
@@ -250,6 +269,23 @@ p {
     color: #336699;
 }
 
+/* Modals */
+.modal-footer {
+    justify-content: left;
+}
+
+.modal-img {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.modal-edit-about {
+    text-align: center;
+    padding-top: 18px;
+    padding-bottom: 10px;
+}
+
 /* Buttons */
 .btn-outline-primary:hover {
     background-color: transparent;
@@ -318,6 +354,11 @@ p {
 .footer .nav-link:hover {
     color: white;
     text-decoration: underline;
+}
+
+.pfp-footer {
+    display: flex;
+    text-align: left;
 }
 
 /* Animations */

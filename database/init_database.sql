@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS users (
     "email"      TEXT NOT NULL PRIMARY KEY,
     "name"       TEXT NOT NULL,
     "title"      TEXT,
-    "avatar_id"  TEXT
+    "avatar_id"  TEXT,
+    "about"      TEXT
 );
 
 CREATE TABLE IF NOT EXISTS projects (
