@@ -23,7 +23,7 @@
 				<br><br>
 				<% if (meetings.length > 0) { %>
 					<strong>Next meeting</strong>: 
-					<%= meetings[0].title %>, <span class="date"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
+					<%= meetings[0].title %>, <span class="datetime"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
 					<% if(meetings[0].rsvped) { %>
 						(RSVP'ed)
 					<% } else { %>
@@ -70,7 +70,7 @@
 							<% } %>
 						</p>
 
-						<p class="meeting-info"><strong><span class="date"><%= meeting.date %>,<%= meeting.duration %></span></strong>
+						<p class="meeting-info"><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
 							in <strong><%= meeting.location %></strong></p>
 						<p class="meeting-description"><%= meeting.description %></p>
 					</div>

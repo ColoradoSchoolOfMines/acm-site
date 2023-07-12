@@ -18,7 +18,7 @@
                         <% } %>
                     </h3>
                     <p><%= meeting.description %></p>
-                    <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                    <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                     <p><strong>Location</strong>: <%= meeting.location %></p>
                 </div>
             <% } %> 
@@ -31,7 +31,7 @@
                     <div class="meeting p-4 bg-white">
                         <p><strong><%= meeting.title %></strong></p>
                         <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                         <p><strong>Location</strong>: <%= meeting.location %></p>
                     </div>
                 <% } %>

@@ -198,6 +198,27 @@ p {
     overflow: scroll;
 }
 
+.presentation-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+.presentation-date {
+    color: lightslategray;
+    font-weight: normal;
+}
+
+.presentation-desc {
+    font-size: 22px;
+    margin: 0;
+}
+
+.presentations-scroll {
+    height: 75vh;
+    overflow: scroll;
+}
+
+
 /* meeting specific to schedule page */
 .schedule-meeting {
     border-bottom: 4px solid #336699;
