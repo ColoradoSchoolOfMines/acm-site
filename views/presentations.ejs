@@ -25,10 +25,10 @@
                             <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." />
 
                             <label class="d-block py-1" for="new-presentation-date">Date</label>
-                            <input id="new-presentation-date" name="description" type="date" required />
+                            <input id="new-presentation-date" name="date" type="date" required />
          
-                            <label class="d-block py-1" for="new-presentation-repository">Slides Link</label>
-                            <input id="new-presentation-repository" name="repository" type="url" required placeholder="https://drive.google.com/..." />
+                            <label class="d-block py-1" for="new-presentation-url">Slides Link</label>
+                            <input id="new-presentation-url" name="url" type="url" required placeholder="https://drive.google.com/..." />
                         </div>
                         <div class="modal-footer">
                             <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
@@ -90,19 +90,21 @@
                                 <h5 class="modal-title" id="edit-presentation-<%= presentation.id %>-modal-label">Edit Presentation</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form class="presentation-form" data-presentation-authors-id="edit-presentation-<%= presentation.id %>-authors" method="POST" action="/presentations/edit" enctype="multipart/form-data" >
+                            <form method="POST" action="/presentations/edit" >
                                 <div class="modal-body">
+                                    <input type="hidden" name="id" value="<%= presentation.id %>">
+
                                     <label class="d-block py-1" for="new-presentation-title">Title</label>
-                                    <input id="new-presentation-title" name="title" type="text" required placeholder="A Cool Presentation" />
+                                    <input id="new-presentation-title" name="title" type="text" required placeholder="A Cool Presentation" value="<%= presentation.title %>" />
                                     
                                     <label class="d-block py-1" for="new-presentation-description">Description</label>
-                                    <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." />
+                                    <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." value="<%= presentation.description %>" />
 
                                     <label class="d-block py-1" for="new-presentation-date">Date</label>
-                                    <input id="new-presentation-date" name="description" type="date" required />
+                                    <input id="new-presentation-date" name="date" type="date" required value="<%= presentation.date %>" />
                  
-                                    <label class="d-block py-1" for="new-presentation-repository">Slides Link</label>
-                                    <input id="new-presentation-repository" name="repository" type="url" required placeholder="https://drive.google.com/..." />
+                                    <label class="d-block py-1" for="new-presentation-url">Slides Link</label>
+                                    <input id="new-presentation-url" name="url" type="url" required placeholder="https://drive.google.com/..." value="<%= presentation.url %>" />
                                 </div>
                                 <div class="modal-footer">
                                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
@@ -112,6 +114,7 @@
                         </div>
                     </div>   
                 </div>
+            </div>
         <% } %>   
     </div>
 </div>
