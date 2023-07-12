@@ -7,7 +7,7 @@
 
     <% if (typeof user == 'object' && user && user.is_admin) { %>
         <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-project-modal">
-            New Project
+            New
         </button>
 
         <div class="modal fade" id="new-project-modal" tabindex="-1" aria-labelledby="new-project-modal-label" aria-hidden="true">
@@ -89,15 +89,15 @@
                             </div>
                         <% } %>
                         <% if (typeof user == 'object' && user && user.is_admin) { %>
-                            <div class="row row-cols-auto align-items-start mx-0 mt-2 gx-1 gy-1">
+                            <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
                                 <div class="col">
                                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-project-<%= project.id %>-modal">
-                                        Edit Project
+                                        Edit
                                     </button>
                                 </div>
                                 <div class="col">
                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-project-<%= project.id %>-modal">
-                                        Delete Project
+                                        Delete
                                     </button>
                                 </div>
                             </div>
