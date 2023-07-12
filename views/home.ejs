@@ -27,7 +27,7 @@
 					<% if(meetings[0].rsvped) { %>
 						(RSVP'ed)
 					<% } else { %>
-						<button class="btn btn-outline-primary"><a href="/rsvp?meeting=<%= meetings[0].id %>">I'm in!</a></button>
+						<a href="/rsvp?meeting=<%= meetings[0].id %>"><button class="btn btn-outline-primary">I'm in!</button></a>
 					<% } %>
 				<% } else { %>
 					<strong>No upcoming meetings right now, check back soon!</strong>
@@ -66,7 +66,7 @@
 							<% if(meeting.rsvped) { %>
 								(RSVP'ed)
 							<% } else { %>
-								<button class="btn btn-outline-primary rsvp"><a href="/rsvp?meeting=<%= meeting.id %>">RSVP</a></button>
+								<a href="/rsvp?meeting=<%= meeting.id %>"><button class="btn btn-outline-primary rsvp">RSVP</button></a>
 							<% } %>
 						</p>
 
