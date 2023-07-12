@@ -38,7 +38,14 @@ const transformProjectRequest = async (req, res, next) => {
     res.redirect('/projects');
     return;
   }
+  // Website field is optional and will be undefined if not specified,
+  // transform into an empty string is that's the case.
+  if (!req.body.website) {
+    req.body.website = ""
+  }
 
+  // Archived field will either be "on" if selected or undefined if not,
+  // convert it to a boolean by those rules.
   req.body.archived = (req.body.archived !== undefined);
   next();
 }
@@ -72,7 +79,7 @@ router.post('/projects', isAdminAuthenticated, upload('image'), transformProject
   // be present in the users DB earlier, so they can be inserted directly.
   for (let i = 0; i < req.body.authors.length; ++i) {
     await db.query(
-      "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
+      "INSERT INTO project_authors VALUES ($1, $2)", [id, req.body.authors[i]])
   }
 
   req.flash('success', 'Successfully added project!');
