@@ -36,7 +36,7 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    await db.query("INSERT INTO users VALUES ($1, $2, '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
+    await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
     const resp = await db.query("SELECT * FROM users WHERE email = $1", [profile.email])
     user = {
       "name": resp.rows[0].name,
@@ -128,9 +128,14 @@ app.get('/schedule', async (req, res) => {
 });
 
 app.get('/uploads/:id', (req, res) => {
-  let image = fs.readFileSync("uploads/" + req.params.id);
-  res.contentType('image/*');
-  res.send(Buffer.from(image.toString('base64'), 'base64'));
+  let path = "uploads/" + req.params.id;
+  if (fs.existsSync(path)) {
+    let image = fs.readFileSync(path);
+    res.contentType('image/*');
+    res.send(Buffer.from(image.toString('base64'), 'base64'));
+  } else {
+    res.status(404).render('404', { title: '404' });
+  }
 });
 
 app.use((req, res, next) => {
