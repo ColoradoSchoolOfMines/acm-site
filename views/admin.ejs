@@ -58,7 +58,7 @@
                     <div class="meeting">
                         <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
                         <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <span class="date"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                         <p><strong>Location</strong>: <%= meeting.location %></p>
                         <p><strong>Type</strong>: <%= meeting.type %></p>
                         <% if(meeting.attendance.length > 0) { %>

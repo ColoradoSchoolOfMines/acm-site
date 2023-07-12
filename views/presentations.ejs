@@ -1,17 +1,124 @@
 <% layout('layouts/base')%>
 
 <div class="content">
-    <h1>Presentations</h1>
+    <h1 class="mt-5">Presentations</h1>
     <p>Slides of all of our tech talks, workshops and related presentations can be found here!</p>
 
-    <% for(let presentation of presentations) { %>
-        <div class="large-card">
-            <p>
-                <%= presentation.title %>
-                <%= presentation.description %>
-                <%= presentation.date %>
-                <%= presentation.url %>
-            </p>
+    <% if (typeof user == 'object' && user && user.is_admin) { %>
+        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-presentation-modal">
+            New
+        </button>
+
+        <div class="modal fade" id="new-presentation-modal" tabindex="-1" aria-labelledby="new-presentation-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="new-presentation-modal-label">New Presentation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/presentations">
+                        <div class="modal-body">
+                            <label class="d-block py-1" for="new-presentation-title">Title</label>
+                            <input id="new-presentation-title" name="title" type="text" required placeholder="A Cool Presentation" />
+                            
+                            <label class="d-block py-1" for="new-presentation-description">Description</label>
+                            <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." />
+
+                            <label class="d-block py-1" for="new-presentation-date">Date</label>
+                            <input id="new-presentation-date" name="date" type="date" required />
+         
+                            <label class="d-block py-1" for="new-presentation-url">Slides Link</label>
+                            <input id="new-presentation-url" name="url" type="url" required placeholder="https://drive.google.com/..." />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    <% } %>   
+    <% } %>
+
+    <div class="presentations-scroll mt-3 mb-5">    
+        <% for(let presentation of presentations) { %>
+            <div class="large-card">
+                <h2 class="presentation-title">
+                    <%= presentation.title %>
+                    <span class="presentation-date date"><%= presentation.date %></span>
+                </h2>
+                <p class="presentation-desc"><%= presentation.description %></p>
+                <a class="d-block mt-1" href="<%= presentation.url %>">Slides</a>
+                
+                <% if (typeof user == 'object' && user && user.is_admin) { %>
+                    <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
+                        <div class="col">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-presentation-<%= presentation.id %>-modal">
+                                Edit
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-presentation-<%= presentation.id %>-modal">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="delete-presentation-<%= presentation.id %>-modal" tabindex="-1" aria-labelledby="delete-presentation-<%= presentation.id %>-modal-label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete-presentation-<%= presentation.id %>-modal-label">Delete Presentation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="POST" action="/presentations/delete">
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete the <strong><%= presentation.title %></strong> presentation?</p>
+                                        <input type="hidden" name="id" value="<%= presentation.id %>">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="edit-presentation-<%= presentation.id %>-modal" tabindex="-1" aria-labelledby="edit-presentation-<%= presentation.id %>-modal-label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="edit-presentation-<%= presentation.id %>-modal-label">Edit Presentation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="POST" action="/presentations/edit" >
+                                    <div class="modal-body">
+                                        <input type="hidden" name="id" value="<%= presentation.id %>">
+
+                                        <label class="d-block py-1" for="new-presentation-title">Title</label>
+                                        <input id="new-presentation-title" name="title" type="text" required placeholder="A Cool Presentation" value="<%= presentation.title %>" />
+                                        
+                                        <label class="d-block py-1" for="new-presentation-description">Description</label>
+                                        <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." value="<%= presentation.description %>" />
+
+                                        <label class="d-block py-1" for="new-presentation-date">Date</label>
+                                        <input id="new-presentation-date" name="date" type="date" required value="<%= presentation.date %>" />
+                     
+                                        <label class="d-block py-1" for="new-presentation-url">Slides Link</label>
+                                        <input id="new-presentation-url" name="url" type="url" required placeholder="https://drive.google.com/..." value="<%= presentation.url %>" />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>   
+                    </div>
+                <% } %>
+            </div>
+        <% } %>   
+    </div>
 </div>
+
+<script src="scripts/date.js"></script>
