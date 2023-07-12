@@ -21,7 +21,6 @@ router.post('/presentations', async (req, res) => {
 });
 
 router.post('/presentations/edit', async (req, res) => {
-  console.log(req.body);
   await db.query("UPDATE presentations SET title = $1, description = $2, date = $3, url = $4 WHERE id = $5", 
     [req.body.title, req.body.description, req.body.date, req.body.url, req.body.id]);
   req.flash('success', 'Successfully edited project!');
