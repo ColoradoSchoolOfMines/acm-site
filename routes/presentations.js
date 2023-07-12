@@ -4,7 +4,7 @@ const db = require('../database/db');
 const router = express.Router();
 
 router.get('/presentations', async (req, res) => {
-  const resp = await db.query("SELECT * FROM presentations");
+  const resp = await db.query("SELECT * FROM presentations ORDER BY date DESC");
   for (presentation of resp.rows) {
     // Just cleave off the time value randomly added for no reason
     // by JS Date, not bringing in Moment.js for just this.
