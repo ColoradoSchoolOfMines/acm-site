@@ -1,17 +1,20 @@
 <% layout('layouts/base')%>
 
 <div class="content">
-    <h1>Presentations</h1>
+    <h1 class="mt-5">Presentations</h1>
     <p>Slides of all of our tech talks, workshops and related presentations can be found here!</p>
 
-    <% for(let presentation of presentations) { %>
-        <div class="large-card">
-            <p>
-                <%= presentation.title %>
-                <%= presentation.description %>
-                <%= presentation.date %>
-                <%= presentation.url %>
-            </p>
-        </div>
-    <% } %>   
+    <div class="presentations-scroll mb-5">    
+        <% for(let presentation of presentations) { %>
+            <div class="large-card">
+                <h2 class="presentation-title">
+                    <%= presentation.title %>
+                    <span class="presentation-date date"><%= presentation.date %></span>
+                </h2>
+                <p class="presentation-desc"><%= presentation.description %></p>
+                <a class="d-block mt-1" href="<%= presentation.url %>">Slides</a>
+            </div>
+        <% } %>   
+    </div>
+    <script src="scripts/date.js"></script>
 </div>
