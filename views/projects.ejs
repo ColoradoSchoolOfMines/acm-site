@@ -13,13 +13,13 @@
                     <input id="new-project-title" name="title" type="text" required placeholder="A Cool Project" />
                     
                     <label class="d-block py-1" for="new-project-description">Description</label>
-                    <input id="new-project-description" name="description" type="text" required placeholder="Meaningful description.." />
+                    <input id="new-project-description" name="description" type="text" required placeholder="A meaningful description..." />
  
                     <label class="d-block py-1" for="new-project-repository">Repository Link</label>
-                    <input id="new-project-repository" name="repository" type="url" required placeholder="https://github.com/" />
+                    <input id="new-project-repository" name="repository" type="url" required placeholder="https://github.com/Example/CoolProject" />
  
-                    <label class="d-block py-1" for="new-project-website">Website Link</label>
-                    <input id="new-project-website" name="website" type="url" />
+                    <label class="d-block py-1" for="new-project-website">Website Link (Optional)</label>
+                    <input id="new-project-website" name="website" type="url" placeholder="https://example.com" />
 
                     <div id="new-project-authors" data-project-authors-value="<%= JSON.stringify(['']) %>"></div>
 
@@ -135,16 +135,16 @@
                                                 <input type="hidden" name="id" value="<%= project.id %>">
 
                                                 <label class="d-block py-1" for="edit-project-<%= project.id %>-title">Title</label>
-                                                <input id="edit-project-<%= project.id %>-title" name="title" type="text" required value="<%= project.title %>" />
+                                                <input id="edit-project-<%= project.id %>-title" name="title" type="text" required value="<%= project.title %>" placeholder="A Cool Project" />
                                                 
                                                 <label class="d-block py-1" for="edit-project-<%= project.id %>-description">Description</label>
-                                                <input id="edit-project-<%= project.id %>-description" name="description" type="text" required value="<%= project.description %>" />
+                                                <input id="edit-project-<%= project.id %>-description" name="description" type="text" required value="<%= project.description %>" placeholder="A meaningful description..." />
                              
                                                 <label class="d-block py-1" for="edit-project-<%= project.id %>-repository">Repository Link</label>
-                                                <input id="edit-project-<%= project.id %>-repository" name="repository" type="url" required value="<%= project.repository %>" />
+                                                <input id="edit-project-<%= project.id %>-repository" name="repository" type="url" required value="<%= project.repository %>" placeholder="https://github.com/Example/CoolProject" />
                              
-                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-website">Website Link</label>
-                                                <input id="edit-project-<%= project.id %>-website" name="website" type="url" required value="<%= project.website %>" />
+                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-website">Website Link (Optional)</label>
+                                                <input id="edit-project-<%= project.id %>-website" name="website" type="url" value="<%= project.website %>" placeholder="https://example.com" />
 
                                                 <div id="edit-project-<%= project.id %>-authors" data-project-authors-value="<%= JSON.stringify(project.authors.map((a) => a.email)) %>"></div>
 

@@ -38,7 +38,7 @@ const addAuthor = (authors, value) => {
 		'beforebegin',
 		`<div id="author-input-${n}" class="author-input">
             <label class="d-block py-1" for="${authors.id}-${n}">Author ${n + 1}</label>
-            <input id="${authors.id}-${n}" name="author${n}" type="email" value="${value}" required />
+            <input id="${authors.id}-${n}" name="author${n}" type="email" value="${value}" placeholder="example@mines.edu" required />
         </div>`
 	);
 }
