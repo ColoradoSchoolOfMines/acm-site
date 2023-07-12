@@ -58,6 +58,6 @@ CREATE TABLE IF NOT EXISTS presentations (
     "id"          TEXT PRIMARY KEY,
     "title"       TEXT NOT NULL,
     "description" TEXT,
-    "date"        TIMESTAMP,
+    "date"        DATE,
     "url"         TEXT
 );

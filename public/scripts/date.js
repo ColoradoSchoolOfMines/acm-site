@@ -1,11 +1,12 @@
 let dates = document.getElementsByClassName("date");
 for (let timestamp of dates) {
 	const date = new Date(timestamp.innerHTML);
-	timestamp.innerHTML = new Date(date).toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	});
+	timestamp.innerHTML = new Date(date.getTime() + (date.getTimezoneOffset() * 60000 ))
+		.toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		});
 }
 
 let dateTimes = document.getElementsByClassName("datetime");
