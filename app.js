@@ -37,30 +37,23 @@ passport.use(new GoogleStrategy({
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
     await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
-    const resp = await db.query("SELECT * FROM users WHERE email = $1", [profile.email])
-    user = {
-      "name": resp.rows[0].name,
-      "email": resp.rows[0].email,
-      "title": resp.rows[0].title,
-      "is_admin": resp.rows[0].title.length > 0,
-      "avatar_id": resp.rows[0].avatar_id,
-      "about": resp.rows[0].about
-    }
     req.flash('success', 'Successfully logged in!');
     done(null, user);
-  }
-  else {
+  } else {
     req.flash('error', 'Please log in with a valid mines.edu email!');
     done(null, false);
   }
 }));
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  done(null, user.email);
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser(async (user, done) => {
+  const resp = await db.query("SELECT * FROM users WHERE email = $1", [user]);
+  let info = resp.rows[0];
+  info.is_admin = info.title.length > 0;
+  done(null, info);
 });
 
 app.use((req, res, next) => {
