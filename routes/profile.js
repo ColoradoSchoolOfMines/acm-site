@@ -16,7 +16,6 @@ router.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
     // Free the space taken up by the now-unused profile picture
     fs.unlinkSync("uploads/" + req.user.avatar_id);
   }
-  req.user.avatar_id = req.file.filename;
   req.flash('success', 'Profile picture uploaded successfully!');
   res.redirect('/profile');
 });
