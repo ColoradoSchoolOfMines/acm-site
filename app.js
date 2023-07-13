@@ -52,9 +52,13 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (user, done) => {
   const resp = await db.query("SELECT * FROM users WHERE email = $1", [user]);
-  let info = resp.rows[0];
-  info.is_admin = info.title.length > 0;
-  done(null, info);
+  if (resp.rows) {
+    let info = resp.rows[0];
+    info.is_admin = info.title.length > 0;
+    done(null, info);
+  } else {
+    done(null, false);
+  }
 });
 
 app.use((req, res, next) => {
