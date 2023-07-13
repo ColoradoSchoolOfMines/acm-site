@@ -3,21 +3,26 @@
 <div class="container" style="background-color: #ecf0f1;">
     <div class="content">        
         <div class="row">
-            <h1 class="acm-secondary pb-2">Upcoming Meetings</h1>
-            <!-- <p>
-                Sync our calendar with yours! <code>https://acm.mines.edu/schedule/ical.ics</code>
-                <a target="_blank" href="https://support.google.com/calendar/answer/37100#add_via_link">(Instructions)</a>
-            </p> -->
+            <div class="pb-4">
+                <h1 class="acm-secondary">Upcoming Meetings</h1>
+                <p class="header-description-secondary">
+                    Sync our calendar with yours!
+                    <a target="_blank" href="https://support.google.com/calendar/answer/37100#add_via_link">(Instructions)</a>
+                    <br><code>https://acm.mines.edu/schedule/ical.ics</code>
+                </p>
+            </div>
+            
             <% for(let meeting of upcoming) { %>
                 <div class="schedule-meeting shadow">
                     <h3 class="acm-secondary"><%= meeting.title %>
                         <% if(meeting.rsvped) { %>
-                            <p>(RSVP'ed)</p>
+                            (RSVP'ed)
                         <% } else { %>
                             <a href="/rsvp?meeting=<%= meeting.id %>"><button class="btn btn-outline-primary rsvp">RSVP</button></a>
                         <% } %>
                     </h3>
                     <p><%= meeting.description %></p>
+                    <br>
                     <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                     <p><strong>Location</strong>: <%= meeting.location %></p>
                 </div>

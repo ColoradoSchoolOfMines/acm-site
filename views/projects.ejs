@@ -1,12 +1,12 @@
 <% layout('layouts/base')%>
 
 <div class="content">
-    <h1 class="mt-5">Projects</h1>
-    <p>Projects are a great way to get involved with Mines ACM! Apply existing knowledge
-        and learn new skills with our variety of projects.</p>
+    <h1 class="mt-5 acm-secondary">Projects</h1>
+    <p style="font-size: 18px;">Projects are a great way to get involved with Mines ACM!
+        Apply knowledge from classes and learn new skills with our variety of projects.</p>
 
     <% if (typeof user == 'object' && user && user.is_admin) { %>
-        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-project-modal">
+        <button type="button" class="d-inline-block btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-project-modal">
             New
         </button>
 
