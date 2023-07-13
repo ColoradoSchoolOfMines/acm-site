@@ -256,6 +256,12 @@ p {
     padding-left: 3%;
 }
 
+.header-description-secondary {
+    border-left: 4px solid #336699;
+    padding-left: 1.5%;
+    font-size: 18px;
+}
+
 .header-image {
     max-width: 90%;
     border-radius: 25px;
@@ -338,7 +344,6 @@ p {
 .navbar-nav .nav-link:hover {
     background-color: white;
     color: #0083c5;
-    font-weight: bold;
 }
 
 .active {

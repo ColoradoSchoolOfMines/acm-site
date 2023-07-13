@@ -1,8 +1,8 @@
 <% layout('layouts/base')%>
 
 <div class="content">
-    <h1 class="mt-5">Presentations</h1>
-    <p>Slides of all of our tech talks, workshops and related presentations can be found here!</p>
+    <h1 class="mt-5 acm-secondary">Presentations</h1>
+    <p style="font-size: 18px;">Slides of all of our tech talks, workshops and related presentations can be found here!</p>
 
     <% if (typeof user == 'object' && user && user.is_admin) { %>
         <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-presentation-modal">
