@@ -37,6 +37,7 @@ passport.use(new GoogleStrategy({
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
     await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
+    user = { email: profile.email };
     req.flash('success', 'Successfully logged in!');
     done(null, user);
   } else {
