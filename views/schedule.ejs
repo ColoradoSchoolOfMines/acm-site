@@ -16,7 +16,7 @@
                 <div class="schedule-meeting shadow">
                     <h3 class="acm-secondary"><%= meeting.title %>
                         <% if(meeting.rsvped) { %>
-                            <p>(RSVP'ed)</p>
+                            (RSVP'ed)
                         <% } else { %>
                             <a href="/rsvp?meeting=<%= meeting.id %>"><button class="btn btn-outline-primary rsvp">RSVP</button></a>
                         <% } %>
