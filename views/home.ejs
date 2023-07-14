@@ -116,13 +116,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="rsvp-<%= meeting.id %>-modal-label">RSVP <%= meeting.title %></h5>
+                    <h5 class="modal-title" id="rsvp-<%= meeting.id %>-modal-label">RSVP for <%= meeting.title %></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id" value="<%= meeting.id %>">
 
-                    <p><%= meeting.description %></p>
+                    <p><strong>Description</strong>: <%= meeting.description %></p>
                     <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                     <p class="mb-3"><strong>Location</strong>: <%= meeting.location %></p>
 
