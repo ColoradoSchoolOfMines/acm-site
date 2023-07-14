@@ -297,7 +297,28 @@ p {
 }
 
 /* Modals */
+
+.modal-content {
+    border-radius: 32px;
+}
+
+.modal-title {
+    color: #336699;
+}
+
+.modal-header {
+    padding-right: 24px;
+    padding-left: 24px;
+}
+
+.modal-body {
+    padding-right: 24px;
+    padding-left: 24px;
+}
+
 .modal-footer {
+    padding-right: 24px;
+    padding-left: 24px;
     justify-content: left;
 }
 
