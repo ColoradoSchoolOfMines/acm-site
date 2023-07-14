@@ -27,7 +27,7 @@
 					<% if(meetings[0].rsvped) { %>
 						(RSVP'ed)
 					<% } else { %>
-						<a href="/rsvp?meeting=<%= meetings[0].id %>"><button class="btn btn-outline-primary">I'm in!</button></a>
+						<button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meetings[0].id %>-modal">I'm in!</button>
 					<% } %>
 				<% } else { %>
 					<strong>No upcoming meetings right now, check back soon!</strong>
@@ -46,7 +46,6 @@
 	</div>
 </div>
 
-<!-- image stuff doesn't work if no images are in DB? -->
 <div class="container homepage">
 	<div class="row">
 		<div class="col me-5">
@@ -61,19 +60,20 @@
 			<div class="highlight">
 				<% if(meetings.length > 0) { %>
 					<% for(let meeting of meetings) { %>
-					<div class="meeting">
-						<p class="meeting-title"><%= meeting.title %>
-							<% if(meeting.rsvped) { %>
-								(RSVP'ed)
-							<% } else { %>
-								<a href="/rsvp?meeting=<%= meeting.id %>"><button class="btn btn-outline-primary rsvp">RSVP</button></a>
-							<% } %>
-						</p>
+						<div class="meeting">
+							<p class="meeting-title">
+								<%= meeting.title %>
+								<% if(meeting.rsvped) { %>
+									<span class="meeting-rsvped">(RSVP'ed)</span>
+								<% } else { %>
+									<button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meeting.id %>-modal">RSVP</button>
+								<% } %>
+							</p>
 
-						<p class="meeting-info"><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
-							in <strong><%= meeting.location %></strong></p>
-						<p class="meeting-description"><%= meeting.description %></p>
-					</div>
+							<p class="meeting-info"><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
+								in <strong><%= meeting.location %></strong></p>
+							<p class="meeting-description"><%= meeting.description %></p>
+						</div>
 					<% } %>
 				<% } else { %> 
 					<div class="meeting">
@@ -110,5 +110,46 @@
 		</div>
 	</div>
 </div>
+
+<% for (let meeting of meetings) { %>
+    <div class="modal fade" id="rsvp-<%= meeting.id %>-modal" tabindex="-1" aria-labelledby="rsvp-<%= meeting.id %>-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rsvp-<%= meeting.id %>-modal-label">RSVP <%= meeting.title %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="<%= meeting.id %>">
+
+                    <p><%= meeting.description %></p>
+                    <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                    <p class="mb-3"><strong>Location</strong>: <%= meeting.location %></p>
+
+                    <% if (!user) { %>
+                        <div class="mb-3">
+                            <label class="form-label" for="rsvp-<%= meeting.id %>-name">Name</label>
+                            <input id="rsvp-<%= meeting.id %>-title" class="form-control" name="title" type="text" required placeholder="First Last" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
+                            <input id="rsvp-<%= meeting.id %>-description" class="form-control" name="description" type="text" required placeholder="example@mines.edu" />
+                        </div>  
+                    <% } %>
+
+                    <div>
+                        <label class="form-label" for="rsvp-<%= meeting.id %>-feedback">Feedback (Optional)</label>
+                        <textarea id="rsvp-<%= meeting.id %>-feedback" class="form-control" name="feedback" rows="3" cols="60"></textarea>
+                    </div>              
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">RSVP</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>     
+            </div>
+        </div>   
+    </div>
+<% } %>
 
 <script src="/scripts/date.js"></script>

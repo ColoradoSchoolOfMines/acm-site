@@ -246,6 +246,11 @@ p {
     margin: 0;
 }
 
+.meeting-rsvped {
+    color: lightslategray;
+    font-weight: normal;
+}
+
 .meeting-info {
     margin: 0;
 }
