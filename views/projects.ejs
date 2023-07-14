@@ -9,57 +9,6 @@
         <button type="button" class="d-inline-block btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#new-project-modal">
             New
         </button>
-
-        <div class="modal fade" id="new-project-modal" tabindex="-1" aria-labelledby="new-project-modal-label" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="new-project-modal-label">New Project</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form class="project-form" data-project-authors-id="new-project-authors" method="POST" action="/projects" enctype="multipart/form-data" >
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label" for="new-project-title">Title</label>
-                                <input id="new-project-title" class="form-control" name="title" type="text" required placeholder="A Cool Project" />
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label" for="new-project-description">Description</label>
-                                <input id="new-project-description" class="form-control" name="description" type="text" required placeholder="A meaningful description..." />
-                            </div>
-         
-                            <div class="mb-3">
-                                <label class="form-label" for="new-project-repository">Repository Link</label>
-                                <input id="new-project-repository" class="form-control" name="repository" type="url" required placeholder="https://github.com/Example/CoolProject" />
-                            </div>
-         
-                            <div class="mb-3">
-                                <label class="form-label" for="new-project-website">Website Link (Optional)</label>
-                                <input id="new-project-website" class="form-control" name="website" type="url" placeholder="https://example.com" />
-                            </div>
-
-                            <div id="new-project-authors" data-project-authors-value="<%= JSON.stringify(['']) %>"></div>
-
-                            <div class="form-check mb-3">
-                                <label class="form-check-label" for="new-project-archived">Archived</label>
-                                <input id="new-project-archived" class="form-check-input" name="archived" type="checkbox" />
-                            </div>
-         
-                            <div>
-                                <label class="form-label" for="new-project-image">Image</label>
-                                <input id="new-project-image" class="form-control" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
-                                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                            <button type="submit" class="btn btn-success">Add</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     <% } %>
 
     <div class="projects-scroll mt-3 mb-5">
@@ -115,92 +64,146 @@
                                     </button>
                                 </div>
                             </div>
-                            
-                            <div class="modal fade" id="delete-project-<%= project.id %>-modal" tabindex="-1" aria-labelledby="delete-project-<%= project.id %>-modal-label" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="delete-project-<%= project.id %>-modal-label">Delete Project</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <form method="POST" action="/projects/delete">
-                                            <div class="modal-body">
-                                                <input type="hidden" name="id" value="<%= project.id %>">
-                                                <p>Are you sure you want to delete the <strong><%= project.title %></strong> project?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-danger">Yes</button>
-                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade" id="edit-project-<%= project.id %>-modal" tabindex="-1" aria-labelledby="edit-project-<%= project.id %>-modal-label" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="edit-project-<%= project.id %>-modal-label">Edit Project</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <form class="project-form" data-project-authors-id="edit-project-<%= project.id %>-authors" method="POST" action="/projects/edit" enctype="multipart/form-data" >
-                                            <div class="modal-body">
-                                                <input type="hidden" name="id" value="<%= project.id %>">
-
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="edit-project-<%= project.id %>-title">Title</label>
-                                                    <input id="edit-project-<%= project.id %>-title" class="form-control" name="title" type="text" required value="<%= project.title %>" placeholder="A Cool Project" />
-                                                </div>
-                                                
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="edit-project-<%= project.id %>-description">Description</label>
-                                                    <input id="edit-project-<%= project.id %>-description" class="form-control" name="description" type="text" required value="<%= project.description %>" placeholder="A meaningful description..." />
-                                                </div>
-                             
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="edit-project-<%= project.id %>-repository">Repository Link</label>
-                                                    <input id="edit-project-<%= project.id %>-repository" class="form-control" name="repository" type="url" required value="<%= project.repository %>" placeholder="https://github.com/Example/CoolProject" />
-                                                </div>
-                             
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="edit-project-<%= project.id %>-website">Website Link (Optional)</label>
-                                                    <input id="edit-project-<%= project.id %>-website" class="form-control" name="website" type="url" value="<%= project.website %>" placeholder="https://example.com" />
-                                                </div>
-
-                                                <div id="edit-project-<%= project.id %>-authors" data-project-authors-value="<%= JSON.stringify(project.authors.map((a) => a.email)) %>"></div>
-
-                                                <div class="form-check mb-3">
-                                                    <label class="form-check-label" for="archived">Archived</label>
-                                                    <% if (project.archived) { %>
-                                                        <input id="archived" name="archived" class="form-check-input" type="checkbox" checked>
-                                                    <% } else { %>
-                                                        <input id="archived" name="archived" class="form-check-input" type="checkbox">
-                                                    <% } %>
-                                                </div>
-                             
-                                                <div>
-                                                    <label class="form-label" for="edit-project-<%= project.id %>-image">Image</label>
-                                                    <input id="edit-project-<%= project.id %>-image" name="image" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
-                                                    <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                                                <button type="submit" class="btn btn-success">Save</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>      
-                            </div>
                         <% } %>
                     </div>
-
-
                 </div>
             </div>
         <% } %> 
     </div>
 </div>
+
+<% if (typeof user === 'object' && user && user.is_admin) { %>
+    <% for (let project of projects) { %>
+        <div class="modal fade" id="new-project-modal" tabindex="-1" aria-labelledby="new-project-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="new-project-modal-label">New Project</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="project-form" data-project-authors-id="new-project-authors" method="POST" action="/projects" enctype="multipart/form-data" >
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-title">Title</label>
+                                <input id="new-project-title" class="form-control" name="title" type="text" required placeholder="A Cool Project" />
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-description">Description</label>
+                                <input id="new-project-description" class="form-control" name="description" type="text" required placeholder="A meaningful description..." />
+                            </div>
+         
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-repository">Repository Link</label>
+                                <input id="new-project-repository" class="form-control" name="repository" type="url" required placeholder="https://github.com/Example/CoolProject" />
+                            </div>
+         
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-website">Website Link (Optional)</label>
+                                <input id="new-project-website" class="form-control" name="website" type="url" placeholder="https://example.com" />
+                            </div>
+
+                            <div id="new-project-authors" data-project-authors-value="<%= JSON.stringify(['']) %>"></div>
+
+                            <div class="form-check mb-3">
+                                <label class="form-check-label" for="new-project-archived">Archived</label>
+                                <input id="new-project-archived" class="form-check-input" name="archived" type="checkbox" />
+                            </div>
+         
+                            <div>
+                                <label class="form-label" for="new-project-image">Image</label>
+                                <input id="new-project-image" class="form-control" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
+                                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="modal fade" id="delete-project-<%= project.id %>-modal" tabindex="-1" aria-labelledby="delete-project-<%= project.id %>-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="delete-project-<%= project.id %>-modal-label">Delete Project</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="/projects/delete">
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="<%= project.id %>">
+                            <p>Are you sure you want to delete the <strong><%= project.title %></strong> project?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="edit-project-<%= project.id %>-modal" tabindex="-1" aria-labelledby="edit-project-<%= project.id %>-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-project-<%= project.id %>-modal-label">Edit Project</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="project-form" data-project-authors-id="edit-project-<%= project.id %>-authors" method="POST" action="/projects/edit" enctype="multipart/form-data" >
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="<%= project.id %>">
+
+                            <div class="mb-3">
+                                <label class="form-label" for="edit-project-<%= project.id %>-title">Title</label>
+                                <input id="edit-project-<%= project.id %>-title" class="form-control" name="title" type="text" required value="<%= project.title %>" placeholder="A Cool Project" />
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label" for="edit-project-<%= project.id %>-description">Description</label>
+                                <input id="edit-project-<%= project.id %>-description" class="form-control" name="description" type="text" required value="<%= project.description %>" placeholder="A meaningful description..." />
+                            </div>
+         
+                            <div class="mb-3">
+                                <label class="form-label" for="edit-project-<%= project.id %>-repository">Repository Link</label>
+                                <input id="edit-project-<%= project.id %>-repository" class="form-control" name="repository" type="url" required value="<%= project.repository %>" placeholder="https://github.com/Example/CoolProject" />
+                            </div>
+         
+                            <div class="mb-3">
+                                <label class="form-label" for="edit-project-<%= project.id %>-website">Website Link (Optional)</label>
+                                <input id="edit-project-<%= project.id %>-website" class="form-control" name="website" type="url" value="<%= project.website %>" placeholder="https://example.com" />
+                            </div>
+
+                            <div id="edit-project-<%= project.id %>-authors" data-project-authors-value="<%= JSON.stringify(project.authors.map((a) => a.email)) %>"></div>
+
+                            <div class="form-check mb-3">
+                                <label class="form-check-label" for="archived">Archived</label>
+                                <% if (project.archived) { %>
+                                    <input id="archived" name="archived" class="form-check-input" type="checkbox" checked>
+                                <% } else { %>
+                                    <input id="archived" name="archived" class="form-check-input" type="checkbox">
+                                <% } %>
+                            </div>
+         
+                            <div>
+                                <label class="form-label" for="edit-project-<%= project.id %>-image">Image</label>
+                                <input id="edit-project-<%= project.id %>-image" name="image" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
+                                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>      
+        </div>
+    <% } %>
+<% } %>
 
 <script src="/scripts/projects.js"></script>
