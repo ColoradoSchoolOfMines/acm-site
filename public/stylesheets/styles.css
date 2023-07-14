@@ -313,6 +313,10 @@ p {
     padding-bottom: 10px;
 }
 
+.btn {
+    border-radius: 32px;
+}
+
 /* Buttons */
 .btn-outline-primary:hover {
     background-color: transparent;
