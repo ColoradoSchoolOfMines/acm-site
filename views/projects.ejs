@@ -19,26 +19,38 @@
                     </div>
                     <form class="project-form" data-project-authors-id="new-project-authors" method="POST" action="/projects" enctype="multipart/form-data" >
                         <div class="modal-body">
-                            <label class="d-block py-1" for="new-project-title">Title</label>
-                            <input id="new-project-title" name="title" type="text" required placeholder="A Cool Project" />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-title">Title</label>
+                                <input id="new-project-title" class="form-control" name="title" type="text" required placeholder="A Cool Project" />
+                            </div>
                             
-                            <label class="d-block py-1" for="new-project-description">Description</label>
-                            <input id="new-project-description" name="description" type="text" required placeholder="A meaningful description..." />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-description">Description</label>
+                                <input id="new-project-description" class="form-control" name="description" type="text" required placeholder="A meaningful description..." />
+                            </div>
          
-                            <label class="d-block py-1" for="new-project-repository">Repository Link</label>
-                            <input id="new-project-repository" name="repository" type="url" required placeholder="https://github.com/Example/CoolProject" />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-repository">Repository Link</label>
+                                <input id="new-project-repository" class="form-control" name="repository" type="url" required placeholder="https://github.com/Example/CoolProject" />
+                            </div>
          
-                            <label class="d-block py-1" for="new-project-website">Website Link (Optional)</label>
-                            <input id="new-project-website" name="website" type="url" placeholder="https://example.com" />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-project-website">Website Link (Optional)</label>
+                                <input id="new-project-website" class="form-control" name="website" type="url" placeholder="https://example.com" />
+                            </div>
 
                             <div id="new-project-authors" data-project-authors-value="<%= JSON.stringify(['']) %>"></div>
 
-                            <label class="d-block py-1" for="new-project-archived">Archived</label>
-                            <input id="new-project-archived" name="archived" type="checkbox" />
+                            <div class="form-check mb-3">
+                                <label class="form-check-label" for="new-project-archived">Archived</label>
+                                <input id="new-project-archived" class="form-check-input" name="archived" type="checkbox" />
+                            </div>
          
-                            <label class="d-block py-1" for="new-project-image">Image</label>
-                            <input id="new-project-image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
-                            <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                            <div>
+                                <label class="form-label" for="new-project-image">Image</label>
+                                <input id="new-project-image" class="form-control" name="image" type="file" accept="image/png,image/jpg,image/jpeg" required />
+                                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
@@ -113,8 +125,8 @@
                                         </div>
                                         <form method="POST" action="/projects/delete">
                                             <div class="modal-body">
-                                                <p>Are you sure you want to delete the <strong><%= project.title %></strong> project?</p>
                                                 <input type="hidden" name="id" value="<%= project.id %>">
+                                                <p>Are you sure you want to delete the <strong><%= project.title %></strong> project?</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-danger">Yes</button>
@@ -136,30 +148,42 @@
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" value="<%= project.id %>">
 
-                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-title">Title</label>
-                                                <input id="edit-project-<%= project.id %>-title" name="title" type="text" required value="<%= project.title %>" placeholder="A Cool Project" />
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="edit-project-<%= project.id %>-title">Title</label>
+                                                    <input id="edit-project-<%= project.id %>-title" class="form-control" name="title" type="text" required value="<%= project.title %>" placeholder="A Cool Project" />
+                                                </div>
                                                 
-                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-description">Description</label>
-                                                <input id="edit-project-<%= project.id %>-description" name="description" type="text" required value="<%= project.description %>" placeholder="A meaningful description..." />
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="edit-project-<%= project.id %>-description">Description</label>
+                                                    <input id="edit-project-<%= project.id %>-description" class="form-control" name="description" type="text" required value="<%= project.description %>" placeholder="A meaningful description..." />
+                                                </div>
                              
-                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-repository">Repository Link</label>
-                                                <input id="edit-project-<%= project.id %>-repository" name="repository" type="url" required value="<%= project.repository %>" placeholder="https://github.com/Example/CoolProject" />
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="edit-project-<%= project.id %>-repository">Repository Link</label>
+                                                    <input id="edit-project-<%= project.id %>-repository" class="form-control" name="repository" type="url" required value="<%= project.repository %>" placeholder="https://github.com/Example/CoolProject" />
+                                                </div>
                              
-                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-website">Website Link (Optional)</label>
-                                                <input id="edit-project-<%= project.id %>-website" name="website" type="url" value="<%= project.website %>" placeholder="https://example.com" />
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="edit-project-<%= project.id %>-website">Website Link (Optional)</label>
+                                                    <input id="edit-project-<%= project.id %>-website" class="form-control" name="website" type="url" value="<%= project.website %>" placeholder="https://example.com" />
+                                                </div>
 
                                                 <div id="edit-project-<%= project.id %>-authors" data-project-authors-value="<%= JSON.stringify(project.authors.map((a) => a.email)) %>"></div>
 
-                                                <label class="d-block py-1" for="archived">Archived</label>
-                                                <% if (project.archived) { %>
-                                                    <input id="archived" name="archived" type="checkbox" checked>
-                                                <% } else { %>
-                                                    <input id="archived" name="archived" type="checkbox">
-                                                <% } %>
+                                                <div class="form-check mb-3">
+                                                    <label class="form-check-label" for="archived">Archived</label>
+                                                    <% if (project.archived) { %>
+                                                        <input id="archived" name="archived" class="form-check-input" type="checkbox" checked>
+                                                    <% } else { %>
+                                                        <input id="archived" name="archived" class="form-check-input" type="checkbox">
+                                                    <% } %>
+                                                </div>
                              
-                                                <label class="d-block py-1" for="edit-project-<%= project.id %>-image">Image</label>
-                                                <input id="edit-project-<%= project.id %>-image" name="image" type="file" accept="image/png,image/jpg,image/jpeg" />
-                                                <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                                                <div>
+                                                    <label class="form-label" for="edit-project-<%= project.id %>-image">Image</label>
+                                                    <input id="edit-project-<%= project.id %>-image" name="image" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
+                                                    <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>

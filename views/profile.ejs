@@ -36,9 +36,8 @@
                             <h5 class="modal-title" id="about-modal-label">About</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-edit-about">
-                                <textarea rows="5" cols="60" name="about-text"><%= user.about %></textarea>
-                                <br/>
+                            <div class="modal-body">
+                                <textarea rows="5" cols="60" class="form-control" name="about-text"><%= user.about %></textarea>
                             </div>
                             <div class="modal-footer pfp-footer">
                                 <!-- TODO: Add 'POST' form to update 'About' section in the backend -->
@@ -75,33 +74,6 @@
                     <img class="profile-picture" src="static/images/default_user.png" />
                 <% } %>
 
-                <!-- Change Avatar Modal -->
-                <div class="modal fade" id="pfp-modal" tabindex="-1" aria-labelledby="pfp-modal-label" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                            <h5 class="modal-title" id="pfp-modal-label">Change Avatar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-img">
-                                <% if (user.avatar_id) { %>
-                                    <img class="profile-picture" src="uploads/<%= user.avatar_id %>" />
-                                <% } else { %>
-                                    <img class="profile-picture" src="static/images/default_user.png" />
-                                <% } %>
-                            </div>
-                            <div class="modal-footer pfp-footer">
-                                <form method="POST" action="/profile" enctype="multipart/form-data">
-                                    <input class="d-inline-block mb-1 pfp-input" type="file" name="avatar" accept="image/png,image/jpg,image/jpeg" required />
-                                    <br>
-                                    <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-                                    <br>
-                                    <button class="btn d-inline-block btn-primary mt-1" accept="image/png,image/jpg,image/jpeg">Save Changes</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="profile-btns">
@@ -110,6 +82,34 @@
 
             <!-- Change Avatar Modal Trigger Button -->
             <button class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#pfp-modal">Change Avatar</button>
+
+            <!-- Change Avatar Modal -->
+            <div class="modal fade" id="pfp-modal" tabindex="-1" aria-labelledby="pfp-modal-label" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="pfp-modal-label">Change Avatar</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="/profile" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <% if (user.avatar_id) { %>
+                                    <img class="profile-picture" src="uploads/<%= user.avatar_id %>" />
+                                <% } else { %>
+                                    <img class="profile-picture" src="static/images/default_user.png" />
+                                <% } %>                             
+                                <div>
+                                    <input name="avatar" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
+                                    <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

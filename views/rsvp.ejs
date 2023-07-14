@@ -11,27 +11,21 @@
             <p><%= meeting.description %></p>
             <p><strong>Date</strong>: <%= meeting.date %></p>
             <p><strong>Location</strong>: <%= meeting.location %></p>
-            <p><%= meeting.duration %></p>
+            <p class="mb-3"><%= meeting.duration %></p>
             <% if(typeof user == 'object' && user) { %>
-                <% if(rsvped) { %>
-                    <p>You have already RSVP'ed for this event!</p>
-                <% } else { %>
-                    <p>You're logged in already, so we'll submit your RSVP as <strong><%= user.name %></strong>.</p>
-                    <form method="POST" action="/rsvp">
-                        <input type="hidden" name="meetingId" value="<%= meeting.id %>">
-                        <button class="btn d-inline-block btn-primary">Submit</button>
-                    </form>
-                <% } %>
-            <% } else { %>
                 <form method="POST" action="/rsvp">
-                    <p>Name</p>
-                    <input class="d-inline-block" type="text" name="name" placeholder="Your name.." />
-                    <p>Email</p>
-                    <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
-                    <br>
                     <input type="hidden" name="meetingId" value="<%= meeting.id %>">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input id="name" class="form-control" type="text" name="name" placeholder="Your name.." />
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Email</p>
+                        <input class="form-control" type="email" name="email" placeholder="me@mines.edu" />
+                    </div>
                     <button class="btn d-inline-block btn-primary">Submit</button>
                 </form>
+            <% } else { %>
             <% } %>
         <% } %>
     </div>

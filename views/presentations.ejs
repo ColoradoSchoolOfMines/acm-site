@@ -18,17 +18,25 @@
                     </div>
                     <form method="POST" action="/presentations">
                         <div class="modal-body">
-                            <label class="d-block py-1" for="new-presentation-title">Title</label>
-                            <input id="new-presentation-title" name="title" type="text" required placeholder="A Cool Presentation" />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-presentation-title">Title</label>
+                                <input id="new-presentation-title" class="form-control" name="title" type="text" required placeholder="A Cool Presentation" />
+                            </div>
                             
-                            <label class="d-block py-1" for="new-presentation-description">Description</label>
-                            <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-presentation-description">Description</label>
+                                <input id="new-presentation-description" class="form-control" name="description" type="text" required placeholder="A compelling description..." />
+                            </div>
 
-                            <label class="d-block py-1" for="new-presentation-date">Date</label>
-                            <input id="new-presentation-date" name="date" type="date" required />
+                            <div class="mb-3">
+                                <label class="form-label" for="new-presentation-date">Date</label>
+                                <input id="new-presentation-date" class="form-control" name="date" type="date" required />
+                            </div>
          
-                            <label class="d-block py-1" for="new-presentation-url">Slides Link</label>
-                            <input id="new-presentation-url" name="url" type="url" required placeholder="https://drive.google.com/..." />
+                            <div>
+                                <label class="form-label" for="new-presentation-url">Slides Link</label>
+                                <input id="new-presentation-url" class="form-control" name="url" type="url" required placeholder="https://drive.google.com/..." />
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
@@ -95,17 +103,25 @@
                                     <div class="modal-body">
                                         <input type="hidden" name="id" value="<%= presentation.id %>">
 
-                                        <label class="d-block py-1" for="new-presentation-title">Title</label>
-                                        <input id="new-presentation-title" name="title" type="text" required placeholder="A Cool Presentation" value="<%= presentation.title %>" />
+                                        <div class="mb-3">
+                                            <label class="form-label" for="new-presentation-title">Title</label>
+                                            <input id="new-presentation-title" class="form-control" name="title" type="text" required placeholder="A Cool Presentation" value="<%= presentation.title %>" />
+                                        </div>
                                         
-                                        <label class="d-block py-1" for="new-presentation-description">Description</label>
-                                        <input id="new-presentation-description" name="description" type="text" required placeholder="A compelling description..." value="<%= presentation.description %>" />
+                                        <div class="mb-3">
+                                            <label class="form-label" for="new-presentation-description">Description</label>
+                                            <input id="new-presentation-description" class="form-control" name="description" type="text" required placeholder="A compelling description..." value="<%= presentation.description %>" />
+                                        </div>
 
-                                        <label class="d-block py-1" for="new-presentation-date">Date</label>
-                                        <input id="new-presentation-date" name="date" type="date" required value="<%= presentation.date %>" />
-                     
-                                        <label class="d-block py-1" for="new-presentation-url">Slides Link</label>
-                                        <input id="new-presentation-url" name="url" type="url" required placeholder="https://drive.google.com/..." value="<%= presentation.url %>" />
+                                        <div class="mb-3">
+                                            <label class="form-label" for="new-presentation-date">Date</label>
+                                            <input id="new-presentation-date" class="form-control" name="date" type="date" required value="<%= presentation.date %>" />
+                                        </div>
+                         
+                                        <div>
+                                            <label class="form-label" for="new-presentation-url">Slides Link</label>
+                                            <input id="new-presentation-url" class="form-control" name="url" type="url" required placeholder="https://drive.google.com/..." value="<%= presentation.url %>" />
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>

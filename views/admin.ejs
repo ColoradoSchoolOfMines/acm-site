@@ -8,12 +8,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="/officers">
-                <div class="modal-body">
-                    <label class="d-block py-1" for="email">Email</label>
-                    <input id="email" name="email" type="text" required />
+                <div class="modal-body">                
+                    <div class="mb-3">                    
+                        <label class="form-label" for="add-officer-email">Email</label>
+                        <input id="add-officer-email" class="form-control" name="email" type="text" required />
+                    </div>
 
-                    <label class="d-block py-1" for="title">Title</label>
-                    <input id="title" name="title" type="text" required />
+                    <div class="mb-3">
+                        <label class="form-label" for="add-officer-title">Title</label>
+                        <input id="add-officer-title" class="form-control" name="title" type="text" required />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
@@ -32,16 +36,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="/officers/edit">
-                <div class="modal-body">
-                    <label class="d-block py-1" for="email">Email</label>
-                    <input id="email" name="email" type="text" required />
+                <div class="modal-body">                
+                    <div class="mb-3">                    
+                        <label class="form-label" for="edit-officer-email">Email</label>
+                        <input id="edit-officer-email" class="form-control" name="email" type="text" required />
+                    </div>
 
-                    <label class="d-block py-1" for="title">Title</label>
-                    <input id="title" name="title" type="text" required />
+                    <div class="mb-3">
+                        <label class="form-label" for="edit-officer-title">Title</label>
+                        <input id="edit-officer-title" class="form-control" name="title" type="text" required />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
@@ -49,7 +57,7 @@
 </div>
 
 <div class="content">
-    <h1>Admin</h1>
+    <h1 class="mt-5 acm-secondary">Admin</h1>
     <div class="large-card">
         <div class="row">
             <div class="col meeting-scroll">
@@ -68,21 +76,35 @@
                 <% } %>
             </div>
             <div class="col-sm-2">
-                <h2>Add Meeting</h2>
+                <h2 class="mb-3">Add Meeting</h2>
                 <form method="POST" action="/meetings">
-                    <input class="d-inline-block" type="text" name="title" placeholder="Title.." />
-                    <br>
-                    <input class="d-inline-block" type="text" name="description" placeholder="Description.." />
-                    <br>
-                    <input class="d-inline-block" type="datetime-local" name="date">
-                    <br>
-                    <input class="d-inline-block" type="number" name="duration" placeholder="Duration (hours)" />
-                    <br>
-                    <input class="d-inline-block" type="text" name="location" placeholder="Location.." />
-                    <br>
-                    <input class="d-inline-block" type="text" name="type" placeholder="Meeting type.." />
-                    <br>
-                    <button class="btn d-inline-block btn-primary">Submit</button>
+                    <div class="mb-3">
+                        <input class="form-control" type="text" name="title" placeholder="Title..." />
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" type="text" name="description" placeholder="Description.." />
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" type="datetime-local" name="date">
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" type="number" name="duration" placeholder="Duration (hours)" />
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" type="text" name="location" placeholder="Location.." />
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-control" type="text" name="type" placeholder="Meeting type.." />
+                    </div>
+
+                    <div>
+                        <button class="btn d-inline-block btn-primary">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -107,7 +129,7 @@
         <h2>Officers</h2>
         <% for(let officer of officers) { %>
             <p><%= officer.name %> | <%= officer.title %></p>
-            <p><%= officer.email %></p>
+            <p class="mb-2"><%= officer.email %></p>
 
             <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editOfficerModal">Edit</button>
             <form class="d-inline-block" method="POST" action="/officers/remove">
@@ -121,14 +143,16 @@
 
     <div class="large-card">
         <h2>Images</h2>
-        <p>Upload new image to be displayed randomly on the front page of the site.</p>
+        <p class="mb-3">Upload new image to be displayed randomly on the front page of the site.</p>
         <form method="POST" action="/admin" enctype="multipart/form-data">
-            <input class="d-inline-block" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
-            <p>Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-            <br>
-            <input class="d-inline-block" type="text" name="caption" placeholder="Caption.." required />
-            <br>
-            <button class="btn d-inline-block btn-primary">Submit</button>
+            <div class="mb-3">
+                <input class="form-control" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
+                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+            </div>
+            <div class="mb-3">
+                <input class="form-control" type="text" name="caption" placeholder="Caption.." required />
+            </div>
+            <button class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
