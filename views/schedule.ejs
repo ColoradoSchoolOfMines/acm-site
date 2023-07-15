@@ -54,34 +54,36 @@
                     <h5 class="modal-title" id="rsvp-<%= meeting.id %>-modal-label">RSVP for <%= meeting.title %></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <input type="hidden" name="id" value="<%= meeting.id %>">
+                <form action="/rsvp" method="POST">             
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="<%= meeting.id %>">
 
-                    <p><strong>Description</strong>: <%= meeting.description %></p>
-                    <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
-                    <p class="mb-3"><strong>Location</strong>: <%= meeting.location %></p>
+                        <p><strong>Description</strong>: <%= meeting.description %></p>
+                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                        <p class="mb-3"><strong>Location</strong>: <%= meeting.location %></p>
 
-                    <% if (!user) { %>
-                        <div class="mb-3">
-                            <label class="form-label" for="rsvp-<%= meeting.id %>-name">Name</label>
-                            <input id="rsvp-<%= meeting.id %>-title" class="form-control" name="title" type="text" required placeholder="First Last" />
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
-                            <input id="rsvp-<%= meeting.id %>-description" class="form-control" name="description" type="text" required placeholder="example@mines.edu" />
-                        </div>  
-                    <% } %>
+                        <% if (!user) { %>
+                            <div class="mb-3">
+                                <label class="form-label" for="rsvp-<%= meeting.id %>-name">Name</label>
+                                <input id="rsvp-<%= meeting.id %>-name" class="form-control" name="name" type="text" required placeholder="First Last" />
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
+                                <input id="rsvp-<%= meeting.id %>-email" class="form-control" name="email" type="text" required placeholder="example@mines.edu" />
+                            </div>  
+                        <% } %>
 
-                    <div>
-                        <label class="form-label" for="rsvp-<%= meeting.id %>-feedback">Feedback (Optional)</label>
-                        <textarea id="rsvp-<%= meeting.id %>-feedback" class="form-control" name="feedback" rows="3" cols="60"></textarea>
-                    </div>              
-                </div>
-                <div class="modal-footer">
-                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">RSVP</button>
-                </div>     
+                        <div>
+                            <label class="form-label" for="rsvp-<%= meeting.id %>-feedback">Feedback (Optional)</label>
+                            <textarea id="rsvp-<%= meeting.id %>-feedback" class="form-control" name="feedback" rows="3" cols="60"></textarea>
+                        </div>              
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">RSVP</button>
+                    </div>   
+                </form>  
             </div>
         </div>   
     </div>
