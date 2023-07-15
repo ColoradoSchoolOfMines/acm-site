@@ -52,7 +52,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (user, done) => {
   const resp = await db.query("SELECT * FROM users WHERE email = $1", [user]);
-  if (resp.rows) {
+  if (resp.rows.length > 0) {
     let info = resp.rows[0];
     info.is_admin = info.title.length > 0;
     done(null, info);

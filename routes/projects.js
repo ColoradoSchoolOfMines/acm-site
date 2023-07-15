@@ -16,7 +16,7 @@ const parseAuthors = async (req, res) => {
       req.flash('error', 'Project authors can only have @mines.edu addresses!');
       return false;
     }
-    let resp = await db.query("SELECT FROM users WHERE email = $1", [author]);
+    const resp = await db.query("SELECT FROM users WHERE email = $1", [author]);
     if (resp.rows.length == 0) {
       req.flash('error', 'Project authors must have created an account prior!');
       return false;
@@ -36,18 +36,19 @@ const transformProjectRequest = async (req, res, next) => {
       fs.unlinkSync("uploads/" + req.file.filename);
     }
     res.redirect('/projects');
-    return;
   }
-  // Website field is optional and will be undefined if not specified,
-  // transform into an empty string is that's the case.
-  if (!req.body.website) {
-    req.body.website = ""
+  else {
+    // Website field is optional and will be undefined if not specified,
+    // transform into an empty string is that's the case.
+    if (!req.body.website) {
+      req.body.website = ""
+    }
+  
+    // Archived field will either be "on" if selected or undefined if not,
+    // convert it to a boolean by those rules.
+    req.body.archived = (req.body.archived !== undefined);
+    next();
   }
-
-  // Archived field will either be "on" if selected or undefined if not,
-  // convert it to a boolean by those rules.
-  req.body.archived = (req.body.archived !== undefined);
-  next();
 }
 
 const clearProjectImage = async (req) => {
