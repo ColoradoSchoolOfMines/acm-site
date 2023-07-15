@@ -34,7 +34,7 @@ router.post('/rsvp', async (req, res) => {
   }
 
   // If email or name is still null, something went very wrong
-  if (email === undefined || name === undefined) {
+  if (!email || !name) {
     req.flash('error', 'Something went wrong when trying to track your RSVP! Please contact a site administrator.');
     res.redirect('/');
   }
@@ -71,17 +71,20 @@ router.get('/attend', async (req, res) => {
 router.post('/attend', async (req, res) => {
   // use logged in credentials if possible
   let email;
+  let name;
 
   if (req.body.name && req.body.email) {
     // user is submitting with form data
     email = req.body.email;
+    name = req.body.name;
   }
   else {
     email = req.user.email;
+    name = req.user.name;
   }
 
   // If email or name is still null, something went very wrong
-  if (!email) {
+  if (!email || !name) {
     req.flash('error', 'Something went wrong when trying to track your form attendance! Please contact a site administrator.');
     res.redirect('/');
   }
@@ -95,7 +98,7 @@ router.post('/attend', async (req, res) => {
     if (req.body.feedback) {
       await db.query("INSERT INTO feedback VALUES ($1, $2)", [email, req.body.feedback]);
     }
-    await db.query("INSERT INTO attendance VALUES ($1, $2) ON CONFLICT DO NOTHING", [req.body.id, email]);
+    await db.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", [req.body.id, email, name]);
     req.flash('success', 'Your attendance has been logged! Thanks for coming.')
     res.redirect('/');
   }

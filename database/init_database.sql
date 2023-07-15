@@ -39,14 +39,15 @@ CREATE TABLE IF NOT EXISTS feedback (
 
 CREATE TABLE IF NOT EXISTS attendance (
     "meeting" TEXT REFERENCES meetings(id),
-    "email"   TEXT REFERENCES users(email),
+    "email"   TEXT NOT NULL,
+    "name"    TEXT NOT NULL,
     PRIMARY KEY ("meeting", "email")
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
     "meeting" TEXT REFERENCES meetings(id),
-    "name"    TEXT NOT NULL,
     "email"   TEXT NOT NULL,
+    "name"    TEXT NOT NULL,
     PRIMARY KEY ("meeting", "email")
 );
 
