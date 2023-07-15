@@ -54,13 +54,12 @@ router.post('/rsvp', async (req, res) => {
 
 router.get('/attend', async (req, res) => {
   // Find active meeting if possible (2 hour buffer) TODO there's probably a better way to do this
-  const resp = await db.query("SELECT * FROM meetings WHERE date >= NOW() - INTERVAL '2 hours' and date <= NOW() + INTERVAL '2 hours'");
+  const resp = await db.query("SELECT * FROM meetings LIMIT 1");
   if (resp.rows.length > 0) {
-    const rsvp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [req.user.email, resp.rows[0].id]);
     let rsvped = false;
-
-    if (rsvp.rows.length > 0) {
-      rsvped = true;
+    if (req.user) {
+      const rsvpResp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [req.user.email, resp.rows[0].id]);
+      rsvped = rsvpResp.rows.length > 0;
     }
     res.render('attend', { title: 'Attend', meeting: resp.rows[0], rsvped: rsvped });
   }
@@ -73,7 +72,7 @@ router.post('/attend', async (req, res) => {
   // use logged in credentials if possible
   let email;
 
-  if (req.body.email) {
+  if (req.body.name && req.body.email) {
     // user is submitting with form data
     email = req.body.email;
   }
@@ -82,22 +81,21 @@ router.post('/attend', async (req, res) => {
   }
 
   // If email or name is still null, something went very wrong
-  if (email === undefined) {
+  if (!email) {
     req.flash('error', 'Something went wrong when trying to track your form attendance! Please contact a site administrator.');
     res.redirect('/');
   }
 
   // Check if submitted already
-  const attendance = await db.query("SELECT 1 FROM attendance WHERE email = $1 AND meeting = $2", [email, req.body.meetingId]);
+  const attendance = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [email, req.body.id]);
   if (attendance.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
     res.redirect('/');
-  }
-  else {
+  } else {
     if (req.body.feedback) {
       await db.query("INSERT INTO feedback VALUES ($1, $2)", [email, req.body.feedback]);
     }
-    await db.query("INSERT INTO attendance VALUES ($1, $2) ON CONFLICT DO NOTHING", [req.body.meetingId, email]);
+    await db.query("INSERT INTO attendance VALUES ($1, $2) ON CONFLICT DO NOTHING", [req.body.id, email]);
     req.flash('success', 'Your attendance has been logged! Thanks for coming.')
     res.redirect('/');
   }

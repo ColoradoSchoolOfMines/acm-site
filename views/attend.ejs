@@ -8,34 +8,45 @@
         <p>If you believe this is an error, please <a href="https://github.com/ColoradoSchoolOfMines/acm-site/issues">submit an issue</a>.</p>
     <% } else { %>
         <h1><%= meeting.title %></h1>
-        <p>Please fill out the following form so we can log your attendance!</p>
         
         <% if(typeof user == 'object' && user) { %>
             <% if(rsvped) { %>
                 <p>You have already filled out an attendance form for this event!</p>
             <% } else { %>
-                <p>You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.</p>
+                <p class="mb-3">
+                    Please fill out the following form so we can log your attendance!
+                    <br>
+                    You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.
+                </p>
                 <form method="POST" action="/attend">
-                    <br>
-                    <p>Do you have any suggestions, feedback, or questions about the club?</p>
-                    <input class="d-inline-block" type="text" name="feedback" placeholder="Feedback.." />
-                    <br>
-                    <input type="hidden" name="meetingId" value="<%= meeting.id %>">
+                    <input type="hidden" name="id" value="<%= meeting.id %>">
+                    <div class="mb-3">                    
+                        <label class="form-label" for="attend-feedback">Do you have any suggestions, feedback, or questions about the club?</label>
+                        <textarea id="attend-feedback" class="form-control" name="feedback" rows="10" cols="60"></textarea>
+                    </div>
                     <button class="btn d-inline-block btn-primary">Submit</button>
                 </form>
             <% } %>
         <% } else { %>
+            <p class="mb-3">Please fill out the following form so we can log your attendance!</p>
             <form method="POST" action="/attend">
-                <p>Name</p>
-                <input class="d-inline-block" type="text" name="name" placeholder="Your name.." />
-                <br>
-                <p>Email</p>
-                <input class="d-inline-block" type="email" name="email" placeholder="me@mines.edu" />
-                <br>
-                <p>Do you have any suggestions, feedback, or questions about the club?</p>
-                <input class="d-inline-block" type="text" name="feedback" placeholder="Feedback.." />
-                <br>
-                <input type="hidden" name="meetingId" value="<%= meeting.id %>">
+                <input type="hidden" name="id" value="<%= meeting.id %>">
+
+                <div class="mb-3">                    
+                    <label class="form-label" for="attend-name">Name</label>
+                    <input id="attend-name" class="form-control" type="text" name="name" placeholder="Your name.." />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="attend-email">Email</label>
+                    <input id="attend-email" class="form-control" type="email" name="email" placeholder="me@mines.edu" />  
+                </div>
+
+                <div class="mb-3">                    
+                    <label class="form-label" for="attend-feedback">Do you have any suggestions, feedback, or questions about the club?</label>
+                    <textarea id="attend-feedback" class="form-control" name="feedback" rows="10" cols="60"></textarea>
+                </div>
+
                 <button class="btn d-inline-block btn-primary">Submit</button>
             </form>
         <% } %>
