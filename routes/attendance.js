@@ -54,14 +54,14 @@ router.post('/rsvp', async (req, res) => {
 
 router.get('/attend', async (req, res) => {
   // Find active meeting if possible (2 hour buffer) TODO there's probably a better way to do this
-  const resp = await db.query("SELECT * FROM meetings LIMIT 1");
-  if (resp.rows.length > 0) {
+  const meetingResp = await db.query("SELECT * FROM meetings WHERE date >= NOW() - INTERVAL '2 hours' and date <= NOW() + INTERVAL '2 hours'");
+  if (meetingResp.rows.length > 0) {
     let rsvped = false;
     if (req.user) {
       const rsvpResp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [req.user.email, resp.rows[0].id]);
       rsvped = rsvpResp.rows.length > 0;
     }
-    res.render('attend', { title: 'Attend', meeting: resp.rows[0], rsvped: rsvped });
+    res.render('attend', { title: 'Attend', meeting: meetingResp.rows[0], rsvped: rsvped });
   }
   else {
     res.render('attend', { title: 'Attend', meeting: false });
