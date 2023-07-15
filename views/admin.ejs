@@ -11,45 +11,17 @@
                 <div class="modal-body">                
                     <div class="mb-3">                    
                         <label class="form-label" for="add-officer-email">Email</label>
-                        <input id="add-officer-email" class="form-control" name="email" type="text" required />
+                        <input id="add-officer-email" class="form-control" name="email" type="text" required placeholder="me@mines.edu" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="add-officer-title">Title</label>
-                        <input id="add-officer-title" class="form-control" name="title" type="text" required />
+                        <input id="add-officer-title" class="form-control" name="title" type="text" required placeholder="Director of X.." />
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
                     <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="editOfficerModal" tabindex="-1" aria-labelledby="editOfficerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editOfficerModalLabel">Edit Officer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="POST" action="/officers/edit">
-                <div class="modal-body">                
-                    <div class="mb-3">                    
-                        <label class="form-label" for="edit-officer-email">Email</label>
-                        <input id="edit-officer-email" class="form-control" name="email" type="text" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="edit-officer-title">Title</label>
-                        <input id="edit-officer-title" class="form-control" name="title" type="text" required />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
@@ -132,6 +104,35 @@
             <p class="mb-2"><%= officer.email %></p>
 
             <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editOfficerModal">Edit</button>
+
+            <div class="modal fade" id="editOfficerModal" tabindex="-1" aria-labelledby="editOfficerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editOfficerModalLabel">Edit <%= officer.name %></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="/officers/edit">
+                            <div class="modal-body">                
+                                <div class="mb-3">                    
+                                    <label class="form-label" for="edit-officer-email">Email</label>
+                                    <input id="edit-officer-email" class="form-control" name="email" type="text" disabled value="<%= officer.email %>"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit-officer-title">Title</label>
+                                    <input id="edit-officer-title" class="form-control" name="title" type="text" required value="<%= officer.title %>"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <form class="d-inline-block" method="POST" action="/officers/remove">
                 <input type="hidden" name="email" value="<%= officer.email %>">
                 <button class="btn d-inline-block btn-outline-danger">Delete</button>
