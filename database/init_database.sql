@@ -44,9 +44,10 @@ CREATE TABLE IF NOT EXISTS attendance (
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
-    "meeting" TEXT PRIMARY KEY REFERENCES meetings(id),
+    "meeting" TEXT REFERENCES meetings(id),
     "name"    TEXT NOT NULL,
-    "email"   TEXT NOT NULL
+    "email"   TEXT NOT NULL,
+    PRIMARY KEY ("meeting", "email")
 );
 
 CREATE TABLE IF NOT EXISTS images (
