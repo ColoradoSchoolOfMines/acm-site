@@ -2,28 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 
-router.get('/rsvp', async (req, res) => {
-  if (req.query.meeting) {
-    // Find next meeting and show it to user
-    const resp = await db.query("SELECT * FROM meetings WHERE id = $1", [req.query.meeting]);
-    if (resp.rows.length > 0) {
-      const rsvp = await db.query("SELECT * FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.email, req.query.meeting]);
-      let rsvped = false;
-
-      if (rsvp.rows.length > 0) {
-        rsvped = true;
-      }
-      res.render('rsvp', { title: 'RSVP', meeting: resp.rows[0], rsvped: rsvped });
-    }
-    else {
-      res.render('rsvp', { title: 'RSVP', meeting: false });
-    }
-  }
-  else {
-    res.render('rsvp', { title: 'RSVP', meeting: false });
-  }
-});
-
 router.post('/rsvp', async (req, res) => {
   // use logged in credentials if possible
   let email;
@@ -46,13 +24,13 @@ router.post('/rsvp', async (req, res) => {
   }
 
   // Check if user has RSVP'ed already
-  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1 AND meeting = $2", [email, req.body.meetingId]);
+  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1 AND meeting = $2", [email, req.body.id]);
   if (rsvp.rows.length > 0) {
     req.flash('error', 'You have already RSVP\'ed for this event!');
     res.redirect('/');
   }
   else {
-    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.meetingId, name, email]);
+    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.id, name, email]);
     req.flash('success', 'Successfully RSVP\'ed! Thanks for coming.');
     res.redirect('/');
   }
