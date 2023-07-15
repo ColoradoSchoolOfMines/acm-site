@@ -2,6 +2,22 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
 
+router.get('/rsvp', async (req, res) => {
+  // Find next meeting and show it to user
+  const meetingResp = await db.query("SELECT * FROM meetings ORDER BY date DESC LIMIT 1");
+  if (meetingResp.rows.length > 0) {
+    let rsvped = false;
+    if (req.user) {
+      let rsvpResp = await db.query("SELECT * FROM rsvps WHERE email = $1", [req.user.email]);
+      rsvped = rsvpResp.rows.length > 0;
+    }
+    res.render('rsvp', { title: 'RSVP', meeting: meetingResp.rows[0], rsvped: rsvped });
+  }
+  else {
+    res.render('rsvp', { title: 'RSVP', meeting: false });
+  }
+});
+
 router.post('/rsvp', async (req, res) => {
   // use logged in credentials if possible
   let email;
