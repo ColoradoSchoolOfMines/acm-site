@@ -9,7 +9,7 @@ const configureForm = (form) => {
 	// Project author input is multi-valued, hence we need to build a custom widget that allows
 	// an arbitrary amount of inputs to be added/removed as needed.
 	authors.innerHTML =
-		`<div id="${authors.id}-control" class="row row-cols-auto align-items-start mx-0 mt-1 mb-2 gx-1 gy-1">
+		`<div id="${authors.id}-control" class="row row-cols-auto align-items-start mx-0 mb-3 gx-1 gy-1">
             <div class="col">
                 <button id="${authors.id}-add" type="button" class="btn btn-outline-primary">
                     Add Author
@@ -36,9 +36,9 @@ const addAuthor = (authors, value) => {
 	// It's easiest to add new author input "before" the controls.
 	control.insertAdjacentHTML(
 		'beforebegin',
-		`<div id="author-input-${n}" class="author-input">
-            <label class="d-block py-1" for="${authors.id}-${n}">Author ${n + 1}</label>
-            <input id="${authors.id}-${n}" name="author${n}" type="email" value="${value}" placeholder="example@mines.edu" required />
+		`<div id="author-input-${n}" class="author-input mb-3">
+            <label class="form-label" for="${authors.id}-${n}">Author ${n + 1}</label>
+            <input id="${authors.id}-${n}" class="form-control" name="author${n}" type="email" value="${value}" placeholder="example@mines.edu" required />
         </div>`
 	);
 }

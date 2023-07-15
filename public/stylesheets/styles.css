@@ -112,7 +112,7 @@ p {
 
 .profile-picture {
     border-radius: 10%;
-    width: 90%;
+    width: 100%;
     margin-bottom: 20px;
     float: right;
 }
@@ -246,6 +246,11 @@ p {
     margin: 0;
 }
 
+.meeting-rsvped {
+    color: lightslategray;
+    font-weight: normal;
+}
+
 .meeting-info {
     margin: 0;
 }
@@ -297,8 +302,28 @@ p {
 }
 
 /* Modals */
+
+.modal-content {
+    border-radius: 32px;
+}
+
+.modal-title {
+    color: #336699;
+}
+
+.modal-header {
+    padding-right: 24px;
+    padding-left: 24px;
+}
+
+.modal-body {
+    padding-right: 24px;
+    padding-left: 24px;
+}
+
 .modal-footer {
-    justify-content: left;
+    padding-right: 24px;
+    padding-left: 24px;
 }
 
 .modal-img {
@@ -313,12 +338,10 @@ p {
     padding-bottom: 10px;
 }
 
-/* Buttons */
-.btn-outline-primary:hover {
-    background-color: transparent;
-    text-decoration: underline;
-    color: #0d6efd;
+.btn {
+    border-radius: 32px;
 }
+
 
 /* Navigation */
 .navbar {
