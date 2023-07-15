@@ -20,8 +20,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                    <button type="submit" class="btn btn-success">Add</button>
                 </div>
             </form>
         </div>
@@ -112,11 +112,11 @@
                             <h5 class="modal-title" id="editOfficerModalLabel">Edit <%= officer.name %></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form method="POST" action="/officers/edit">
+                        <form method="POST" action="/officers">
                             <div class="modal-body">                
                                 <div class="mb-3">                    
                                     <label class="form-label" for="edit-officer-email">Email</label>
-                                    <input id="edit-officer-email" class="form-control" name="email" type="text" disabled value="<%= officer.email %>"/>
+                                    <input id="edit-officer-email" class="form-control" name="email" type="text" required value="<%= officer.email %>"/>
                                 </div>
 
                                 <div class="mb-3">
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </form>
