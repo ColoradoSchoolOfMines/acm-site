@@ -1,7 +1,7 @@
 let dates = document.getElementsByClassName("date");
 for (let timestamp of dates) {
 	const date = new Date(timestamp.innerHTML);
-	timestamp.innerHTML = new Date(date.getTime() + (date.getTimezoneOffset() * 60000 ))
+	timestamp.innerHTML = new Date(date.getTime() + (date.getTimezoneOffset() * 60000))
 		.toLocaleDateString('en-US', {
 			year: 'numeric',
 			month: 'long',
@@ -30,5 +30,6 @@ for (let timestamp of dateTimes) {
 let element = document.getElementsByClassName("add-meeting-date");
 for(let i = 0; i < element.length; i++) {
 	const date = new Date(element[i].getAttribute('data-date'));
-	element[i].value = date.toISOString().split(".")[0]
+	const timestamp = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString()
+	element[i].value = timestamp.split(".")[0]
 }
