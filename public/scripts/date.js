@@ -25,3 +25,10 @@ for (let timestamp of dateTimes) {
 		day: 'numeric',
 	}) + newDuration;
 }
+
+// Modify prefill edit fields in admin
+let element = document.getElementsByClassName("add-meeting-date");
+for(let i = 0; i < element.length; i++) {
+	const date = new Date(element[i].getAttribute('data-date'));
+	element[i].value = date.toISOString().split(".")[0]
+}
