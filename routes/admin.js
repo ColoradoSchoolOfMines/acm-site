@@ -55,4 +55,12 @@ router.post('/meetings', isAdminAuthenticated, async (req, res) => {
   res.redirect('/admin');
 });
 
+router.post('/meetings/edit', isAdminAuthenticated, async (req, res) => {
+  await db.query("UPDATE meetings SET title = $1, description = $2, date = $3, duration = $4, location = $5, type = $6 WHERE id = $7", [
+    req.body.title, req.body.description, req.body.date,
+    // convert hours -> milliseconds
+    (req.body.duration * 3600000), req.body.location, req.body.type, req.body.id]);
+  res.redirect('/admin');
+});
+
 module.exports = router;
