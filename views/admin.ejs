@@ -1,10 +1,111 @@
 <% layout('layouts/base')%>
 
-<div class="modal fade" id="addMeetingModal" tabindex="-1" aria-labelledby="addMeetingModalLabel" aria-hidden="true">
+<div class="content">
+    <h1 class="mt-5 acm-secondary">Admin</h1>
+    <div class="large-card">
+        <div class="row">
+            <div class="col meeting-scroll">
+                <h2>Meetings
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-meeting-modal">Add Meeting</button>
+                </h2>
+                <% for(let meeting of meetings) { %>
+                    <div class="meeting">
+                        <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
+                        <p><strong>Description</strong>: <%= meeting.description %></p>
+                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                        <p><strong>Location</strong>: <%= meeting.location %></p>
+                        <p><strong>Type</strong>: <%= meeting.type %></p>
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-meeting-<%= meeting.id %>-modal">Edit Meeting</button>
+                        <% if(meeting.attendance.length > 0) { %>
+                            <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="large-card">
+        <h2>Feedback</h2>
+        <% for(let feedback of feedbackData) { %>
+            <div class="meeting">
+                <p><strong>User</strong>: <%= feedback.email %></p>
+                <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
+                <form class="d-inline-block" method="POST" action="/feedback/remove">
+                    <input type="hidden" name="email" value="<%= feedback.email %>">
+                    <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
+                    <button class="btn d-inline-block btn-outline-danger">Delete</button>
+                </form>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="large-card">
+        <h2>Officers</h2>
+        <% for(let officer of officers) { %>
+            <p><%= officer.name %> | <%= officer.title %></p>
+            <p class="mb-2"><%= officer.email %></p>
+
+            <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.email.split('@')[0] %>-modal">Edit</button>
+
+            <form class="d-inline-block" method="POST" action="/officers/remove">
+                <input type="hidden" name="email" value="<%= officer.email %>">
+                <button class="btn d-inline-block btn-outline-danger">Delete</button>
+            </form>
+        <% } %>
+        <br><br>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-officer-modal">Add Officer</button>
+    </div>
+
+    <div class="large-card">
+        <h2>Images</h2>
+        <p class="mb-3">Upload new image to be displayed randomly on the front page of the site.</p>
+        <form method="POST" action="/admin" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input class="form-control" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
+                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+            </div>
+            <div class="mb-3">
+                <input class="form-control" type="text" name="caption" placeholder="Caption.." required />
+            </div>
+            <button class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="add-officer-modal" tabindex="-1" aria-labelledby="add-officer-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addMeetingModalLabel">Add Meeting</h5>
+                <h5 class="modal-title" id="add-officer-modal-label">Add Officer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/officers">
+                <div class="modal-body">                
+                    <div class="mb-3">                    
+                        <label class="form-label" for="add-officer-email">Email</label>
+                        <input id="add-officer-email" class="form-control" name="email" type="text" required placeholder="me@mines.edu" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="add-officer-title">Title</label>
+                        <input id="add-officer-title" class="form-control" name="title" type="text" required placeholder="Director of X.." />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-meeting-modal" tabindex="-1" aria-labelledby="add-meeting-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-meeting-modal-label">Add Meeting</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="POST" action="/meetings">
@@ -38,193 +139,96 @@
                         <label class="form-label" for="add-meeting-type">Type</label>
                         <input id="add-meeting-type" class="form-control" type="text" name="type" placeholder="Meeting type.." />
                     </div>
-    
-                    <div>
-                        <button class="btn d-inline-block btn-primary">Submit</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="addOfficerModal" tabindex="-1" aria-labelledby="addOfficerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addOfficerModalLabel">Add Officer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="POST" action="/officers">
-                <div class="modal-body">                
-                    <div class="mb-3">                    
-                        <label class="form-label" for="add-officer-email">Email</label>
-                        <input id="add-officer-email" class="form-control" name="email" type="text" required placeholder="me@mines.edu" />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="add-officer-title">Title</label>
-                        <input id="add-officer-title" class="form-control" name="title" type="text" required placeholder="Director of X.." />
-                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                    <button type="submit" class="btn btn-success">Add</button>
+                    <button type="reset" class="btn btn-outline-secondary">Discard</button>
+                    <button class="btn btn-success">Add</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<div class="content">
-    <h1 class="mt-5 acm-secondary">Admin</h1>
-    <div class="large-card">
-        <div class="row">
-            <div class="col meeting-scroll">
-                <h2>Meetings
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMeetingModal">Add Meeting</button>
-                </h2>
-                <% for(let meeting of meetings) { %>
-                    <div class="meeting">
-                        <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
-                        <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
-                        <p><strong>Location</strong>: <%= meeting.location %></p>
-                        <p><strong>Type</strong>: <%= meeting.type %></p>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMeetingModal-<%= meeting.id %>">Edit Meeting</button>
-                        <% if(meeting.attendance.length > 0) { %>
-                            <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
-                        <% } %>
-                    </div>
+<% for (let officer of officers) { %>
+    <div class="modal fade" id="edit-officer-<%= officer.email.split('@')[0] %>-modal" tabindex="-1" aria-labelledby="edit-officer-<%= officer.email.split('@')[0] %>-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-officer-<%= officer.email.split('@')[0] %>-modal-label">Edit <%= officer.name %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/officers">
+                    <div class="modal-body">                
+                        <div class="mb-3">                    
+                            <label class="form-label" for="edit-officer-email">Email</label>
+                            <input id="edit-officer-email" class="form-control" name="email" type="text" required value="<%= officer.email %>"/>
+                        </div>
 
-                    <div class="modal fade" id="editMeetingModal-<%= meeting.id %>" tabindex="-1" aria-labelledby="editMeetingModalLabel-<%= meeting.id %>" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editMeetingModalLabel-<%= meeting.id %>">Edit Meeting: <%= meeting.id %></h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form method="POST" action="/meetings/edit">
-                                    <input type="hidden" name="id" value="<%= meeting.id %>">
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="add-meeting-title">Title</label>
-                                            <input id="add-meeting-title" class="form-control" type="text" name="title" placeholder="Title..." value="<%= meeting.title %>" />
-                                        </div>
-                        
-                                        <div class="mb-3">
-                                            <label class="form-label" for="add-meeting-description">Description</label>
-                                            <input id="add-meeting-description" class="form-control" type="text" name="description" placeholder="Description.." value="<%= meeting.description %>" />
-                                        </div>
-                        
-                                        <div class="mb-3">
-                                            <label class="form-label" for="add-meeting-date">Date</label>
-                                            <input class="add-meeting-date" class="form-control" type="datetime-local" name="date" data-date="<%= meeting.date %>" value="">
-                                        </div>
-                    
-                                        <div class="mb-3">
-                                            <label class="form-label" for="add-meeting-duration">Duration</label>
-                                            <input id="add-meeting-duration" class="form-control" min="0" max="10" type="number" name="duration" placeholder="Duration (hours)" value="<%= meeting.duration %>" />
-                                        </div>
-                        
-                                        <div class="mb-3">
-                                            <label class="form-label" for="add-meeting-location">Location</label>
-                                            <input id="add-meeting-location" class="form-control" type="text" name="location" placeholder="Location.." value="<%= meeting.location %>" />
-                                        </div>
-                        
-                                        <div class="mb-3">
-                                            <label class="form-label" for="add-meeting-type">Type</label>
-                                            <input id="add-meeting-type" class="form-control" type="text" name="type" placeholder="Meeting type.." value="<%= meeting.type %>" />
-                                        </div>
-                        
-                                        <div>
-                                            <button class="btn d-inline-block btn-primary">Submit</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-officer-title">Title</label>
+                            <input id="edit-officer-title" class="form-control" name="title" type="text" required value="<%= officer.title %>"/>
                         </div>
                     </div>
-                <% } %>
-            </div>
-        </div>
-    </div>
-
-    <div class="large-card">
-        <h2>Feedback</h2>
-        <% for(let feedback of feedbackData) { %>
-            <div class="meeting">
-                <p><strong>User</strong>: <%= feedback.email %></p>
-                <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
-                <form class="d-inline-block" method="POST" action="/feedback/remove">
-                    <input type="hidden" name="email" value="<%= feedback.email %>">
-                    <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
-                    <button class="btn d-inline-block btn-outline-danger">Delete</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
                 </form>
             </div>
-        <% } %>
+        </div>
     </div>
+<% } %>
 
-    <div class="large-card">
-        <h2>Officers</h2>
-        <% for(let officer of officers) { %>
-            <p><%= officer.name %> | <%= officer.title %></p>
-            <p class="mb-2"><%= officer.email %></p>
-
-            <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editOfficerModal">Edit</button>
-
-            <div class="modal fade" id="editOfficerModal" tabindex="-1" aria-labelledby="editOfficerModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editOfficerModalLabel">Edit <%= officer.name %></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form method="POST" action="/officers">
-                            <div class="modal-body">                
-                                <div class="mb-3">                    
-                                    <label class="form-label" for="edit-officer-email">Email</label>
-                                    <input id="edit-officer-email" class="form-control" name="email" type="text" required value="<%= officer.email %>"/>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="edit-officer-title">Title</label>
-                                    <input id="edit-officer-title" class="form-control" name="title" type="text" required value="<%= officer.title %>"/>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                                <button type="submit" class="btn btn-primary">Update</button>
-                            </div>
-                        </form>
-                    </div>
+<% for (let meeting of meetings) { %>
+    <div class="modal fade" id="edit-meeting-<%= meeting.id %>-modal" tabindex="-1" aria-labelledby="edit-meeting-<%= meeting.id %>-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-meeting-<%= meeting.id %>-modal-label">Edit <%= meeting.title %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
+                <form method="POST" action="/meetings/edit">
+                    <input type="hidden" name="id" value="<%= meeting.id %>">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-meeting-<%= meeting.id %>-title">Title</label>
+                            <input id="edit-meeting-<%= meeting.id %>-title" class="form-control" type="text" name="title" placeholder="Title..." value="<%= meeting.title %>" />
+                        </div>
+        
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-meeting-<%= meeting.id %>-description">Description</label>
+                            <input id="edit-meeting-<%= meeting.id %>-description" class="form-control" type="text" name="description" placeholder="Description.." value="<%= meeting.description %>" />
+                        </div>
+        
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-meeting-<%= meeting.id %>-date">Date</label>
+                            <input id="edit-meeting-<%= meeting.id %>-date" class="form-control" type="datetime-local" name="date" data-date="<%= meeting.date %>" value="">
+                        </div>
 
-            <form class="d-inline-block" method="POST" action="/officers/remove">
-                <input type="hidden" name="email" value="<%= officer.email %>">
-                <button class="btn d-inline-block btn-outline-danger">Delete</button>
-            </form>
-        <% } %>
-        <br><br>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOfficerModal">Add Officer</button>
-    </div>
-
-    <div class="large-card">
-        <h2>Images</h2>
-        <p class="mb-3">Upload new image to be displayed randomly on the front page of the site.</p>
-        <form method="POST" action="/admin" enctype="multipart/form-data">
-            <div class="mb-3">
-                <input class="form-control" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
-                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-meeting-<%= meeting.id %>-duration">Duration</label>
+                            <input id="edit-meeting-<%= meeting.id %>-duration" class="form-control" min="0" max="10" type="number" name="duration" placeholder="Duration (hours)" value="<%= meeting.duration %>" />
+                        </div>
+        
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-meeting-<%= meeting.id %>-location">Location</label>
+                            <input id="edit-meeting-<%= meeting.id %>-location" class="form-control" type="text" name="location" placeholder="Location.." value="<%= meeting.location %>" />
+                        </div>
+        
+                        <div class="mb-3">
+                            <label class="form-label" for="edit-meeting-<%= meeting.id %>-type">Type</label>
+                            <input id="edit-meeting-<%= meeting.id %>-type" class="form-control" type="text" name="type" placeholder="Meeting type.." value="<%= meeting.type %>" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-outline-secondary">Discard</button>
+                        <button class="btn btn-success">Update</button>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <input class="form-control" type="text" name="caption" placeholder="Caption.." required />
-            </div>
-            <button class="btn btn-primary">Submit</button>
-        </form>
+        </div>
     </div>
-</div>
+<% } %>
 
 <script src="/scripts/csv.js"></script>
 <script src="/scripts/date.js"></script>
