@@ -40,45 +40,45 @@
 </div>
 
 <% if (typeof user === 'object' && user && user.is_admin) { %>
-    <% for (let presentation of presentations) { %>
-        <div class="modal fade" id="new-presentation-modal" tabindex="-1" aria-labelledby="new-presentation-modal-label" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="new-presentation-modal-label">New Presentation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form method="POST" action="/presentations">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label" for="new-presentation-title">Title</label>
-                                <input id="new-presentation-title" class="form-control" name="title" type="text" required placeholder="A Cool Presentation" />
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label class="form-label" for="new-presentation-description">Description</label>
-                                <input id="new-presentation-description" class="form-control" name="description" type="text" required placeholder="A compelling description..." />
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label" for="new-presentation-date">Date</label>
-                                <input id="new-presentation-date" class="form-control" name="date" type="date" required />
-                            </div>
-         
-                            <div>
-                                <label class="form-label" for="new-presentation-url">Slides Link</label>
-                                <input id="new-presentation-url" class="form-control" name="url" type="url" required placeholder="https://drive.google.com/..." />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                            <button type="submit" class="btn btn-success">Add</button>
-                        </div>
-                    </form>
+    <div class="modal fade" id="new-presentation-modal" tabindex="-1" aria-labelledby="new-presentation-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="new-presentation-modal-label">New Presentation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form method="POST" action="/presentations">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="new-presentation-title">Title</label>
+                            <input id="new-presentation-title" class="form-control" name="title" type="text" required placeholder="A Cool Presentation" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="new-presentation-description">Description</label>
+                            <input id="new-presentation-description" class="form-control" name="description" type="text" required placeholder="A compelling description..." />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="new-presentation-date">Date</label>
+                            <input id="new-presentation-date" class="form-control" name="date" type="date" required />
+                        </div>
+     
+                        <div>
+                            <label class="form-label" for="new-presentation-url">Slides Link</label>
+                            <input id="new-presentation-url" class="form-control" name="url" type="url" required placeholder="https://drive.google.com/..." />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
+    <% for (let presentation of presentations) { %>
         <div class="modal fade" id="delete-presentation-<%= presentation.id %>-modal" tabindex="-1" aria-labelledby="delete-presentation-<%= presentation.id %>-modal-label" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
