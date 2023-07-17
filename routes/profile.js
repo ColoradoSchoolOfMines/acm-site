@@ -5,9 +5,13 @@ const { isLoggedIn, upload } = require('../middleware');
 const router = express.Router();
 
 router.get('/profile', isLoggedIn, async (req, res) => {
-  const meetingsResp = await db.query("SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.email = $1", [req.user.email]);
-  const projectsResp = await db.query("SELECT title, repository FROM projects JOIN project_authors ON project_authors.project_id = projects.id WHERE project_authors.author_email = $1", [req.user.email]);
-  res.render('profile', { title: req.user.name, meetings: meetingsResp.rows, projects: projectsResp.rows });
+  if(req.user) {
+    res.redirect('/profile/' + req.user.email.split("@")[0]);
+  }
+  else {
+    req.flash('error', "Couldn't find the specified profile page!");
+    res.redirect('/');
+  }
 });
 
 router.get('/profile/:id', async (req, res) => {
