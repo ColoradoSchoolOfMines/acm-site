@@ -1,6 +1,6 @@
 <% layout('layouts/base')%>
 
-<div class="bg-light">
+<main class="bg-light">
     <div class="container">
         <h1 class="acm-secondary">Projects</h1>
         <p style="font-size: 18px;">Projects are a great way to get involved with Mines ACM!
@@ -72,7 +72,7 @@
             <% } %> 
         </div>
     </div>    
-</div>
+</main>
 
 <% if (typeof user === 'object' && user && user.is_admin) { %>
     <div class="modal fade" id="new-project-modal" tabindex="-1" aria-labelledby="new-project-modal-label" aria-hidden="true">

@@ -69,6 +69,10 @@ p {
     margin-bottom: 0;
 }
 
+main {
+    flex-grow: 1;
+}
+
 /* Container */
 .container {
     padding-top: 3%;

@@ -1,131 +1,133 @@
 <% layout('layouts/base')%>
 
-<div class="bg-light">
-	<div class="container">	
+<main>
+	<div class="bg-light">	
+		<div class="container">	
+			<div class="row">
+				<div class="col me-5">
+					<h1 class="big-header">Mines ACM</h1>
+					<div class="header-description">
+						Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
+						strives
+						to provide meaningful career opportunities and CS experiences to students.
+						<br><br>
+						We host weekly tech talks from recognized industry professionals, project meetings
+						with diverse and interesting projects, skill workshops, and more.
+						<br><br>
+						Mines ACM is an official student chapter of the <a href="https://www.acm.org">Association for
+							Computing Machinery</a>
+						and is an official club of <a href="https://cs.mines.edu">CS@Mines</a>.
+						<br><br>
+						To join Mines ACM, simply show up to our meetings every <b>Tuesday at 6:00pm</b>.
+						Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing
+							list</a>
+						for weekly meeting details and to stay in touch with our community.
+						<br><br>
+						<% if (meetings.length > 0) { %>
+							<strong>Next meeting</strong>: 
+							<%= meetings[0].title %>, <span class="datetime"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
+							<% if(meetings[0].rsvped) { %>
+								<span class="meeting-rsvped">(RSVP'ed)</span>
+							<% } else { %>
+		                        <% if (typeof user === 'object' && user) { %>
+		                            <form class="d-inline" method="POST" action="/rsvp">
+		                                <input type="hidden" name="id" value="<%= meetings[0].id %>">
+		                                <button class="btn btn-outline-primary rsvp">I'm In!</button>
+		                            </form>
+		                        <% } else { %>
+		                            <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meetings[0].id %>-modal">I'm In!</button>
+		                        <% } %>
+							<% } %>
+						<% } else { %>
+							<strong>No upcoming meetings right now, check back soon!</strong>
+						<% } %>
+					</div>
+				</div>
+				<div class="col-lg-6 text-center">
+					<% if (image) { %> 
+						<img src="uploads/<%= image.id %>" class="header-image shadow" />
+						<p class="image-caption"><%= image.caption %></p>
+					<% } else { %>
+						<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
+						<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
 		<div class="row">
 			<div class="col me-5">
-				<h1 class="big-header">Mines ACM</h1>
-				<div class="header-description">
-					Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
-					strives
-					to provide meaningful career opportunities and CS experiences to students.
-					<br><br>
-					We host weekly tech talks from recognized industry professionals, project meetings
-					with diverse and interesting projects, skill workshops, and more.
-					<br><br>
-					Mines ACM is an official student chapter of the <a href="https://www.acm.org">Association for
-						Computing Machinery</a>
-					and is an official club of <a href="https://cs.mines.edu">CS@Mines</a>.
-					<br><br>
-					To join Mines ACM, simply show up to our meetings every <b>Tuesday at 6:00pm</b>.
-					Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing
-						list</a>
-					for weekly meeting details and to stay in touch with our community.
-					<br><br>
-					<% if (meetings.length > 0) { %>
-						<strong>Next meeting</strong>: 
-						<%= meetings[0].title %>, <span class="datetime"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
-						<% if(meetings[0].rsvped) { %>
-							<span class="meeting-rsvped">(RSVP'ed)</span>
-						<% } else { %>
-	                        <% if (typeof user === 'object' && user) { %>
-	                            <form class="d-inline" method="POST" action="/rsvp">
-	                                <input type="hidden" name="id" value="<%= meetings[0].id %>">
-	                                <button class="btn btn-outline-primary rsvp">I'm In!</button>
-	                            </form>
-	                        <% } else { %>
-	                            <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meetings[0].id %>-modal">I'm In!</button>
-	                        <% } %>
+				<h1 class="big-header-2">Upcoming Meetings</h1>
+			</div>
+			<div class="col">
+				<h1 class="big-header-2">Our Events</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col me-5">
+				<div class="highlight">
+					<% if(meetings.length > 0) { %>
+						<% for(let meeting of meetings) { %>
+							<div class="meeting">
+								<p class="meeting-title">
+									<%= meeting.title %>
+									<% if(meeting.rsvped) { %>
+										<span class="meeting-rsvped">(RSVP'ed)</span>
+									<% } else { %>
+			                            <% if (typeof user === 'object' && user) { %>
+			                                <form class="d-inline" method="POST" action="/rsvp">
+			                                    <input type="hidden" name="id" value="<%= meeting.id %>">
+			                                    <button class="btn btn-outline-primary rsvp">RSVP</button>
+			                                </form>
+			                            <% } else { %>
+			                                <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meeting.id %>-modal">RSVP</button>
+			                            <% } %>
+									<% } %>
+								</p>
+
+								<p class="meeting-info"><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
+									in <strong><%= meeting.location %></strong></p>
+								<p class="meeting-description"><%= meeting.description %></p>
+							</div>
 						<% } %>
-					<% } else { %>
-						<strong>No upcoming meetings right now, check back soon!</strong>
-					<% } %>
-				</div>
-			</div>
-			<div class="col-lg-6 text-center">
-				<% if (image) { %> 
-					<img src="uploads/<%= image.id %>" class="header-image shadow" />
-					<p class="image-caption"><%= image.caption %></p>
-				<% } else { %>
-					<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
-					<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
-				<% } %>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="container">
-	<div class="row">
-		<div class="col me-5">
-			<h1 class="big-header-2">Upcoming Meetings</h1>
-		</div>
-		<div class="col">
-			<h1 class="big-header-2">Our Events</h1>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col me-5">
-			<div class="highlight">
-				<% if(meetings.length > 0) { %>
-					<% for(let meeting of meetings) { %>
+					<% } else { %> 
 						<div class="meeting">
-							<p class="meeting-title">
-								<%= meeting.title %>
-								<% if(meeting.rsvped) { %>
-									<span class="meeting-rsvped">(RSVP'ed)</span>
-								<% } else { %>
-		                            <% if (typeof user === 'object' && user) { %>
-		                                <form class="d-inline" method="POST" action="/rsvp">
-		                                    <input type="hidden" name="id" value="<%= meeting.id %>">
-		                                    <button class="btn btn-outline-primary rsvp">RSVP</button>
-		                                </form>
-		                            <% } else { %>
-		                                <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meeting.id %>-modal">RSVP</button>
-		                            <% } %>
-								<% } %>
-							</p>
-
-							<p class="meeting-info"><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
-								in <strong><%= meeting.location %></strong></p>
-							<p class="meeting-description"><%= meeting.description %></p>
+							<p>No upcoming meetings! Check back soon for more.</p>
 						</div>
 					<% } %>
-				<% } else { %> 
-					<div class="meeting">
-						<p>No upcoming meetings! Check back soon for more.</p>
-					</div>
-				<% } %>
-				<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
+					<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
+				</div>
 			</div>
-		</div>
-		<div class="col">
-			<div class="highlight">
-				<div class="event">
-					<p class="meeting-title">Tech Talks</p>
-					<p class="meeting-description">Tech talks are hour long talks from industry professionals, often
-						CS@Mines alum.
-						We've hosted representatives from Google, Chevron, Cloudflare, and more.</p>
+			<div class="col">
+				<div class="highlight">
+					<div class="event">
+						<p class="meeting-title">Tech Talks</p>
+						<p class="meeting-description">Tech talks are hour long talks from industry professionals, often
+							CS@Mines alum.
+							We've hosted representatives from Google, Chevron, Cloudflare, and more.</p>
+					</div>
+					<div class="event">
+						<p class="meeting-title">Project Meetings</p>
+						<p class="meeting-description">Project meetings are a great and low-pressure way to learn
+							new skills and collaborate with others outside of school on a variety of <a
+								href="/projects">projects</a>.</p>
+					</div>
+					<div class="event">
+						<p class="meeting-title">Workshops</p>
+						<p class="meeting-description">Workshops are another way Mines ACM provides students with
+							opportunities to learn
+							industry skills. We regularly host our Git Workshop, with seasonal workshops
+							such as web and even Minecraft development also happening!</p>
+					</div>
+					<br>
+					<p><strong>and so much more!</strong></p>
 				</div>
-				<div class="event">
-					<p class="meeting-title">Project Meetings</p>
-					<p class="meeting-description">Project meetings are a great and low-pressure way to learn
-						new skills and collaborate with others outside of school on a variety of <a
-							href="/projects">projects</a>.</p>
-				</div>
-				<div class="event">
-					<p class="meeting-title">Workshops</p>
-					<p class="meeting-description">Workshops are another way Mines ACM provides students with
-						opportunities to learn
-						industry skills. We regularly host our Git Workshop, with seasonal workshops
-						such as web and even Minecraft development also happening!</p>
-				</div>
-				<br>
-				<p><strong>and so much more!</strong></p>
 			</div>
 		</div>
 	</div>
-</div>
+</main>
 
 <% if (!user) { %>
     <% for (let meeting of meetings) { %>
