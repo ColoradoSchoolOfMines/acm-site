@@ -1,59 +1,61 @@
 <% layout('layouts/base')%>
 
-<div class="container bg-light homepage">
-	<div class="row">
-		<div class="col me-5">
-			<h1 class="big-header">Mines ACM</h1>
-			<div class="header-description">
-				Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
-				strives
-				to provide meaningful career opportunities and CS experiences to students.
-				<br><br>
-				We host weekly tech talks from recognized industry professionals, project meetings
-				with diverse and interesting projects, skill workshops, and more.
-				<br><br>
-				Mines ACM is an official student chapter of the <a href="https://www.acm.org">Association for
-					Computing Machinery</a>
-				and is an official club of <a href="https://cs.mines.edu">CS@Mines</a>.
-				<br><br>
-				To join Mines ACM, simply show up to our meetings every <b>Tuesday at 6:00pm</b>.
-				Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing
-					list</a>
-				for weekly meeting details and to stay in touch with our community.
-				<br><br>
-				<% if (meetings.length > 0) { %>
-					<strong>Next meeting</strong>: 
-					<%= meetings[0].title %>, <span class="datetime"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
-					<% if(meetings[0].rsvped) { %>
-						<span class="meeting-rsvped">(RSVP'ed)</span>
+<div class="bg-light">
+	<div class="container">	
+		<div class="row">
+			<div class="col me-5">
+				<h1 class="big-header">Mines ACM</h1>
+				<div class="header-description">
+					Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
+					strives
+					to provide meaningful career opportunities and CS experiences to students.
+					<br><br>
+					We host weekly tech talks from recognized industry professionals, project meetings
+					with diverse and interesting projects, skill workshops, and more.
+					<br><br>
+					Mines ACM is an official student chapter of the <a href="https://www.acm.org">Association for
+						Computing Machinery</a>
+					and is an official club of <a href="https://cs.mines.edu">CS@Mines</a>.
+					<br><br>
+					To join Mines ACM, simply show up to our meetings every <b>Tuesday at 6:00pm</b>.
+					Join our <a href="/about">Discord</a> and <a href="https://acm.mines.edu/mailinglist">mailing
+						list</a>
+					for weekly meeting details and to stay in touch with our community.
+					<br><br>
+					<% if (meetings.length > 0) { %>
+						<strong>Next meeting</strong>: 
+						<%= meetings[0].title %>, <span class="datetime"><%= meetings[0].date %>,<%= meetings[0].duration %></span> in <%= meetings[0].location %>
+						<% if(meetings[0].rsvped) { %>
+							<span class="meeting-rsvped">(RSVP'ed)</span>
+						<% } else { %>
+	                        <% if (typeof user === 'object' && user) { %>
+	                            <form class="d-inline" method="POST" action="/rsvp">
+	                                <input type="hidden" name="id" value="<%= meetings[0].id %>">
+	                                <button class="btn btn-outline-primary rsvp">I'm In!</button>
+	                            </form>
+	                        <% } else { %>
+	                            <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meetings[0].id %>-modal">I'm In!</button>
+	                        <% } %>
+						<% } %>
 					<% } else { %>
-                        <% if (typeof user === 'object' && user) { %>
-                            <form class="d-inline" method="POST" action="/rsvp">
-                                <input type="hidden" name="id" value="<%= meetings[0].id %>">
-                                <button class="btn btn-outline-primary rsvp">I'm In!</button>
-                            </form>
-                        <% } else { %>
-                            <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meetings[0].id %>-modal">I'm In!</button>
-                        <% } %>
+						<strong>No upcoming meetings right now, check back soon!</strong>
 					<% } %>
+				</div>
+			</div>
+			<div class="col-lg-6 text-center">
+				<% if (image) { %> 
+					<img src="uploads/<%= image.id %>" class="header-image shadow" />
+					<p class="image-caption"><%= image.caption %></p>
 				<% } else { %>
-					<strong>No upcoming meetings right now, check back soon!</strong>
+					<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
+					<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
 				<% } %>
 			</div>
-		</div>
-		<div class="col-lg-6 text-center">
-			<% if (image) { %> 
-				<img src="uploads/<%= image.id %>" class="header-image shadow" />
-				<p class="image-caption"><%= image.caption %></p>
-			<% } else { %>
-				<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
-				<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
-			<% } %>
 		</div>
 	</div>
 </div>
 
-<div class="container homepage">
+<div class="container">
 	<div class="row">
 		<div class="col me-5">
 			<h1 class="big-header-2">Upcoming Meetings</h1>

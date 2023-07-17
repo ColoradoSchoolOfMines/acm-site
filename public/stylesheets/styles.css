@@ -73,10 +73,6 @@ p {
 .container {
     padding-top: 3%;
     padding-bottom: 3%;
-    margin-left: 0;
-    margin-right: 0;
-    width: 100%;
-    min-width: 100%;
 }
 
 /* Components */
@@ -116,11 +112,6 @@ p {
     border-radius: 75px;
     width: 50%;
     margin-bottom: 20px;
-}
-
-.content {
-    margin-left: 20%;
-    margin-right: 20%;
 }
 
 .homepage .row {
