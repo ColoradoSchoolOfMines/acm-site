@@ -71,34 +71,6 @@
     </div>    
 </main>
 
-<div class="modal fade" id="add-officer-modal" tabindex="-1" aria-labelledby="add-officer-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="add-officer-modal-label">Add Officer</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="POST" action="/officers">
-                <div class="modal-body">                
-                    <div class="mb-3">                    
-                        <label class="form-label" for="add-officer-email">Email</label>
-                        <input id="add-officer-email" class="form-control" name="email" type="text" required placeholder="me@mines.edu" />
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label" for="add-officer-title">Title</label>
-                        <input id="add-officer-title" class="form-control" name="title" type="text" required placeholder="Director of X.." />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                    <button type="submit" class="btn btn-success">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="add-meeting-modal" tabindex="-1" aria-labelledby="add-meeting-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -197,6 +169,7 @@
         </div>
     </div>
 <% } %>
+
 <div class="modal fade" id="add-officer-modal" tabindex="-1" aria-labelledby="add-officer-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
