@@ -5,9 +5,24 @@ const { isLoggedIn, upload } = require('../middleware');
 const router = express.Router();
 
 router.get('/profile', isLoggedIn, async (req, res) => {
-  const meetings_resp = await db.query("SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.email = $1", [req.user.email]);
-  const projects_resp = await db.query("SELECT title, repository FROM projects JOIN user_projects ON user_projects.project_id = projects.id WHERE user_projects.user_id = $1", [req.user.email]);
-  res.render('profile', { title: req.user.name, meetings: meetings_resp.rows, projects: projects_resp.rows });
+  const meetingsResp = await db.query("SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.email = $1", [req.user.email]);
+  const projectsResp = await db.query("SELECT title, repository FROM projects JOIN project_authors ON project_authors.project_id = projects.id WHERE project_authors.author_email = $1", [req.user.email]);
+  res.render('profile', { title: req.user.name, meetings: meetingsResp.rows, projects: projectsResp.rows });
+});
+
+router.get('/profile/:id', async (req, res) => {
+  const targetEmail = req.params.id + "@mines.edu";
+  const resp = await db.query("SELECT * FROM users WHERE email = $1", [targetEmail]);
+  
+  if(resp.rows.length > 0) {
+    const meetingsResp = await db.query("SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.email = $1", [targetEmail]);
+    const projectsResp = await db.query("SELECT title, repository FROM projects JOIN project_authors ON project_authors.project_id = projects.id WHERE project_authors.author_email = $1", [targetEmail]);
+    const isUser = req.user ? (targetEmail == req.user.email) : false;
+    res.render('profile', { title: resp.rows[0].name, profileUser: resp.rows[0], isProfileUser: isUser, meetings: meetingsResp.rows, projects: projectsResp.rows });
+  }
+  else {
+    res.status(404).render('404', { title: '404' });
+  }
 });
 
 router.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
@@ -17,6 +32,13 @@ router.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
     fs.unlinkSync("uploads/" + req.user.avatar_id);
   }
   req.flash('success', 'Profile picture uploaded successfully!');
+  res.redirect('/profile');
+});
+
+router.post('/profile/about', isLoggedIn, async (req, res) => {
+  req.user.about = req.body.about;
+  await db.query("UPDATE users SET about = $1 WHERE email = $2", [req.body.about, req.user.email]);
+  req.flash('success', 'Biography updated successfully!');
   res.redirect('/profile');
 });
 
