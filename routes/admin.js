@@ -23,9 +23,9 @@ router.post('/admin', isAdminAuthenticated, upload('image'), async (req, res) =>
 });
 
 router.post('/officers', isAdminAuthenticated, async (req, res) => {
-  const resp = await db.query("SELECT 1 FROM users WHERE email = $1", [req.body.email]);
+  const resp = await db.query("SELECT 1 FROM users WHERE id = $1", [req.body.email]);
   if(resp.rows.length > 0) {
-    await db.query("UPDATE users SET title = $1 WHERE email = $2", [req.body.title, req.body.email]);
+    await db.query("UPDATE users SET title = $1 WHERE id = $2", [req.body.title, req.body.email]);
     req.flash('success', 'Successfully set officer role to ' + req.body.title + ' for ' + req.body.email + '.');
     res.redirect('/admin');
   }
@@ -36,13 +36,13 @@ router.post('/officers', isAdminAuthenticated, async (req, res) => {
 });
 
 router.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE users SET title = $1 WHERE email = $2", ['', req.body.email]);
+  await db.query("UPDATE users SET title = $1 WHERE id = $2", ['', req.body.email]);
   req.flash('success', 'Successfully removed ' + req.body.email + ' as an officer.');
   res.redirect('/admin');
 });
 
 router.post('/feedback/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("DELETE FROM feedback WHERE email = $1 and feedback = $2", [req.body.email, req.body.feedback]);
+  await db.query("DELETE FROM feedback WHERE id = $1 and feedback = $2", [req.body.email, req.body.feedback]);
   req.flash('success', 'Successfully removed feedback from ' + req.body.email + '.');
   res.redirect('/admin');
 });

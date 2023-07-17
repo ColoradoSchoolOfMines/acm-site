@@ -37,8 +37,9 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [profile.email, profile.displayName]);
-    user = { email: profile.email };
+    email = profile.email.split("@")[0] // only store ID
+    await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [email, profile.displayName]);
+    user = { id: email };
     req.flash('success', 'Successfully logged in!');
     done(null, user);
   } else {
@@ -48,11 +49,11 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser((user, done) => {
-  done(null, user.email);
+  done(null, user.id);
 });
 
 passport.deserializeUser(async (user, done) => {
-  const resp = await db.query("SELECT * FROM users WHERE email = $1", [user]);
+  const resp = await db.query("SELECT * FROM users WHERE id = $1", [user]);
   if (resp.rows.length > 0) {
     let info = resp.rows[0];
     info.is_admin = info.title.length > 0;
@@ -103,7 +104,7 @@ app.get('/', async (req, res) => {
   let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
   for (let meeting in meetings.rows) {
     if (req.user) {
-      const rsvp = await db.query("SELECT * FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.email, meetings.rows[meeting].id]);
+      const rsvp = await db.query("SELECT * FROM rsvps WHERE id = $1 AND meeting = $2", [req.user.id, meetings.rows[meeting].id]);
       if (rsvp.rows.length > 0) {
         meetings.rows[meeting].rsvped = true;
       }
