@@ -48,11 +48,7 @@
                 <p class="mb-2"><%= officer.email %></p>
 
                 <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.email.split('@')[0] %>-modal">Edit</button>
-
-                <form class="d-inline-block" method="POST" action="/officers/remove">
-                    <input type="hidden" name="email" value="<%= officer.email %>">
-                    <button class="btn d-inline-block btn-outline-danger">Delete</button>
-                </form>
+                <button class="btn d-inline-block btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delete-officer-<%= officer.email.split('@')[0] %>-modal">Delete</button>
             <% } %>
             <br><br>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-officer-modal">Add Officer</button>
@@ -151,33 +147,6 @@
     </div>
 </div>
 
-<% for (let officer of officers) { %>
-    <div class="modal fade" id="edit-officer-<%= officer.email.split('@')[0] %>-modal" tabindex="-1" aria-labelledby="edit-officer-<%= officer.email.split('@')[0] %>-modal-label" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="edit-officer-<%= officer.email.split('@')[0] %>-modal-label">Edit Title of <%= officer.name %></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="POST" action="/officers">
-                    <div class="modal-body">                
-                        <input id="edit-officer-email" name="email" type="hidden" required value="<%= officer.email %>"/>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="edit-officer-title">Title</label>
-                            <input id="edit-officer-title" class="form-control" name="title" type="text" required value="<%= officer.title %>"/>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-<% } %>
-
 <% for (let meeting of meetings) { %>
     <div class="modal fade" id="edit-meeting-<%= meeting.id %>-modal" tabindex="-1" aria-labelledby="edit-meeting-<%= meeting.id %>-modal-label" aria-hidden="true">
         <div class="modal-dialog">
@@ -222,6 +191,81 @@
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-outline-secondary">Discard</button>
                         <button class="btn btn-success">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<% } %>
+<div class="modal fade" id="add-officer-modal" tabindex="-1" aria-labelledby="add-officer-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-officer-modal-label">Add Officer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/officers">
+                <div class="modal-body">                
+                    <div class="mb-3">                    
+                        <label class="form-label" for="add-officer-email">Email</label>
+                        <input id="add-officer-email" class="form-control" name="email" type="text" required placeholder="me@mines.edu" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="add-officer-title">Title</label>
+                        <input id="add-officer-title" class="form-control" name="title" type="text" required placeholder="Director of X.." />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                    <button type="submit" class="btn btn-success">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<% for (let officer of officers) { %>
+    <div class="modal fade" id="edit-officer-<%= officer.email.split('@')[0] %>-modal" tabindex="-1" aria-labelledby="edit-officer-<%= officer.email.split('@')[0] %>-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit-officer-<%= officer.email.split('@')[0] %>-modal-label">Edit Title of <%= officer.name %></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/officers">
+                    <div class="modal-body">                
+                        <input name="email" type="hidden" required value="<%= officer.email %>"/>
+
+                        <div>
+                            <label class="form-label" for="edit-officer-<%= officer.email.split('@')[0] %>-title">Title</label>
+                            <input id="edit-officer-<%= officer.email.split('@')[0] %>-title" class="form-control" name="title" type="text" required value="<%= officer.title %>"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete-officer-<%= officer.email.split('@')[0] %>-modal" tabindex="-1" aria-labelledby="delete-officer-<%= officer.email.split('@')[0] %>-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete-officer-<%= officer.email.split('@')[0] %>-modal-label">Delete Presentation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/officers/delete">
+                    <div class="modal-body">
+                        <input type="hidden" name="email" value="<%= officer.id %>">
+                        <p>Are you sure you want to remove the title of <strong><%= officer.name %></strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                 </form>
             </div>
