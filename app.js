@@ -104,7 +104,7 @@ app.get('/', async (req, res) => {
   let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
   for (let meeting in meetings.rows) {
     if (req.user) {
-      const rsvp = await db.query("SELECT * FROM rsvps WHERE id = $1 AND meeting = $2", [req.user.id, meetings.rows[meeting].id]);
+      const rsvp = await db.query("SELECT * FROM rsvps WHERE email = $1 AND meeting = $2", [req.user.id, meetings.rows[meeting].id]);
       if (rsvp.rows.length > 0) {
         meetings.rows[meeting].rsvped = true;
       }
@@ -138,7 +138,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).render('error', { title: "Error", error: err });
+  res.status(500).render('error', { title: "Error" });
 });
 
 app.listen(process.env.PORT || 3000, async () => {

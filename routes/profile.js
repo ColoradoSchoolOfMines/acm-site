@@ -5,7 +5,7 @@ const { isLoggedIn, upload } = require('../middleware');
 const router = express.Router();
 
 router.get('/profile/:id', async (req, res) => {
-  const targetEmail = req.params.id + "@mines.edu";
+  const targetEmail = req.params.id;
   const resp = await db.query("SELECT * FROM users WHERE id = $1", [targetEmail]);
   
   if(resp.rows.length > 0) {
@@ -26,14 +26,14 @@ router.post('/profile', isLoggedIn, upload('avatar'), async (req, res) => {
     fs.unlinkSync("uploads/" + req.user.avatar_id);
   }
   req.flash('success', 'Profile picture uploaded successfully!');
-  res.redirect('/profile');
+  res.redirect('/profile/' + req.user.id);
 });
 
 router.post('/profile/about', isLoggedIn, async (req, res) => {
   req.user.about = req.body.about;
   await db.query("UPDATE users SET about = $1 WHERE id = $2", [req.body.about, req.user.id]);
   req.flash('success', 'Biography updated successfully!');
-  res.redirect('/profile');
+  res.redirect('/profile/' + req.user.id);
 });
 
 module.exports = router;
