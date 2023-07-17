@@ -156,15 +156,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="edit-officer-<%= officer.email.split('@')[0] %>-modal-label">Edit <%= officer.name %></h5>
+                    <h5 class="modal-title" id="edit-officer-<%= officer.email.split('@')[0] %>-modal-label">Edit Title of <%= officer.name %></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="/officers">
                     <div class="modal-body">                
-                        <div class="mb-3">                    
-                            <label class="form-label" for="edit-officer-email">Email</label>
-                            <input id="edit-officer-email" class="form-control" name="email" type="text" required value="<%= officer.email %>"/>
-                        </div>
+                        <input id="edit-officer-email" name="email" type="hidden" required value="<%= officer.email %>"/>
 
                         <div class="mb-3">
                             <label class="form-label" for="edit-officer-title">Title</label>
