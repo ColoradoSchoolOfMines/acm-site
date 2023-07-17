@@ -19,9 +19,8 @@
                     <% } else { %>
                         <p>This user is not currently involved in any ACM projects.<p>
                     <% } %>
-                <br>
-                <h5>About</h5>
 
+                <h5 class="mt-3">About</h5>
                 <% if(isProfileUser) { %>
                     <% if (profileUser.about && profileUser.about.length > 0) { %>
                         <p><%= profileUser.about %></p>
@@ -64,6 +63,11 @@
                         <p><i>This user hasn't set a bio yet!</i><p>
                     <% } %>
                 <% } %>
+
+                <!-- <h5 class="mt-3">Attended Meetings (<%= meetings.length %>)</h5>
+                <% for(let meeting of meetings) { %>
+                    <p><%= meeting.title %> (<span class="date"><%= meeting.date %></span>)</p>
+                <% } %> -->
 
                 <!-- Meetings Attended Modal -->
                 <div class="modal fade" id="meetings-modal" tabindex="-1" aria-labelledby="meetings-modal-label" aria-hidden="true">
