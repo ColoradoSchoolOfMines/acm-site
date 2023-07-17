@@ -1,76 +1,78 @@
 <% layout('layouts/base')%>
 
-<div class="content">
-    <h1 class="mt-5 acm-secondary">Admin</h1>
-    <div class="large-card">
-        <div class="row">
-            <div class="col meeting-scroll">
-                <h2>Meetings
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-meeting-modal">Add Meeting</button>
-                </h2>
-                <% for(let meeting of meetings) { %>
-                    <div class="meeting">
-                        <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
-                        <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
-                        <p><strong>Location</strong>: <%= meeting.location %></p>
-                        <p><strong>Type</strong>: <%= meeting.type %></p>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-meeting-<%= meeting.id %>-modal">Edit Meeting</button>
-                        <% if(meeting.attendance.length > 0) { %>
-                            <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
-                        <% } %>
-                    </div>
-                <% } %>
+<div class="container bg-light">
+    <div class="content">
+        <h1 class="acm-secondary">Admin</h1>
+        <div class="large-card shadow mb-4">
+            <div class="row">
+                <div class="col meeting-scroll">
+                    <h2>Meetings
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-meeting-modal">Add Meeting</button>
+                    </h2>
+                    <% for(let meeting of meetings) { %>
+                        <div class="meeting">
+                            <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
+                            <p><strong>Description</strong>: <%= meeting.description %></p>
+                            <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                            <p><strong>Location</strong>: <%= meeting.location %></p>
+                            <p><strong>Type</strong>: <%= meeting.type %></p>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-meeting-<%= meeting.id %>-modal">Edit Meeting</button>
+                            <% if(meeting.attendance.length > 0) { %>
+                                <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="large-card">
-        <h2>Feedback</h2>
-        <% for(let feedback of feedbackData) { %>
-            <div class="meeting">
-                <p><strong>User</strong>: <%= feedback.email %></p>
-                <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
-                <form class="d-inline-block" method="POST" action="/feedback/remove">
-                    <input type="hidden" name="email" value="<%= feedback.email %>">
-                    <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
+        <div class="large-card shadow mb-4">
+            <h2>Feedback</h2>
+            <% for(let feedback of feedbackData) { %>
+                <div class="meeting">
+                    <p><strong>User</strong>: <%= feedback.email %></p>
+                    <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
+                    <form class="d-inline-block" method="POST" action="/feedback/remove">
+                        <input type="hidden" name="email" value="<%= feedback.email %>">
+                        <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
+                        <button class="btn d-inline-block btn-outline-danger">Delete</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="large-card shadow mb-4">
+            <h2>Officers</h2>
+            <% for(let officer of officers) { %>
+                <p><%= officer.name %> | <%= officer.title %></p>
+                <p class="mb-2"><%= officer.email %></p>
+
+                <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.email.split('@')[0] %>-modal">Edit</button>
+
+                <form class="d-inline-block" method="POST" action="/officers/remove">
+                    <input type="hidden" name="email" value="<%= officer.email %>">
                     <button class="btn d-inline-block btn-outline-danger">Delete</button>
                 </form>
-            </div>
-        <% } %>
-    </div>
+            <% } %>
+            <br><br>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-officer-modal">Add Officer</button>
+        </div>
 
-    <div class="large-card">
-        <h2>Officers</h2>
-        <% for(let officer of officers) { %>
-            <p><%= officer.name %> | <%= officer.title %></p>
-            <p class="mb-2"><%= officer.email %></p>
-
-            <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.email.split('@')[0] %>-modal">Edit</button>
-
-            <form class="d-inline-block" method="POST" action="/officers/remove">
-                <input type="hidden" name="email" value="<%= officer.email %>">
-                <button class="btn d-inline-block btn-outline-danger">Delete</button>
+        <div class="large-card shadow mb-4">
+            <h2>Images</h2>
+            <p class="mb-3">Upload new image to be displayed randomly on the front page of the site.</p>
+            <form method="POST" action="/admin" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input class="form-control" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
+                    <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" type="text" name="caption" placeholder="Caption.." required />
+                </div>
+                <button class="btn btn-primary">Submit</button>
             </form>
-        <% } %>
-        <br><br>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-officer-modal">Add Officer</button>
-    </div>
-
-    <div class="large-card">
-        <h2>Images</h2>
-        <p class="mb-3">Upload new image to be displayed randomly on the front page of the site.</p>
-        <form method="POST" action="/admin" enctype="multipart/form-data">
-            <div class="mb-3">
-                <input class="form-control" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
-                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-            </div>
-            <div class="mb-3">
-                <input class="form-control" type="text" name="caption" placeholder="Caption.." required />
-            </div>
-            <button class="btn btn-primary">Submit</button>
-        </form>
-    </div>
+        </div>
+    </div>    
 </div>
 
 <div class="modal fade" id="add-officer-modal" tabindex="-1" aria-labelledby="add-officer-modal-label" aria-hidden="true">

@@ -282,10 +282,9 @@ p {
 }
 
 .large-card {
-    background-color: #f8f9fa;
-    padding: 4%;
-    border-radius: 25px;
-    margin-bottom: 2%;
+    border-bottom: 4px solid #336699;
+    padding: 25px;
+    background-color: white;
 }
 
 .meeting-scroll {

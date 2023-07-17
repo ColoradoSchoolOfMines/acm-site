@@ -1,44 +1,46 @@
 <% layout('layouts/base')%>
 
-<div class="content">
-    <div class="large-card">
-        <% if(!meeting) { %>
-            <h1>No meeting found to RSVP for!</h1>
-            <p><a href="/schedule">Check our schedule</a> to see upcoming meetings.</p>
-            <p>If you believe this is an error, please <a href="https://github.com/ColoradoSchoolOfMines/acm-site/issues">submit an issue</a>.</p>
-        <% } else { %>
-            <h1>RSVP for <%= meeting.title %></h1>
-            <p><strong>Description</strong>: <%= meeting.description %></p>
-            <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
-            <p class="mb-3"><strong>Location</strong>: <%= meeting.location %></p>
-            <% if(typeof user == 'object' && user) { %>
-                <% if(rsvped) { %>
-                    <p>You have already RSVP'ed for this event!</p>
+<div class="container bg-light">
+    <div class="content">
+        <div class="large-card shadow">
+            <% if(!meeting) { %>
+                <h1>No meeting found to RSVP for!</h1>
+                <p><a href="/schedule">Check our schedule</a> to see upcoming meetings.</p>
+                <p>If you believe this is an error, please <a href="https://github.com/ColoradoSchoolOfMines/acm-site/issues">submit an issue</a>.</p>
+            <% } else { %>
+                <h1>RSVP for <%= meeting.title %></h1>
+                <p><strong>Description</strong>: <%= meeting.description %></p>
+                <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                <p class="mb-3"><strong>Location</strong>: <%= meeting.location %></p>
+                <% if(typeof user == 'object' && user) { %>
+                    <% if(rsvped) { %>
+                        <p>You have already RSVP'ed for this event!</p>
+                    <% } else { %>
+                        <p class="mb-3">You're logged in already, so we'll submit your RSVP as <strong><%= user.name %></strong>.</p>
+                        <form method="POST" action="/rsvp">
+                            <input type="hidden" name="id" value="<%= meeting.id %>">
+                            <button class="btn btn-primary">Submit</button>
+                        </form>
+                    <% } %>
                 <% } else { %>
-                    <p class="mb-3">You're logged in already, so we'll submit your RSVP as <strong><%= user.name %></strong>.</p>
                     <form method="POST" action="/rsvp">
                         <input type="hidden" name="id" value="<%= meeting.id %>">
-                        <button class="btn btn-primary">Submit</button>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="rsvp-<%= meeting.id %>-name">Name</label>
+                            <input id="rsvp-<%= meeting.id %>-name" class="form-control" name="name" type="text" required placeholder="First Last" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
+                            <input id="rsvp-<%= meeting.id %>-email" class="form-control" name="email" type="text" required placeholder="example@mines.edu" />
+                        </div>   
+
+                        <button class="btn d-inline-block btn-success">RSVP</button>
                     </form>
                 <% } %>
-            <% } else { %>
-                <form method="POST" action="/rsvp">
-                    <input type="hidden" name="id" value="<%= meeting.id %>">
-
-                    <div class="mb-3">
-                        <label class="form-label" for="rsvp-<%= meeting.id %>-name">Name</label>
-                        <input id="rsvp-<%= meeting.id %>-name" class="form-control" name="name" type="text" required placeholder="First Last" />
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
-                        <input id="rsvp-<%= meeting.id %>-email" class="form-control" name="email" type="text" required placeholder="example@mines.edu" />
-                    </div>   
-
-                    <button class="btn d-inline-block btn-success">RSVP</button>
-                </form>
             <% } %>
-        <% } %>
+        </div>
     </div>
 </div>
 

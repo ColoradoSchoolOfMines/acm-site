@@ -1,55 +1,57 @@
 <% layout('layouts/base')%>
 
-<div class="content">
-    <div class="large-card">
-    <% if(!meeting) { %>
-        <h1>There is no active meeting right now!</h1>
-        <p><a href="/schedule">Check our schedule</a> to see upcoming meetings.</p>
-        <p>If you believe this is an error, please <a href="https://github.com/ColoradoSchoolOfMines/acm-site/issues">submit an issue</a>.</p>
-    <% } else { %>
-        <h1><%= meeting.title %></h1>
-        
-        <% if(typeof user == 'object' && user) { %>
-            <% if(rsvped) { %>
-                <p>You have already filled out an attendance form for this event!</p>
+<div class="container bg-light">
+    <div class="content">
+        <div class="large-card shadow">
+            <% if(!meeting) { %>
+                <h1>There is no active meeting right now!</h1>
+                <p><a href="/schedule">Check our schedule</a> to see upcoming meetings.</p>
+                <p>If you believe this is an error, please <a href="https://github.com/ColoradoSchoolOfMines/acm-site/issues">submit an issue</a>.</p>
             <% } else { %>
-                <p class="mb-3">
-                    Please fill out the following form so we can log your attendance!
-                    <br>
-                    You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.
-                </p>
-                <form method="POST" action="/attend">
-                    <input type="hidden" name="id" value="<%= meeting.id %>">
-                    <div class="mb-3">                    
-                        <label class="form-label" for="attend-feedback">Do you have any suggestions, feedback, or questions about the club?</label>
-                        <textarea id="attend-feedback" class="form-control" name="feedback" rows="10" cols="60"></textarea>
-                    </div>
-                    <button class="btn d-inline-block btn-primary">Submit</button>
-                </form>
+                <h1><%= meeting.title %></h1>
+                
+                <% if(typeof user == 'object' && user) { %>
+                    <% if(rsvped) { %>
+                        <p>You have already filled out an attendance form for this event!</p>
+                    <% } else { %>
+                        <p class="mb-3">
+                            Please fill out the following form so we can log your attendance!
+                            <br>
+                            You're logged in already, so we'll submit your form as <strong><%= user.name %></strong>.
+                        </p>
+                        <form method="POST" action="/attend">
+                            <input type="hidden" name="id" value="<%= meeting.id %>">
+                            <div class="mb-3">                    
+                                <label class="form-label" for="attend-feedback">Do you have any suggestions, feedback, or questions about the club?</label>
+                                <textarea id="attend-feedback" class="form-control" name="feedback" rows="10" cols="60"></textarea>
+                            </div>
+                            <button class="btn d-inline-block btn-primary">Submit</button>
+                        </form>
+                    <% } %>
+                <% } else { %>
+                    <p class="mb-3">Please fill out the following form so we can log your attendance!</p>
+                    <form method="POST" action="/attend">
+                        <input type="hidden" name="id" value="<%= meeting.id %>">
+
+                        <div class="mb-3">                    
+                            <label class="form-label" for="attend-name">Name</label>
+                            <input id="attend-name" class="form-control" type="text" name="name" placeholder="Your name.." />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="attend-email">Email</label>
+                            <input id="attend-email" class="form-control" type="email" name="email" placeholder="me@mines.edu" />  
+                        </div>
+
+                        <div class="mb-3">                    
+                            <label class="form-label" for="attend-feedback">Do you have any suggestions, feedback, or questions about the club?</label>
+                            <textarea id="attend-feedback" class="form-control" name="feedback" rows="10" cols="60"></textarea>
+                        </div>
+
+                        <button class="btn d-inline-block btn-primary">Submit</button>
+                    </form>
+                <% } %>
             <% } %>
-        <% } else { %>
-            <p class="mb-3">Please fill out the following form so we can log your attendance!</p>
-            <form method="POST" action="/attend">
-                <input type="hidden" name="id" value="<%= meeting.id %>">
-
-                <div class="mb-3">                    
-                    <label class="form-label" for="attend-name">Name</label>
-                    <input id="attend-name" class="form-control" type="text" name="name" placeholder="Your name.." />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="attend-email">Email</label>
-                    <input id="attend-email" class="form-control" type="email" name="email" placeholder="me@mines.edu" />  
-                </div>
-
-                <div class="mb-3">                    
-                    <label class="form-label" for="attend-feedback">Do you have any suggestions, feedback, or questions about the club?</label>
-                    <textarea id="attend-feedback" class="form-control" name="feedback" rows="10" cols="60"></textarea>
-                </div>
-
-                <button class="btn d-inline-block btn-primary">Submit</button>
-            </form>
-        <% } %>
-    <% } %>
-    </div>
+        </div>
+    </div>    
 </div>

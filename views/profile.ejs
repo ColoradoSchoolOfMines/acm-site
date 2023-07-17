@@ -1,14 +1,14 @@
 <% layout('layouts/base')%>
 
-<div class="content">
-    <div class="large-card">
+<div class="container bg-light">
+    <div class="content large-card shadow">
         <div class="profile-container">
             <div class="profile-text-content">
                 <h1><%= user.name %></h1>
                 <% if(user.title.length > 0) { %>
                     <h5><%= user.title%><h5>
                 <% } else { %>
-					<h5>Member</h5>
+                    <h5>Member</h5>
                 <% } %>
                 <hr>
                 <h5>Projects</h5>
@@ -111,5 +111,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
 </div>
