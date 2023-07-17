@@ -57,9 +57,10 @@
             </div>
             <form method="POST" action="/officers">
                 <div class="modal-body">                
-                    <div class="mb-3">                    
-                        <label class="form-label" for="add-officer-email">Email</label>
-                        <input id="add-officer-email" class="form-control" name="email" type="text" required placeholder="me@mines.edu" />
+                    <label class="form-label" for="add-officer-email">Email</label>
+                    <div class="input-group mb-3">
+                        <input id="add-officer-email" name="email" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="basic-addon2" required />
+                        <span class="input-group-text" id="basic-addon2">@mines.edu</span>
                     </div>
 
                     <div class="mb-3">
@@ -182,9 +183,10 @@
                         </div>
                         <form method="POST" action="/officers">
                             <div class="modal-body">                
-                                <div class="mb-3">                    
-                                    <label class="form-label" for="edit-officer-email">Email</label>
-                                    <input id="edit-officer-email" class="form-control" name="email" type="text" required value="<%= officer.email %>"/>
+                                <label class="form-label" for="edit-officer-email">Email</label>
+                                <div class="input-group mb-3">
+                                    <input id="edit-officer-email" name="email" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="basic-addon2" required value="<%= officer.id %>">
+                                    <span class="input-group-text" id="basic-addon2">@mines.edu</span>
                                 </div>
 
                                 <div class="mb-3">
@@ -202,7 +204,7 @@
             </div>
 
             <form class="d-inline-block" method="POST" action="/officers/remove">
-                <input type="hidden" name="email" value="<%= officer.email %>">
+                <input type="hidden" name="email" value="<%= officer.id %>">
                 <button class="btn d-inline-block btn-outline-danger">Delete</button>
             </form>
         <% } %>

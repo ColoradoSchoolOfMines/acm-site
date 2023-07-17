@@ -8,7 +8,7 @@ router.get('/rsvp', async (req, res) => {
   if (meetingResp.rows.length > 0) {
     let rsvped = false;
     if (req.user) {
-      let rsvpResp = await db.query("SELECT * FROM rsvps WHERE id = $1", [req.user.id]);
+      let rsvpResp = await db.query("SELECT * FROM rsvps WHERE email = $1", [req.user.id]);
       rsvped = rsvpResp.rows.length > 0;
     }
     res.render('rsvp', { title: 'RSVP', meeting: meetingResp.rows[0], rsvped: rsvped });
@@ -40,13 +40,13 @@ router.post('/rsvp', async (req, res) => {
   }
 
   // Check if user has RSVP'ed already
-  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE id = $1 AND meeting = $2", [email, req.body.id]);
+  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE email = $1 AND meeting = $2", [email, req.body.id]);
   if (rsvp.rows.length > 0) {
     req.flash('error', 'You have already RSVP\'ed for this event!');
     res.redirect('/');
   }
   else {
-    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.id, name, email]);
+    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.id, email, name]);
     req.flash('success', 'Successfully RSVP\'ed! Thanks for coming.');
     res.redirect('/');
   }
@@ -58,7 +58,7 @@ router.get('/attend', async (req, res) => {
   if (meetingResp.rows.length > 0) {
     let rsvped = false;
     if (req.user) {
-      const rsvpResp = await db.query("SELECT * FROM attendance WHERE id = $1 AND meeting = $2", [req.user.id, resp.rows[0].id]);
+      const rsvpResp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [req.user.id, meetingResp.rows[0].id]);
       rsvped = rsvpResp.rows.length > 0;
     }
     res.render('attend', { title: 'Attend', meeting: meetingResp.rows[0], rsvped: rsvped });
@@ -90,7 +90,7 @@ router.post('/attend', async (req, res) => {
   }
 
   // Check if submitted already
-  const attendance = await db.query("SELECT * FROM attendance WHERE id = $1 AND meeting = $2", [email, req.body.id]);
+  const attendance = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [email, req.body.id]);
   if (attendance.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
     res.redirect('/');

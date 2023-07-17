@@ -30,10 +30,11 @@
                         <input id="rsvp-<%= meeting.id %>-name" class="form-control" name="name" type="text" required placeholder="First Last" />
                     </div>
                     
-                    <div class="mb-3">
-                        <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
-                        <input id="rsvp-<%= meeting.id %>-email" class="form-control" name="email" type="text" required placeholder="example@mines.edu" />
-                    </div>   
+                    <label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
+                    <div class="input-group mb-3">
+                        <input id="rsvp-<%= meeting.id %>-email" name="email" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="basic-addon2" required>
+                        <span class="input-group-text" id="basic-addon2">@mines.edu</span>
+                    </div>
 
                     <button class="btn d-inline-block btn-success">RSVP</button>
                 </form>
