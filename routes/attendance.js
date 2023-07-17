@@ -4,7 +4,8 @@ const db = require('../database/db');
 
 router.get('/rsvp', async (req, res) => {
   // Find next meeting and show it to user
-  const meetingResp = await db.query("SELECT * FROM meetings ORDER BY date DESC LIMIT 1");
+  // TODO: This actually doesn't work
+  const meetingResp = await db.query("SELECT * FROM meetings ORDER BY date LIMIT 1");
   if (meetingResp.rows.length > 0) {
     let rsvped = false;
     if (req.user) {
@@ -58,7 +59,8 @@ router.get('/attend', async (req, res) => {
   if (meetingResp.rows.length > 0) {
     let rsvped = false;
     if (req.user) {
-      const rsvpResp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", [req.user.email, resp.rows[0].id]);
+      const rsvpResp = await db.query("SELECT * FROM attendance WHERE email = $1 AND meeting = $2", 
+        [req.user.email, meetingResp.rows[0].id]);
       rsvped = rsvpResp.rows.length > 0;
     }
     res.render('attend', { title: 'Attend', meeting: meetingResp.rows[0], rsvped: rsvped });
