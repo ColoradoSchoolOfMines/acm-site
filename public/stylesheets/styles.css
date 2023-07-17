@@ -107,7 +107,7 @@ p {
 
 .profile-btns {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .profile-picture {
@@ -289,7 +289,7 @@ p {
 }
 
 .meeting-scroll {
-    height: 50vh;
+    max-height: 50vh;
     overflow: scroll;
 }
 
