@@ -81,14 +81,9 @@ p {
 
 /* Components */
 .team-card {
-    display: inline-block;
     text-align: center;
-    background-color: #f8f9fa;
     padding: 40px;
-    width: 20%;
-    height: 300px;
-    margin-right: 1%;
-    margin-bottom: 1%;
+    max-width: 20dvh;
     vertical-align: middle;
 }
 

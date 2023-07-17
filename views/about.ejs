@@ -22,18 +22,20 @@
 
 <div class="content mb-5 mt-5">
     <h1 class="acm-secondary">Our Team</h1>
-    <p class="mb-4">Mines ACM is run by an amazing team of students with support from CS@Mines! Elections are run every year around March to decide roles.</p>
+    <p>Mines ACM is run by an amazing team of students with support from CS@Mines! Elections are run every year around March to decide roles.</p>
     
-    <% for(let person of people) { %>
-    <div class="team-card">
-        <% if(person.avatar_id) { %>
-            <img class="team-picture" src="uploads/<%= person.avatar_id %>"/>
-        <% } else { %>
-            <img class="team-picture" src="/static/images/default_user.png"/>
+    <div class="row row-cols-auto mt-4 mx-0 gx-1 gy-1">    
+        <% for(let person of people) { %>
+        <div class="team-card bg-light">
+            <% if(person.avatar_id) { %>
+                <img class="team-picture" src="uploads/<%= person.avatar_id %>"/>
+            <% } else { %>
+                <img class="team-picture" src="/static/images/default_user.png"/>
+            <% } %>
+            <h2><%= person.name %></h2>
+            <p><%= person.title %></p>
+            <p><%= person.email %></p>
+        </div>
         <% } %>
-        <h2><%= person.name %></h2>
-        <p><%= person.title %></p>
-        <p><%= person.email %></p>
     </div>
-    <% } %>
 </div>
