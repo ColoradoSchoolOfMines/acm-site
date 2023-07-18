@@ -61,7 +61,7 @@ router.get('/projects', async (req, res) => {
   const projectResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
   for (let project of projectResp.rows) {
     const authorResp = await db.query("SELECT users.id, users.name, users.avatar_id " +
-      "FROM users JOIN project_authors ON users.id = project_authors.author_email " +
+      "FROM users JOIN project_authors ON users.id = project_authors.author_id " +
       "JOIN projects ON project_authors.project_id = projects.id " +
       "WHERE projects.id = $1", [project.id]);
     project.authors = authorResp.rows;

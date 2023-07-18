@@ -9,8 +9,8 @@ router.get('/profile/:id', async (req, res) => {
   const resp = await db.query("SELECT * FROM users WHERE id = $1", [targetEmail]);
   
   if(resp.rows.length > 0) {
-    const meetingsResp = await db.query("SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.email = $1", [targetEmail]);
-    const projectsResp = await db.query("SELECT title, repository FROM projects JOIN project_authors ON project_authors.project_id = projects.id WHERE project_authors.author_email = $1", [targetEmail]);
+    const meetingsResp = await db.query("SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.user_id = $1", [targetEmail]);
+    const projectsResp = await db.query("SELECT title, repository FROM projects JOIN project_authors ON project_authors.project_id = projects.id WHERE project_authors.author_id = $1", [targetEmail]);
     const isUser = req.user ? (targetEmail == req.user.id) : false;
     res.render('profile', { title: resp.rows[0].name, profileUser: resp.rows[0], isProfileUser: isUser, meetings: meetingsResp.rows, projects: projectsResp.rows });
   }

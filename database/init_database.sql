@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE TABLE IF NOT EXISTS project_authors (
     "project_id"   TEXT REFERENCES projects(id),
-    "author_email" TEXT REFERENCES users(id),
-    PRIMARY KEY ("project_id", "author_email")
+    "author_id" TEXT REFERENCES users(id),
+    PRIMARY KEY ("project_id", "author_id")
 );
 
 CREATE TABLE IF NOT EXISTS meetings (
@@ -33,22 +33,22 @@ CREATE TABLE IF NOT EXISTS meetings (
 );
 
 CREATE TABLE IF NOT EXISTS feedback (
-    "email"    TEXT PRIMARY KEY REFERENCES users(id),
+    "id"       TEXT PRIMARY KEY REFERENCES users(id),
     "feedback" TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
     "meeting" TEXT REFERENCES meetings(id),
-    "email"   TEXT NOT NULL,
+    "user_id"   TEXT NOT NULL,
     "name"    TEXT NOT NULL,
-    PRIMARY KEY ("meeting", "email")
+    PRIMARY KEY ("meeting", "user_id")
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
     "meeting" TEXT REFERENCES meetings(id),
-    "email"   TEXT NOT NULL,
+    "user_id"   TEXT NOT NULL,
     "name"    TEXT NOT NULL,
-    PRIMARY KEY ("meeting", "email")
+    PRIMARY KEY ("meeting", "user_id")
 );
 
 CREATE TABLE IF NOT EXISTS images (

@@ -7,7 +7,7 @@ const uuid = require('uuid');
 router.get('/admin', isAdminAuthenticated, async (req, res) => {
   let meetings = await db.query("SELECT * FROM meetings ORDER BY date");
   for (let meeting in meetings.rows) {
-    const attendance = await db.query("SELECT attendance.email FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
+    const attendance = await db.query("SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
     meetings.rows[meeting].attendance = attendance.rows;
   }
 
