@@ -47,7 +47,7 @@
 					<%= user.name %>
 				</a>
 				<ul class="dropdown-menu shadow-sm" aria-labelledby="userDropdown">
-					<li><a class="dropdown-item" href="/profile">Profile</a></li>
+					<li><a class="dropdown-item" href="/profile/<%= user.id %>">Profile</a></li>
 					<% if(user.is_admin) { %>
 						<li><a class="dropdown-item" href="/admin">Admin</a></li>
 					<% } %>

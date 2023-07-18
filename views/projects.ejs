@@ -39,14 +39,16 @@
                             <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
                                 <% for (author of project.authors) { %>
                                     <div class="col">
-                                        <div class="chip">
-                                            <% if (author.avatar_id) { %>
-                                                <img src="uploads/<%= author.avatar_id %>" class="d-inline project-user-image" />
-                                            <% } else { %>
-                                                <img src="static/images/default_user.png" class="d-inline project-user-image" />
-                                            <% } %>
-                                            <p class="d-inline project-user-name ms-1"><%= author.name %></p>
-                                        </div>
+                                        <a href="/profile/<%= author.id %>">
+                                            <div class="chip">
+                                                <% if (author.avatar_id) { %>
+                                                    <img src="uploads/<%= author.avatar_id %>" class="d-inline project-user-image" />
+                                                <% } else { %>
+                                                    <img src="static/images/default_user.png" class="d-inline project-user-image" />
+                                                <% } %>
+                                                <p class="d-inline project-user-name ms-1"><%= author.name %></p>
+                                            </div>
+                                        </a>
                                     </div>
                                 <% } %>
                             </div>
