@@ -80,11 +80,16 @@ main {
 }
 
 /* Components */
-.team-card {
+.team-picture-container {
     text-align: center;
-    padding: 40px;
-    max-width: 20dvh;
-    vertical-align: middle;
+    padding-top: 1rem;
+    width: 100%;
+}
+
+.team-picture {
+    border-radius: 24px;
+    width: 128px;
+    height: 128px;
 }
 
 .profile-container {
@@ -110,12 +115,6 @@ main {
     width: 100%;
     margin-bottom: 20px;
     float: right;
-}
-
-.team-picture {
-    border-radius: 75px;
-    width: 50%;
-    margin-bottom: 20px;
 }
 
 .homepage .row {

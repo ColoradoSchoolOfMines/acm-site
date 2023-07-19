@@ -27,15 +27,19 @@
         
         <div class="row row-cols-auto mt-4 mx-0 gx-1 gy-1">    
             <% for(let person of people) { %>
-            <div class="team-card bg-light">
-                <% if(person.avatar_id) { %>
-                    <img class="team-picture" src="uploads/<%= person.avatar_id %>"/>
-                <% } else { %>
-                    <img class="team-picture" src="/static/images/default_user.png"/>
-                <% } %>
-                <h2><%= person.name %></h2>
-                <p><%= person.title %></p>
-                <p><%= person.email %></p>
+            <div class="card bg-light">
+                <div class="team-picture-container card-img-top">                    
+                    <% if(person.avatar_id) { %>
+                        <img class="team-picture" src="uploads/<%= person.avatar_id %>"/>
+                    <% } else { %>
+                        <img class="team-picture" src="/static/images/default_user.png"/>
+                    <% } %>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"><%= person.name %></h2>
+                    <p class="card-subtitle"><%= person.title %></p>
+                    <p class="card-text"><%= person.email %></p>
+                </div>
             </div>
             <% } %>
         </div>
