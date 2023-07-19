@@ -38,7 +38,11 @@ const addAuthor = (authors, value) => {
 		'beforebegin',
 		`<div id="author-input-${n}" class="author-input mb-3">
             <label class="form-label" for="${authors.id}-${n}">Author ${n + 1}</label>
-            <input id="${authors.id}-${n}" class="form-control" name="author${n}" type="email" value="${value}" placeholder="example@mines.edu" required />
+            <div class="input-group">
+            	<input id="${authors.id}-${n}" class="form-control" name="author${n}" type="text" value="${value}" placeholder="Mines username" required
+            		aria-label="Username" aria-describedby="email-suffix" />
+  				<span class="input-group-text" id="email-suffix">@mines.edu</span>
+            </div>
         </div>`
 	);
 }

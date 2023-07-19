@@ -16,7 +16,7 @@ const parseAuthors = async (req, res) => {
       req.flash('error', 'Project authors can only have @mines.edu addresses!');
       return false;
     }
-    const resp = await db.query("SELECT FROM users WHERE email = $1", [author]);
+    const resp = await db.query("SELECT FROM users WHERE id = $1", [author]);
     if (resp.rows.length == 0) {
       req.flash('error', 'Project authors must have created an account prior!');
       return false;
@@ -60,8 +60,8 @@ const clearProjectImage = async (req) => {
 router.get('/projects', async (req, res) => {
   const projectResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
   for (let project of projectResp.rows) {
-    const authorResp = await db.query("SELECT users.email, users.name, users.avatar_id " +
-      "FROM users JOIN project_authors ON users.email = project_authors.author_email " +
+    const authorResp = await db.query("SELECT users.id, users.name, users.avatar_id " +
+      "FROM users JOIN project_authors ON users.id = project_authors.author_id " +
       "JOIN projects ON project_authors.project_id = projects.id " +
       "WHERE projects.id = $1", [project.id]);
     project.authors = authorResp.rows;
