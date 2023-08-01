@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE TABLE IF NOT EXISTS project_authors (
     "project_id"   TEXT REFERENCES projects(id),
-    "author_id" TEXT REFERENCES users(id),
+    "author_id"    TEXT REFERENCES users(id),
     PRIMARY KEY ("project_id", "author_id")
 );
 
@@ -33,21 +33,21 @@ CREATE TABLE IF NOT EXISTS meetings (
 );
 
 CREATE TABLE IF NOT EXISTS feedback (
-    "id"       TEXT PRIMARY KEY REFERENCES users(id),
-    "feedback" TEXT NOT NULL
+    "id"        TEXT PRIMARY KEY REFERENCES users(id),
+    "feedback"  TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
-    "meeting" TEXT REFERENCES meetings(id),
-    "user_id"   TEXT NOT NULL,
-    "name"    TEXT NOT NULL,
+    "meeting"  TEXT REFERENCES meetings(id),
+    "user_id"  TEXT NOT NULL,
+    "name"     TEXT NOT NULL,
     PRIMARY KEY ("meeting", "user_id")
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
-    "meeting" TEXT REFERENCES meetings(id),
-    "user_id"   TEXT NOT NULL,
-    "name"    TEXT NOT NULL,
+    "meeting"  TEXT REFERENCES meetings(id),
+    "user_id"  TEXT NOT NULL,
+    "name"     TEXT NOT NULL,
     PRIMARY KEY ("meeting", "user_id")
 );
 
@@ -57,9 +57,9 @@ CREATE TABLE IF NOT EXISTS images (
 );
 
 CREATE TABLE IF NOT EXISTS presentations (
-    "id"          TEXT PRIMARY KEY,
-    "title"       TEXT NOT NULL,
-    "description" TEXT,
-    "date"        DATE,
-    "url"         TEXT
+    "id"           TEXT PRIMARY KEY,
+    "title"        TEXT NOT NULL,
+    "description"  TEXT,
+    "date"         DATE,
+    "url"          TEXT
 );
