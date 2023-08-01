@@ -33,7 +33,7 @@
                     <p><strong>User</strong>: <%= feedback.id %></p>
                     <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
                     <form class="d-inline-block" method="POST" action="/feedback/remove">
-                        <input type="hidden" name="id" value="<%= feedback.id %>">
+                        <input type="hidden" name="" value="<%= feedback.id %>">
                         <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
                         <button class="btn d-inline-block btn-outline-danger">Delete</button>
                     </form>
@@ -128,7 +128,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="/meetings/edit">
-                    <input type="hidden" name="id" value="<%= meeting.id %>">
+                    <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-title">Title</label>
@@ -179,10 +179,10 @@
             </div>
             <form method="POST" action="/officers">
                 <div class="modal-body">                
-                    <label class="form-label" for="add-officer-id">Email</label>
+                    <label class="form-label" for="add-officer-user-id">Email</label>
                     <div class="input-group mb-3">
-                        <input id="add-officer-id" name="id" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="basic-addon2" required />
-                        <span class="input-group-text" id="basic-addon2">@mines.edu</span>
+                        <input id="add-officer-user-id" name="user_id" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="email-addon" required />
+                        <span class="input-group-text" id="email-addon">@mines.edu</span>
                     </div>
 
                     <div class="mb-3">
@@ -209,7 +209,7 @@
                 </div>
                 <form method="POST" action="/officers">
                     <div class="modal-body">                
-                        <input name="id" type="hidden" required value="<%= officer.id %>"/>
+                        <input name="user_id" type="hidden" required value="<%= officer.id %>"/>
 
                         <div>
                             <label class="form-label" for="edit-officer-<%= officer.id %>-title">Title</label>
@@ -232,9 +232,9 @@
                     <h5 class="modal-title" id="delete-officer-<%= officer.id %>-modal-label">Delete Presentation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="POST" action="/officers/delete">
+                <form method="POST" action="/officers/remove">
                     <div class="modal-body">
-                        <input type="hidden" name="id" value="<%= officer.id %>">
+                        <input type="hidden" name="user_id" value="<%= officer.id %>">
                         <p>Are you sure you want to remove the title of <strong><%= officer.name %></strong>?</p>
                     </div>
                     <div class="modal-footer">
@@ -245,22 +245,7 @@
             </div>
         </div>
     </div>
-
-    <div class="large-card">
-        <h2>Images</h2>
-        <p class="mb-3">Upload new image to be displayed randomly on the front page of the site.</p>
-        <form method="POST" action="/admin" enctype="multipart/form-data">
-            <div class="mb-3">
-                <input class="form-control" type="file" name="image" accept="image/png,image/jpg,image/jpeg" required />
-                <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-            </div>
-            <div class="mb-3">
-                <input class="form-control" type="text" name="caption" placeholder="Caption.." required />
-            </div>
-            <button class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-</div>
+<% } %>
 
 <script src="/scripts/csv.js"></script>
 <script src="/scripts/date.js"></script>

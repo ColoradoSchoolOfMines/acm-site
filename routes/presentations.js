@@ -22,13 +22,13 @@ router.post('/presentations', async (req, res) => {
 
 router.post('/presentations/edit', async (req, res) => {
   await db.query("UPDATE presentations SET title = $1, description = $2, date = $3, url = $4 WHERE id = $5", 
-    [req.body.title, req.body.description, req.body.date, req.body.url, req.body.id]);
+    [req.body.title, req.body.description, req.body.date, req.body.url, req.body.presentation_id]);
   req.flash('success', 'Successfully edited project!');
   res.redirect('/presentations');
 });
 
 router.post('/presentations/delete', async (req, res) => {
-  await db.query("DELETE FROM presentations WHERE id = $1", [req.body.id]);
+  await db.query("DELETE FROM presentations WHERE id = $1", [req.body.presentation_id]);
   req.flash('success', 'Successfully deleted project!');
   res.redirect('/presentations');
 });

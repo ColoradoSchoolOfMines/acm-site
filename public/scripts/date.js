@@ -30,6 +30,6 @@ for (let timestamp of dateTimes) {
 let element = document.getElementsByClassName("add-meeting-date");
 for(let i = 0; i < element.length; i++) {
 	const date = new Date(element[i].getAttribute('data-date'));
-	const timestamp = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString()
+	const timestamp = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
 	element[i].value = timestamp.split(".")[0]
 }

@@ -21,33 +21,33 @@ router.get('/rsvp', async (req, res) => {
 
 router.post('/rsvp', async (req, res) => {
   // use logged in credentials if possible
-  let email;
+  let user_id;
   let name;
 
-  if (req.body.name && req.body.email) {
+  if (req.body.user_id && req.body.name) {
     // user is submitting with form data
-    email = req.body.email;
+    user_id = req.body.user_id;
     name = req.body.name;
   }
   else {
-    email = req.user.id;
+    user_id = req.user.id;
     name = req.user.name;
   }
 
-  // If email or name is still null, something went very wrong
-  if (!email || !name) {
+  // If id or name is still null, something went very wrong
+  if (!user_id || !name) {
     req.flash('error', 'Something went wrong when trying to track your RSVP! Please contact a site administrator.');
     res.redirect('/');
   }
 
   // Check if user has RSVP'ed already
-  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE user_id = $1 AND meeting = $2", [email, req.body.id]);
+  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE user_id = $1 AND meeting = $2", [user_id, req.body.meeting_id]);
   if (rsvp.rows.length > 0) {
     req.flash('error', 'You have already RSVP\'ed for this event!');
     res.redirect('/');
   }
   else {
-    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.id, email, name]);
+    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.meeting_id, user_id, name]);
     req.flash('success', 'Successfully RSVP\'ed! Thanks for coming.');
     res.redirect('/');
   }
@@ -71,35 +71,35 @@ router.get('/attend', async (req, res) => {
 
 router.post('/attend', async (req, res) => {
   // use logged in credentials if possible
-  let email;
+  let user_id;
   let name;
 
-  if (req.body.name && req.body.email) {
+  if (req.body.user_id && req.body.name) {
     // user is submitting with form data
-    email = req.body.email;
+    user_id = req.body.user_id;
     name = req.body.name;
   }
   else {
-    email = req.user.id;
+    user_id = req.user.id;
     name = req.user.name;
   }
 
-  // If email or name is still null, something went very wrong
-  if (!email || !name) {
-    req.flash('error', 'Something went wrong when trying to track your form attendance! Please contact a site administrator.');
+  // If id or name is still null, something went very wrong
+  if (!user_id || !name) {
+    req.flash('error', 'Something went wrong when trying to track your RSVP! Please contact a site administrator.');
     res.redirect('/');
   }
 
   // Check if submitted already
-  const attendance = await db.query("SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2", [email, req.body.id]);
+  const attendance = await db.query("SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2", [user_id, req.body.meeting_id]);
   if (attendance.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
     res.redirect('/');
   } else {
     if (req.body.feedback) {
-      await db.query("INSERT INTO feedback VALUES ($1, $2)", [email, req.body.feedback]);
+      await db.query("INSERT INTO feedback VALUES ($1, $2)", [user_id, req.body.feedback]);
     }
-    await db.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", [req.body.id, email, name]);
+    await db.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", [req.body.meeting_id, user_id, name]);
     req.flash('success', 'Your attendance has been logged! Thanks for coming.')
     res.redirect('/');
   }

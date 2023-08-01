@@ -90,7 +90,7 @@
                     </div>
                     <form method="POST" action="/presentations/edit" >
                         <div class="modal-body">
-                            <input type="hidden" name="id" value="<%= presentation.id %>">
+                            <input type="hidden" name="presentation_id" value="<%= presentation.id %>">
 
                             <div class="mb-3">
                                 <label class="form-label" for="new-presentation-title">Title</label>
@@ -130,7 +130,7 @@
                     </div>
                     <form method="POST" action="/presentations/delete">
                         <div class="modal-body">
-                            <input type="hidden" name="id" value="<%= presentation.id %>">
+                            <input type="hidden" name="presentation_id" value="<%= presentation.id %>">
                             <p>Are you sure you want to delete the <strong><%= presentation.title %></strong> presentation?</p>
                         </div>
                         <div class="modal-footer">

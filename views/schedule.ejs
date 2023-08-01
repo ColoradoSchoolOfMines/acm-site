@@ -21,7 +21,7 @@
                         <% } else { %>
                             <% if (typeof user === 'object' && user) { %>
                                 <form class="d-inline" method="POST" action="/rsvp">
-                                    <input type="hidden" name="id" value="<%= meeting.id %>">
+                                    <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
                                     <button class="btn btn-outline-primary rsvp">RSVP</button>
                                 </form>
                             <% } else { %>
@@ -65,7 +65,7 @@
                     </div>
                     <form action="/rsvp" method="POST">             
                         <div class="modal-body">
-                            <input type="hidden" name="id" value="<%= meeting.id %>">
+                            <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
 
                             <p><strong>Description</strong>: <%= meeting.description %></p>
                             <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
@@ -76,10 +76,10 @@
                                 <input id="rsvp-<%= meeting.id %>-name" class="form-control" name="name" type="text" required placeholder="First Last" />
                             </div>
 
-    						<label class="form-label" for="rsvp-<%= meeting.id %>-email">Email</label>
+    						<label class="form-label" for="rsvp-<%= meeting.id %>-user-id">Email</label>
 							<div class="input-group mb-3">
-								<input id="rsvp-<%= meeting.id %>-email" name="email" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="basic-addon2" required>
-								<span class="input-group-text" id="basic-addon2">@mines.edu</span>
+								<input id="rsvp-<%= meeting.id %>-user-id" name="user_id" type="text" class="form-control" placeholder="Mines username" aria-label="Mines username" aria-describedby="email-addon" required>
+								<span class="input-group-text" id="email-addon">@mines.edu</span>
 							</div>
                         </div>
                         <div class="modal-footer">

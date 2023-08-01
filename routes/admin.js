@@ -23,10 +23,10 @@ router.post('/admin', isAdminAuthenticated, upload('image'), async (req, res) =>
 });
 
 router.post('/officers', isAdminAuthenticated, async (req, res) => {
-  const resp = await db.query("SELECT 1 FROM users WHERE id = $1", [req.body.id]);
+  const resp = await db.query("SELECT 1 FROM users WHERE id = $1", [req.body.user_id]);
   if(resp.rows.length > 0) {
-    await db.query("UPDATE users SET title = $1 WHERE id = $2", [req.body.title, req.body.id]);
-    req.flash('success', 'Successfully set officer role to ' + req.body.title + ' for ' + req.body.id + '.');
+    await db.query("UPDATE users SET title = $1 WHERE id = $2", [req.body.title, req.body.user_id]);
+    req.flash('success', 'Successfully set officer role to ' + req.body.title + ' for ' + req.body.user_id + '.');
     res.redirect('/admin');
   }
   else {
@@ -36,8 +36,8 @@ router.post('/officers', isAdminAuthenticated, async (req, res) => {
 });
 
 router.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE users SET title = $1 WHERE id = $2", ['', req.body.id]);
-  req.flash('success', 'Successfully removed ' + req.body.id + ' as an officer.');
+  await db.query("UPDATE users SET title = $1 WHERE id = $2", ['', req.body.user_id]);
+  req.flash('success', 'Successfully removed ' + req.body.user_id + ' as an officer.');
   res.redirect('/admin');
 });
 
@@ -59,7 +59,7 @@ router.post('/meetings/edit', isAdminAuthenticated, async (req, res) => {
   await db.query("UPDATE meetings SET title = $1, description = $2, date = $3, duration = $4, location = $5, type = $6 WHERE id = $7", [
     req.body.title, req.body.description, req.body.date,
     // convert hours -> milliseconds
-    (req.body.duration * 3600000), req.body.location, req.body.type, req.body.id]);
+    (req.body.duration * 3600000), req.body.location, req.body.type, req.body.meeting_id]);
   res.redirect('/admin');
 });
 
