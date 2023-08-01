@@ -82,36 +82,36 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label" for="add-meeting-title">Title</label>
-                        <input id="add-meeting-title" class="form-control" type="text" name="title" placeholder="Title..." />
+                        <input id="add-meeting-title" class="form-control" type="text" name="title" placeholder="Title..." required />
                     </div>
     
                     <div class="mb-3">
                         <label class="form-label" for="add-meeting-description">Description</label>
-                        <input id="add-meeting-description" class="form-control" type="text" name="description" placeholder="Description.." />
+                        <input id="add-meeting-description" class="form-control" type="text" name="description" placeholder="Description.." required />
                     </div>
     
                     <div class="mb-3">
                         <label class="form-label" for="add-meeting-date">Date</label>
-                        <input id="add-meeting-date" class="form-control" type="datetime-local" name="date">
+                        <input id="add-meeting-date" class="form-control" type="datetime-local" name="date" required />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label" for="add-meeting-duration">Duration</label>
-                        <input id="add-meeting-duration" class="form-control" min="0" max="10" type="number" name="duration" placeholder="Duration (hours)" />
+                        <input id="add-meeting-duration" class="form-control" min="0" max="10" type="number" name="duration" placeholder="Duration (hours)" required />
                     </div>
     
                     <div class="mb-3">
                         <label class="form-label" for="add-meeting-location">Location</label>
-                        <input id="add-meeting-location" class="form-control" type="text" name="location" placeholder="Location.." />
+                        <input id="add-meeting-location" class="form-control" type="text" name="location" placeholder="Location.." required />
                     </div>
     
                     <div class="mb-3">
                         <label class="form-label" for="add-meeting-type">Type</label>
-                        <input id="add-meeting-type" class="form-control" type="text" name="type" placeholder="Meeting type.." />
+                        <input id="add-meeting-type" class="form-control" type="text" name="type" placeholder="Meeting type.." required />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-outline-secondary">Discard</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
                     <button class="btn btn-success">Add</button>
                 </div>
             </form>
@@ -132,36 +132,36 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-title">Title</label>
-                            <input id="edit-meeting-<%= meeting.id %>-title" class="form-control" type="text" name="title" placeholder="Title..." value="<%= meeting.title %>" />
+                            <input id="edit-meeting-<%= meeting.id %>-title" class="form-control" type="text" name="title" placeholder="Title..." value="<%= meeting.title %>" required />
                         </div>
         
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-description">Description</label>
-                            <input id="edit-meeting-<%= meeting.id %>-description" class="form-control" type="text" name="description" placeholder="Description.." value="<%= meeting.description %>" />
+                            <input id="edit-meeting-<%= meeting.id %>-description" class="form-control" type="text" name="description" placeholder="Description.." value="<%= meeting.description %>" required />
                         </div>
         
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-date">Date</label>
-                            <input id="edit-meeting-<%= meeting.id %>-date" class="form-control" type="datetime-local" name="date" data-date="<%= meeting.date %>" value="">
+                            <input id="edit-meeting-<%= meeting.id %>-date" class="form-control date-input" type="datetime-local" name="date" data-date="<%= meeting.date %>" value="" required />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-duration">Duration</label>
-                            <input id="edit-meeting-<%= meeting.id %>-duration" class="form-control" min="0" max="10" type="number" name="duration" placeholder="Duration (hours)" value="<%= meeting.duration %>" />
+                            <input id="edit-meeting-<%= meeting.id %>-duration" class="form-control" min="0" max="10" type="number" name="duration" placeholder="Duration (hours)" value="<%= meeting.duration / (60 * 60 * 1000) %>" required />
                         </div>
         
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-location">Location</label>
-                            <input id="edit-meeting-<%= meeting.id %>-location" class="form-control" type="text" name="location" placeholder="Location.." value="<%= meeting.location %>" />
+                            <input id="edit-meeting-<%= meeting.id %>-location" class="form-control" type="text" name="location" placeholder="Location.." value="<%= meeting.location %>" required />
                         </div>
         
                         <div class="mb-3">
                             <label class="form-label" for="edit-meeting-<%= meeting.id %>-type">Type</label>
-                            <input id="edit-meeting-<%= meeting.id %>-type" class="form-control" type="text" name="type" placeholder="Meeting type.." value="<%= meeting.type %>" />
+                            <input id="edit-meeting-<%= meeting.id %>-type" class="form-control" type="text" name="type" placeholder="Meeting type.." value="<%= meeting.type %>" required />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="reset" class="btn btn-outline-secondary">Discard</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
                         <button class="btn btn-success">Update</button>
                     </div>
                 </form>
