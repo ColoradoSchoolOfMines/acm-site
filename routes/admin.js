@@ -7,7 +7,7 @@ const uuid = require('uuid');
 router.get('/admin', isAdminAuthenticated, async (req, res) => {
   let meetings = await db.query("SELECT * FROM meetings ORDER BY date");
   for (let meeting in meetings.rows) {
-    const attendance = await db.query("SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id])
+    const attendance = await db.query("SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id]);
     meetings.rows[meeting].attendance = attendance.rows;
   }
 
@@ -42,8 +42,8 @@ router.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
 });
 
 router.post('/feedback/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("DELETE FROM feedback WHERE id = $1 and feedback = $2", [req.body.id, req.body.feedback]);
-  req.flash('success', 'Successfully removed feedback from ' + req.body.id + '.');
+  await db.query("DELETE FROM feedback WHERE user_id = $1 and feedback = $2", [req.body.user_id, req.body.feedback]);
+  req.flash('success', 'Successfully removed feedback from ' + req.body.user_id + '.');
   res.redirect('/admin');
 });
 
