@@ -31,6 +31,5 @@ let element = document.getElementsByClassName("date-input");
 for(let i = 0; i < element.length; i++) {
 	const date = new Date(element[i].getAttribute('data-date'));
 	const timestamp = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
-	console.log(timestamp);
 	element[i].value = timestamp.split(".")[0]
 }

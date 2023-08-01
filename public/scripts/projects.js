@@ -69,7 +69,6 @@ const resetAuthors = (authors, values) => {
 
 const populateAuthors = (authors) => {
 	let authorValues = JSON.parse(authors.getAttribute(`data-project-authors-value`));
-	console.log(authorValues);
 	for (let i = 0; i < authorValues.length; ++i) {
 		addAuthor(authors, authorValues[i]);
 	}
