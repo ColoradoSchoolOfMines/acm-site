@@ -37,9 +37,9 @@ passport.use(new GoogleStrategy({
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
-    email = profile.email.split("@")[0] // only store ID
-    await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [email, profile.displayName]);
-    user = { id: email };
+    user_id = profile.email.split("@")[0] // only store ID
+    await db.query("INSERT INTO users VALUES ($1, $2, '', '', '') ON CONFLICT DO NOTHING", [user_id, profile.displayName]);
+    user = { id: user_id };
     req.flash('success', 'Successfully logged in!');
     done(null, user);
   } else {
@@ -138,7 +138,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).render('error', { title: "Error" });
+  res.status(500).render('error', { title: "Error", error: err });
 });
 
 app.listen(process.env.PORT || 3000, async () => {

@@ -15,7 +15,7 @@ generateCSV = (attendanceData) => {
 
     let rows = [["Email"]];
     for (let user in attendance) {
-        rows.push([attendance[user].user]);
+        rows.push([attendance[user].user_id]);
     }
 
     let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");

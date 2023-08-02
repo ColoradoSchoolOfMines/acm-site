@@ -1,118 +1,169 @@
 <% layout('layouts/base')%>
 
-<div class="content mt-5 mb-5">
-    <div class="large-card">
-        <div class="profile-container">
-            <div class="profile-text-content">
-                <h1><%= profileUser.name %></h1>
-                <% if(profileUser.title.length > 0) { %>
-                    <h5><%= profileUser.title%><h5>
-                <% } else { %>
-					<h5>Member</h5>
-                <% } %>
-                <hr>
-                <h5>Projects</h5>
-                    <% if (projects.length > 0) { %>
-                        <% for(let project of projects) { %>
-                            <p><%= project.title %> <a href="<%= project.repository %>" target="blank">View Repository</a></p>
+<div class="bg-light">
+    <div class="container">
+        <div class="large-card">
+            <div class="profile-container">
+                <div class="profile-text-content">
+                    <h1><%= profileUser.name %></h1>
+                    <% if(profileUser.title.length > 0) { %>
+                        <h5><%= profileUser.title%><h5>
+                    <% } else { %>
+                        <h5>Member</h5>
+                    <% } %>
+                    <hr>
+                    <h5>Projects</h5>
+                        <% if (projects.length > 0) { %>
+                            <% for(let project of projects) { %>
+                                <p><%= project.title %> <a href="<%= project.repository %>" target="blank">View Repository</a></p>
+                            <% } %>
+                        <% } else { %>
+                            <p>This user is not currently involved in any ACM projects.<p>
                         <% } %>
+
+                    <h5 class="mt-3">About</h5>
+                    <% if(isProfileUser) { %>
+                        <% if (profileUser.about && profileUser.about.length > 0) { %>
+                            <p><%= profileUser.about %></p>
+                            <button type="button" class="d-inline-block btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#about-modal">
+                                Edit
+                            </button>
+                        <% } else { %>
+                            <p>You haven't set a bio yet!</p>
+                            <button type="button" class="d-inline-block btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#about-modal">
+                                Add
+                            </button>
+                        <% } %>
+                        <br>             
                     <% } else { %>
-                        <p>This user is not currently involved in any ACM projects.<p>
+                        <% if (profileUser.about && profileUser.about.length > 0) { %>
+                            <p><%= profileUser.about %></p>
+                        <% } else { %>
+                            <p><i>This user hasn't set a bio yet!</i><p>
+                        <% } %>
                     <% } %>
 
-                <h5 class="mt-3">About</h5>
-                <% if(isProfileUser) { %>
-                    <% if (profileUser.about && profileUser.about.length > 0) { %>
-                        <p><%= profileUser.about %></p>
-                        <button type="button" class="d-inline-block btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#about-modal">
-                            Edit
-                        </button>
+                    <h5 class="mt-3">Attended Meetings (<%= meetings.length %>)</h5>
+                    <div class="meeting-scroll">
+                        <% for(let meeting of meetings) { %>
+                            <p><%= meeting.title %> (<span class="date"><%= meeting.date %></span>)</p>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="profile-picture-content">
+                    <% if (profileUser.avatar_id) { %>
+                        <img class="profile-picture" src="/uploads/<%= profileUser.avatar_id %>" />
                     <% } else { %>
-                        <p>You haven't set a bio yet!</p>
-                        <button type="button" class="d-inline-block btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#about-modal">
-                            Add
-                        </button>
-                    <% } %>
-                    <br>
-
-                    <!-- Edit About Section Modal -->
-                    <div class="modal fade" id="about-modal" tabindex="-1" aria-labelledby="about-modal-label" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable">
-                            <form method="POST" action="/profile/about">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="about-modal-label">About</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <label class="form-label" for="about">Biography</label>
-                                        <textarea id="about" rows="5" cols="60" maxlength="500" class="form-control" name="about" required placeholder="Some cool bio.."><%= profileUser.about %></textarea>
-                                    </div>
-                                    <div class="modal-footer pfp-footer">
-                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button class="btn d-inline-block btn-success mt-1">Save</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>                
-                <% } else { %>
-                    <% if (profileUser.about && profileUser.about.length > 0) { %>
-                        <p><%= profileUser.about %></p>
-                    <% } else { %>
-                        <p><i>This user hasn't set a bio yet!</i><p>
-                    <% } %>
-                <% } %>
-
-                <h5 class="mt-3">Attended Meetings (<%= meetings.length %>)</h5>
-                <div class="meeting-scroll">
-                    <% for(let meeting of meetings) { %>
-                        <p><%= meeting.title %> (<span class="date"><%= meeting.date %></span>)</p>
+                        <img class="profile-picture" src="/static/images/default_user.png" />
                     <% } %>
                 </div>
             </div>
-            <div class="profile-picture-content">
-                <% if (profileUser.avatar_id) { %>
-                    <img class="profile-picture" src="/uploads/<%= profileUser.avatar_id %>" />
-                <% } else { %>
-                    <img class="profile-picture" src="/static/images/default_user.png" />
+            <div class="profile-btns">
+                <% if(isProfileUser) { %>
+                    <!-- Change Avatar Modal Trigger Button -->
+                    <button class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#pfp-modal">Change Avatar</button>
                 <% } %>
             </div>
         </div>
-        <div class="profile-btns">
-            <% if(isProfileUser) { %>
-                <!-- Change Avatar Modal Trigger Button -->
-                <button class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#pfp-modal">Change Avatar</button>
+    </div>
+</div>
 
-                <!-- Change Avatar Modal -->
-                <div class="modal fade" id="pfp-modal" tabindex="-1" aria-labelledby="pfp-modal-label" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="pfp-modal-label">Change Avatar</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <form method="POST" action="/profile" enctype="multipart/form-data">
-                                <div class="modal-body">
-                                    <% if (profileUser.avatar_id) { %>
-                                        <img class="profile-picture" src="/uploads/<%= profileUser.avatar_id %>" />
-                                    <% } else { %>
-                                        <img class="profile-picture" src="/static/images/default_user.png" />
-                                    <% } %>                             
-                                    <div>
-                                        <input name="avatar" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
-                                        <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button class="btn btn-primary">Save</button>
-                                </div>
-                            </form>
-                        </div>
+<!-- Change Avatar Modal -->
+<div class="modal fade" id="pfp-modal" tabindex="-1" aria-labelledby="pfp-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pfp-modal-label">Change Avatar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/profile" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <% if (profileUser.avatar_id) { %>
+                        <img class="profile-picture" src="/uploads/<%= profileUser.avatar_id %>" />
+                    <% } else { %>
+                        <img class="profile-picture" src="/static/images/default_user.png" />
+                    <% } %>                             
+                    <div>
+                        <input name="avatar" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
+                        <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
                     </div>
                 </div>
-            <% } %>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+                    
+<!-- Meetings Attended Modal -->
+<div class="modal fade" id="meetings-modal" tabindex="-1" aria-labelledby="meetings-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="meetings-modal-label"><%= user.name %>'s Attended Meetings %></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <% for(let meeting of meetings) { %>
+                    <p><%= meeting.title %> - <%= meeting.date %></p>
+                <% } %>
+            </div>
+            <div class="modal-footer meetings-footer">
+                Total Number of Meetings Attended: <%= meetings.length %> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit About Section Modal -->
+<div class="modal fade" id="about-modal" tabindex="-1" aria-labelledby="about-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <form method="POST" action="/profile/about">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="about-modal-label">About</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label" for="about">Biography</label>
+                    <textarea id="about" rows="5" cols="60" maxlength="500" class="form-control" name="about" required placeholder="Some cool bio.."><%= profileUser.about %></textarea>
+                </div>
+                <div class="modal-footer pfp-footer">
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn d-inline-block btn-success mt-1">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>   
+                               
+<!-- Change Avatar Modal -->
+<div class="modal fade" id="pfp-modal" tabindex="-1" aria-labelledby="pfp-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pfp-modal-label">Change Avatar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/profile" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <% if (user.avatar_id) { %>
+                        <img class="profile-picture" src="uploads/<%= user.avatar_id %>" />
+                    <% } else { %>
+                        <img class="profile-picture" src="static/images/default_user.png" />
+                    <% } %>                             
+                    <div>
+                        <input name="avatar" class="form-control" type="file" accept="image/png,image/jpg,image/jpeg" />
+                        <p class="form-text">Images must be under 5 MB and of JPG/JPEG/PNG type.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -40,8 +40,8 @@ const addAuthor = (authors, value) => {
             <label class="form-label" for="${authors.id}-${n}">Author ${n + 1}</label>
             <div class="input-group">
             	<input id="${authors.id}-${n}" class="form-control" name="author${n}" type="text" value="${value}" placeholder="Mines username" required
-            		aria-label="Username" aria-describedby="email-suffix" />
-  				<span class="input-group-text" id="email-suffix">@mines.edu</span>
+            		aria-label="Username" aria-describedby="email-addon" />
+  				<span class="input-group-text" id="email-addon">@mines.edu</span>
             </div>
         </div>`
 	);

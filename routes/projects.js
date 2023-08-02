@@ -12,10 +12,6 @@ const parseAuthors = async (req, res) => {
   req.body.authors = [];
   for (let i = 0; getAuthorValue(i); ++i) {
     const author = getAuthorValue(i);
-    if (!author.endsWith("@mines.edu")) {
-      req.flash('error', 'Project authors can only have @mines.edu addresses!');
-      return false;
-    }
     const resp = await db.query("SELECT FROM users WHERE id = $1", [author]);
     if (resp.rows.length == 0) {
       req.flash('error', 'Project authors must have created an account prior!');
@@ -53,7 +49,7 @@ const transformProjectRequest = async (req, res, next) => {
 
 const clearProjectImage = async (req) => {
   // We don't have access to the image id from the request usually, query it from the db.
-  const resp = await db.query("SELECT image_id FROM projects WHERE id = $1", [req.body.id]);
+  const resp = await db.query("SELECT image_id FROM projects WHERE id = $1", [req.body.project_id]);
   fs.unlinkSync("uploads/" + resp.rows[0].image_id);
 }
 
@@ -96,21 +92,21 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), trans
     await db.query(
       "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5, image_id = $6 WHERE id = $7",
       [req.body.title, req.body.description, req.body.website, req.body.repository,
-      req.body.archived, req.file.filename, req.body.id])
+      req.body.archived, req.file.filename, req.body.project_id])
   } else {
     // No image specified, leave it unchanged and only commit the rest.
     await db.query(
       "UPDATE projects SET title = $1, description = $2, website = $3, repository = $4, archived = $5 WHERE id = $6",
       [req.body.title, req.body.description, req.body.website, req.body.repository,
-      req.body.archived, req.body.id])
+      req.body.archived, req.body.project_id])
   }
 
   // Since the author amount could have changed in length, just wipe the prior relations
   // and insert ones to avoid stray entries.
-  await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.id]);
+  await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.project_id]);
   for (let i = 0; i < req.body.authors.length; ++i) {
     await db.query(
-      "INSERT INTO project_authors VALUES ($1, $2)", [req.body.id, req.body.authors[i]])
+      "INSERT INTO project_authors VALUES ($1, $2)", [req.body.project_id, req.body.authors[i]])
   }
 
   req.flash('success', 'Successfully edited project!');
@@ -120,8 +116,8 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image', true), trans
 router.post('/projects/delete', isAdminAuthenticated, async (req, res) => {
   // Free the space taken up by the now-unused project image.
   await clearProjectImage(req);
-  await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.id]);
-  await db.query("DELETE FROM projects WHERE id = $1", [req.body.id]);
+  await db.query("DELETE FROM project_authors WHERE project_id = $1", [req.body.project_id]);
+  await db.query("DELETE FROM projects WHERE id = $1", [req.body.project_id]);
   req.flash('success', 'Successfully deleted project!');
   res.redirect('/projects');
 });
