@@ -76,7 +76,7 @@
                 <h5 class="modal-title" id="pfp-modal-label">Change Avatar</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="/profile" enctype="multipart/form-data">
+            <form method="POST" action="/profile/avatar" enctype="multipart/form-data">
                 <div class="modal-body">
                     <% if (profileUser.avatar_id) { %>
                         <img class="profile-picture" src="/uploads/<%= profileUser.avatar_id %>" />
@@ -102,7 +102,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="meetings-modal-label"><%= user.name %>'s Attended Meetings %></h5>
+            <h5 class="modal-title" id="meetings-modal-label"><%= profileUser.name %>'s Attended Meetings %></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -149,8 +149,8 @@
             </div>
             <form method="POST" action="/profile" enctype="multipart/form-data">
                 <div class="modal-body">
-                    <% if (user.avatar_id) { %>
-                        <img class="profile-picture" src="uploads/<%= user.avatar_id %>" />
+                    <% if (profileUser.avatar_id) { %>
+                        <img class="profile-picture" src="uploads/<%= profileUser.avatar_id %>" />
                     <% } else { %>
                         <img class="profile-picture" src="static/images/default_user.png" />
                     <% } %>                             
