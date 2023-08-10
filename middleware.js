@@ -27,24 +27,20 @@ module.exports.isAdminAuthenticated = (req, res, next) => {
   }
 }
 
-module.exports.upload = function (id, required = true) {
+module.exports.upload = function (id) {
   const impl = upload.single(id);
   return async (req, res, next) => {
-    if (required || req.body[id]) {
-      impl(req, res, async (err) => {
-        if (err instanceof multer.MulterError) {
-          req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
-          res.redirect(req.url);
-        } else if (err) {
-          req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
-          res.redirect(req.url);
-        } else {
-          next();
-        }
-      });
-    } else {
-      next();
-    }
+    impl(req, res, async (err) => {
+      if (err instanceof multer.MulterError) {
+        req.flash('error', 'Please upload a valid image. Only JPEG, JPG, and PNG files are allowed, and they must be under 5MB.');
+        res.redirect(req.url);
+      } else if (err) {
+        req.flash('error', 'An error occurred while trying to upload your image! Please try again. If the issue persists, contact us.');
+        res.redirect(req.url);
+      } else {
+        next();
+      }
+    });
   }
 }
 

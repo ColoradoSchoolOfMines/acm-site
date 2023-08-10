@@ -111,7 +111,7 @@ router.post('/projects', isAdminAuthenticated, upload('image'), withProjectForm(
   req.flash('success', 'Successfully added project!');
 }));
 
-router.post('/projects/edit', isAdminAuthenticated, upload('image', true), withProjectForm(async (req, res, project) => {
+router.post('/projects/edit', isAdminAuthenticated, upload('image'), withProjectForm(async (req, res, project) => {
   if (!uuid.validate(req.body.project_id)) {
     throw new Error("Invalid project id")
   }
