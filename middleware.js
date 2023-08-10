@@ -1,6 +1,7 @@
 const multer = require('multer');
 const { multerConfig } = require('./config/general.config');
 const upload = multer(multerConfig);
+const fs = require('fs/promises');
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -43,6 +44,26 @@ module.exports.upload = function (id, required = true) {
       });
     } else {
       next();
+    }
+  }
+}
+
+module.exports.fallible = (block) => {
+  return async (req, res, next) => {
+    try {
+      await block(req, res);
+    } catch (e) {
+      // If any upload middleware was used, we will need to remove the
+      // newly-uploaded image as it's unlikely to be referenced anywhere
+      // in the database.
+      if (req.file) {
+        try {
+          await fs.unlink(req.file.filename)
+        } catch (e) {
+          // Just ignore this.
+        }
+      }
+      next(e);
     }
   }
 }
