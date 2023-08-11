@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs/promises');
+const fs = require('fs');
 const db = require('../database/db');
 const { isLoggedIn, upload, fallible } = require('../middleware');
 const router = express.Router();
@@ -34,7 +34,7 @@ router.post('/profile/avatar', isLoggedIn, upload('avatar'), fallible(async (req
 
   if (req.user.avatar_id) {
     // Free the space taken up by the now-unused profile picture
-    await fs.unlink("uploads/" + req.user.avatar_id);
+    fs.unlinkSync("uploads/" + req.user.avatar_id);
   }
   await db.query("UPDATE users SET avatar_id = $1 WHERE id = $2", [avatarId, req.user.id]);
 

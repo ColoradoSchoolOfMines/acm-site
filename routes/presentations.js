@@ -4,16 +4,6 @@ const db = require('../database/db');
 const { fallible } = require("../middleware");
 const router = express.Router();
 
-router.get('/presentations', fallible(async (req, res) => {
-  const presentationsResp = await db.query("SELECT * FROM presentations ORDER BY date DESC");
-  for (presentation of presentationsResp.rows) {
-    // Just cleave off the time value randomly added for no reason
-    // by JS Date, not bringing in Moment.js for just this.
-    presentation.date = presentation.date.toISOString().split("T")[0];
-  }
-  res.render('presentations', { title: 'Presentations', presentations: presentationsResp.rows });
-}));
-
 const parsePresentationId = (body) => {
   if (!uuid.validate(body.presentation_id)) {
     throw new TypeError("Invalid presentation id");
@@ -51,6 +41,16 @@ const parsePresentationInfo = (body) => {
 
   return presentation;
 }
+
+router.get('/presentations', fallible(async (req, res) => {
+  const presentationsResp = await db.query("SELECT * FROM presentations ORDER BY date DESC");
+  for (presentation of presentationsResp.rows) {
+    // Just cleave off the time value randomly added for no reason
+    // by JS Date, not bringing in Moment.js for just this.
+    presentation.date = presentation.date.toISOString().split("T")[0];
+  }
+  res.render('presentations', { title: 'Presentations', presentations: presentationsResp.rows });
+}));
 
 router.post('/presentations', fallible(async (req, res) => {
   const presentation = parsePresentationInfo(req.body);

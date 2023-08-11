@@ -1,7 +1,7 @@
 const multer = require('multer');
 const { multerConfig } = require('./config/general.config');
 const upload = multer(multerConfig);
-const fs = require('fs/promises');
+const fs = require('fs');
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -27,7 +27,7 @@ module.exports.isAdminAuthenticated = (req, res, next) => {
   }
 }
 
-module.exports.upload = function (id) {
+module.exports.upload = (id) => {
   const impl = upload.single(id);
   return async (req, res, next) => {
     impl(req, res, async (err) => {
@@ -54,7 +54,7 @@ module.exports.fallible = (block) => {
       // in the database.
       if (req.file) {
         try {
-          await fs.unlink(req.file.filename)
+          fs.unlinkSync("uploads/" + req.file.filename)
         } catch (e) {
           // Just ignore this.
         }

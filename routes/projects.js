@@ -1,21 +1,9 @@
 const express = require('express');
 const db = require('../database/db');
-const fs = require('fs/promises');
+const fs = require('fs');
 const uuid = require('uuid');
 const { isAdminAuthenticated, upload, fallible } = require('../middleware');
 const router = express.Router();
-
-router.get('/projects', fallible(async (req, res) => {
-  const projectsResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
-  for (let project of projectResp.rows) {
-    const authorsResp = await db.query("SELECT users.id, users.name, users.avatar_id " +
-      "FROM users JOIN project_authors ON users.id = project_authors.author_id " +
-      "JOIN projects ON project_authors.project_id = projects.id " +
-      "WHERE projects.id = $1", [project.id]);
-    project.authors = authorsResp.rows;
-  }
-  res.render('projects', { title: "Projects", projects: projectsResp.rows });
-}));
 
 const parseBaseProjectForm = async (req) => {
   const project = {};
@@ -83,11 +71,23 @@ const withProjectForm = (body) =>
       if (project) {
         await body(req, res, project);
       } else if (req.file) {
-        await fs.unlink(req.file.filename);
+        fs.unlinkSync("uploads/", req.file.filename);
       }
       res.redirect('/projects')
     }
   )
+
+router.get('/projects', fallible(async (req, res) => {
+  const projectsResp = await db.query("SELECT * FROM projects ORDER BY archived, title");
+  for (let project of projectsResp.rows) {
+    const authorsResp = await db.query("SELECT users.id, users.name, users.avatar_id " +
+      "FROM users JOIN project_authors ON users.id = project_authors.author_id " +
+      "JOIN projects ON project_authors.project_id = projects.id " +
+      "WHERE projects.id = $1", [project.id]);
+    project.authors = authorsResp.rows;
+  }
+  res.render('projects', { title: "Projects", projects: projectsResp.rows });
+}));
 
 router.post('/projects', isAdminAuthenticated, upload('image'), withProjectForm(async (req, res, project) => {
   project.id = uuid.v4();
@@ -124,7 +124,7 @@ router.post('/projects/edit', isAdminAuthenticated, upload('image'), withProject
   const imageId = imageResp.rows[0].image_id;
   if (project.imageId) {
     // New image is being applied, remove the old image.
-    await fs.unlink("uploads/" + imageId);
+    fs.unlinkSync("uploads/" + imageId);
   } else {
     // No change in image.
     project.imageId = imageId;
@@ -155,7 +155,7 @@ router.post('/projects/delete', isAdminAuthenticated, fallible(async (req, res) 
   
   // Free the space taken up by the now-unused image.
   const imageResp = await db.query("SELECT image_id FROM projects WHERE id = $1", [projectId]);
-  fs.unlink("uploads/" + imageResp.rows[0].image_id);
+  fs.unlinkSync("uploads/" + imageResp.rows[0].image_id);
 
   await db.transaction(async (client) => {  
     await client.query("DELETE FROM project_authors WHERE project_id = $1", [projectId]);

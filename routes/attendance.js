@@ -4,7 +4,7 @@ const db = require('../database/db');
 const uuid = require('uuid');
 const { fallible } = require("../middleware");
 
-const parseAttendanceForm = req => {
+const parseAttendanceForm = (req) => {
   let form = {};
 
   if (uuid.validate(req.body.meeting_id)) {
@@ -109,7 +109,7 @@ router.post('/attend', fallible(async (req, res) => {
       }
     }
 
-    await db.transaction(async client => {
+    await db.transaction(async (client) => {
       await client.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", 
         [form.meeting_id, form.user_id, form.user_name]);
       if (feedback) {
