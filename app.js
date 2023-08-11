@@ -10,6 +10,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { cspConfig, sessionConfig } = require('./config/general.config');
 const db = require('./database/db');
+const { fallible } = require('./middleware');
 const authRoutes = require('./routes/auth');
 const attendRoutes = require('./routes/attendance');
 const adminRoutes = require('./routes/admin');
@@ -53,9 +54,9 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (user, done) => {
-  const resp = await db.query("SELECT * FROM users WHERE id = $1", [user]);
-  if (resp.rows.length > 0) {
-    let info = resp.rows[0];
+  const userResp = await db.query("SELECT * FROM users WHERE id = $1", [user]);
+  if (userResp.rows.length > 0) {
+    let info = userResp.rows[0];
     info.is_admin = info.title.length > 0;
     done(null, info);
   } else {
@@ -97,32 +98,29 @@ app.use('/', profileRoutes);
 app.use('/', projectsRoutes);
 app.use('/', scheduleRoutes);
 
-app.get('/', async (req, res) => {
-  const resp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
-  const image = resp.rows[0];
+app.get('/', fallible(async (req, res) => {
+  const imageResp = await db.query("SELECT * FROM images ORDER BY RANDOM() LIMIT 1");
+  const image = imageResp.rows[0];
 
-  let meetings = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
-  for (let meeting in meetings.rows) {
+  let meetingsResp = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '2 weeks' ORDER BY date DESC LIMIT 2");
+  for (let meeting of meetingsResp.rows) {
     if (req.user) {
-      const rsvp = await db.query("SELECT * FROM rsvps WHERE user_id = $1 AND meeting = $2", [req.user.id, meetings.rows[meeting].id]);
-      if (rsvp.rows.length > 0) {
-        meetings.rows[meeting].rsvped = true;
-      }
-    }
-    else {
-      meetings.rows[meeting].rsvped = false;
+      const rsvpResp = await db.query("SELECT * FROM rsvps WHERE user_id = $1 AND meeting = $2", [req.user.id, meeting.id]);
+      meeting.rsvped = rsvpResp.rows.length > 0;
+    } else {
+      meeting.rsvped = false;
     }
   }
 
-  res.render('home', { title: 'Home', image: image, meetings: meetings.rows });
-});
+  res.render('home', { title: 'Home', image: image, meetings: meetingsResp.rows });
+}));
 
-app.get('/about', async (req, res) => {
-  const resp = await db.query("SELECT * FROM users WHERE title != ''");
-  res.render('about', { title: 'About Us', people: resp.rows });
-});
+app.get('/about', fallible(async (req, res) => {
+  const peopleResp = await db.query("SELECT * FROM users WHERE title != ''");
+  res.render('about', { title: 'About Us', people: peopleResp.rows });
+}));
 
-app.get('/uploads/:id', (req, res) => {
+app.get('/uploads/:id', fallible(async (req, res) => {
   let path = "uploads/" + req.params.id;
   if (fs.existsSync(path)) {
     let image = fs.readFileSync(path);
@@ -131,7 +129,7 @@ app.get('/uploads/:id', (req, res) => {
   } else {
     res.status(404).render('404', { title: '404' });
   }
-});
+}));
 
 app.use((req, res, next) => {
   res.status(404).render('404', { title: "404" });
