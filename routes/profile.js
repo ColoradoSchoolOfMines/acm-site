@@ -43,7 +43,7 @@ router.post('/profile/avatar', isLoggedIn, upload('avatar'), fallible(async (req
 }));
 
 router.post('/profile/about', isLoggedIn, fallible(async (req, res) => {
-  if (!req.body.about) {
+  if (typeof req.body.about !== "string" || req.body.about.length < 1) {
     throw new TypeError("Invalid user about")
   }
   const about = req.body.about;
