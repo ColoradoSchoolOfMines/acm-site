@@ -63,7 +63,7 @@ router.post('/officers', isAdminAuthenticated, fallible(async (req, res) => {
 }));
 
 router.post('/officers/remove', isAdminAuthenticated, fallible(async (req, res) => {
-  if (typeof req.body.user_id !== "string" || req.body.user_id.length < 0) {
+  if (typeof req.body.user_id !== "string" || req.body.user_id.length < 1) {
     throw new TypeError("Invalid user id")
   }
   const userId = req.body.user_id;
@@ -84,7 +84,7 @@ router.post('/feedback/remove', isAdminAuthenticated, fallible(async (req, res) 
   if (typeof req.body.feedback === "string" && req.body.feedback.length > 0) {
     feedback.feedback = req.body.feedback;
   } else {
-    throw new TypeError("Invalid title");
+    throw new TypeError("Invalid feedback");
   }
 
   await db.query("DELETE FROM feedback WHERE user_id = $1 and feedback = $2", 

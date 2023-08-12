@@ -25,14 +25,9 @@ const parseBaseProjectForm = async (req) => {
     throw new TypeError("Invalid project repository");
   }
 
+  // Website field is optional and will be an empty string if not specified.
   if (typeof req.body.website === "string") {
-    // Website field is optional and will be undefined if not specified,
-    // transform into an empty string is that's the case.
-    if (req.body.website) {
-      project.website = req.body.website;
-    } else {
-      project.website = "";
-    }
+    project.website = req.body.website;
   } else {
     throw new TypeError("Invalid project website");
   }

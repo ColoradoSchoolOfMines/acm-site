@@ -27,12 +27,16 @@ const parsePresentationInfo = (body) => {
     throw new TypeError("Invalid presentation description");
   }
 
+  // Ensure the presentation's date resolves to a valid timestamp. Date only indicates this
+  // by having a NaN time (which is really hard to accurately check), or having a string
+  // representation of "Invalid date". Do the latter since it's less of a footgun.
   if (typeof body.date === "string" && new Date(body.date).toString() !== "Invalid Date") {
     presentation.date = body.date;
   } else {
     throw new TypeError("Invalid presentation date");
   }
 
+  // TODO: We should probably also be validating URLs and the like
   if (typeof body.url === "string" && body.url.length > 0) {
     presentation.url = body.url;
   } else {
