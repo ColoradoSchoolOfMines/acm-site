@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../database/db');
 const fs = require('fs');
+const { URL } = require('url');
 const uuid = require('uuid');
 const { isAdminAuthenticated, upload, fallible } = require('../middleware');
 const router = express.Router();
@@ -19,21 +20,26 @@ const parseBaseProjectForm = async (req) => {
     throw new TypeError("Invalid project description");
   }
 
-  if (typeof req.body.repository === "string" && req.body.repository.length > 0) {
-    project.repository = req.body.repository;
-  } else {
-    throw new TypeError("Invalid project repository");
+  try {
+    new URL(req.body.repository);
+  } catch (e) {
+    throw TypeError("Invalid project repository");
   }
+  project.repository = req.body.repository;
 
   // Website field is optional and will be an empty string if not specified.
-  if (typeof req.body.website === "string") {
-    project.website = req.body.website;
-  } else {
-    throw new TypeError("Invalid project website");
+  const empty = typeof req.body.website === "string" && req.body.website.length === 0;
+  if (!empty) {  
+    try {
+      new URL(req.body.website);
+    } catch (e) {
+      throw TypeError("Invalid project website");
+    }
   }
+  project.website = req.body.website;
 
-  const getAuthorValue = (i) => req.body[`author${i}`]
   project.authors = [];
+  const getAuthorValue = (i) => req.body[`author${i}`]
   for (let i = 0; getAuthorValue(i); ++i) {
     const author = getAuthorValue(i);
     const authorResp = await db.query("SELECT FROM users WHERE id = $1", [author]);

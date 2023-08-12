@@ -1,6 +1,7 @@
 const express = require('express');
 const uuid = require('uuid');
 const db = require('../database/db');
+const { URL } = require('url');
 const { fallible } = require("../middleware");
 const router = express.Router();
 
@@ -36,12 +37,13 @@ const parsePresentationInfo = (body) => {
     throw new TypeError("Invalid presentation date");
   }
 
-  // TODO: We should probably also be validating URLs and the like
-  if (typeof body.url === "string" && body.url.length > 0) {
-    presentation.url = body.url;
-  } else {
-    throw new TypeError("Invalid presentation url");
+  // URL will throw a TypeError if invalid, hence why this statement is free-floating.
+  try {
+    new URL(body.url);
+  } catch (e) {
+    throw TypeError("Invalid presentation url");
   }
+  presentation.url = body.url;
 
   return presentation;
 }
