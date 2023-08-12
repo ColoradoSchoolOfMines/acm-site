@@ -18,7 +18,6 @@ const profileRoutes = require('./routes/profile');
 const projectsRoutes = require('./routes/projects');
 const presentationsRoutes = require('./routes/presentations');
 const scheduleRoutes = require('./routes/schedule');
-const { URL } = require("url");
 const app = express();
 
 app.engine('ejs', ejsMate);
