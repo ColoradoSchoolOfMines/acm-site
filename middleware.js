@@ -56,7 +56,10 @@ module.exports.fallible = (block) => {
         try {
           fs.unlinkSync("uploads/" + req.file.filename)
         } catch (e) {
-          // Just ignore this.
+          // Letting this error be thrown would crash the server, and
+          // routing it to next would override the original error we
+          // wanted to catch and make debugging more difficult. Thus,
+          // we ignore the error.
         }
       }
       next(e);
