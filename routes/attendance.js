@@ -1,108 +1,126 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
+const uuid = require('uuid');
+const { fallible } = require("../middleware");
 
-router.get('/rsvp', async (req, res) => {
-  // Find next meeting and show it to user
-  // TODO: This actually doesn't work
-  const meetingResp = await db.query("SELECT * FROM meetings ORDER BY date LIMIT 1");
-  if (meetingResp.rows.length > 0) {
-    let rsvped = false;
-    if (req.user) {
-      let rsvpResp = await db.query("SELECT * FROM rsvps WHERE user_id = $1", [req.user.id]);
-      rsvped = rsvpResp.rows.length > 0;
+const parseAttendanceForm = (req) => {
+  let form = {};
+
+  if (uuid.validate(req.body.meeting_id)) {
+    form.meeting_id = req.body.meeting_id;
+  } else {
+    throw new TypeError("Invalid meeting id");
+  }
+
+  if (req.user) {
+    // User is already logged in
+    form.user_id = req.user.id;
+    form.user_name = req.user.name;
+  } else {
+    // User is submitting w/form data
+    if (typeof req.body.user_id === "string" && req.body.user_id.length > 0) {
+      form.user_id = req.body.user_id;
+    } else {
+      throw new TypeError("Invalid user id");
     }
-    res.render('rsvp', { title: 'RSVP', meeting: meetingResp.rows[0], rsvped: rsvped });
-  }
-  else {
-    res.render('rsvp', { title: 'RSVP', meeting: false });
-  }
-});
 
-router.post('/rsvp', async (req, res) => {
-  // use logged in credentials if possible
-  let user_id;
-  let name;
-
-  if (req.body.user_id && req.body.name) {
-    // user is submitting with form data
-    user_id = req.body.user_id;
-    name = req.body.name;
-  }
-  else {
-    user_id = req.user.id;
-    name = req.user.name;
+    if (typeof req.body.name === "string" && req.body.name.length > 0) {
+      form.user_name = req.body.name;
+    } else {
+      throw new TypeError("Invalid user name");
+    }
   }
 
-  // If id or name is still null, something went very wrong
-  if (!user_id || !name) {
-    req.flash('error', 'Something went wrong when trying to track your RSVP! Please contact a site administrator.');
-    res.redirect('/');
+  return form;
+}
+
+router.get('/rsvp', fallible(async (req, res) => {
+  // Find next meeting and show it to user
+  const meetingResp = await db.query(
+    "SELECT * FROM meetings WHERE date >= NOW() ORDER BY date LIMIT 1");
+  const meeting = meetingResp.rows[0];
+
+  let rsvped = false;
+  if (meeting && req.user) {    
+    let rsvpResp = await db.query(
+      "SELECT * FROM rsvps WHERE meeting = $1 AND user_id = $2", 
+      [meeting.id, req.user.id]);
+    rsvped = rsvpResp.rows.length > 0;
   }
 
+  res.render('rsvp', { title: 'RSVP', meeting: meeting, rsvped: rsvped });
+}));
+
+router.post('/rsvp', fallible(async (req, res) => {
+  const form = parseAttendanceForm(req);
   // Check if user has RSVP'ed already
-  const rsvp = await db.query("SELECT 1 FROM rsvps WHERE user_id = $1 AND meeting = $2", [user_id, req.body.meeting_id]);
-  if (rsvp.rows.length > 0) {
+  const rsvpResp = await db.query(
+    "SELECT 1 FROM rsvps WHERE user_id = $1 AND meeting = $2", 
+    [form.user_id, form.meeting_id]);
+
+  if (rsvpResp.rows.length > 0) {
     req.flash('error', 'You have already RSVP\'ed for this event!');
     res.redirect('/');
-  }
-  else {
-    await db.query("INSERT INTO rsvps VALUES ($1, $2, $3)", [req.body.meeting_id, user_id, name]);
+  } else {
+    await db.query(
+      "INSERT INTO rsvps VALUES ($1, $2, $3)", 
+      [form.meeting_id, form.user_id, form.user_name]);
+
     req.flash('success', 'Successfully RSVP\'ed! Thanks for coming.');
     res.redirect('/');
   }
-});
+}));
 
-router.get('/attend', async (req, res) => {
+router.get('/attend', fallible(async (req, res) => {
   // Find active meeting if possible (2 hour buffer) TODO there's probably a better way to do this
-  const meetingResp = await db.query("SELECT * FROM meetings WHERE date >= NOW() - INTERVAL '2 hours' and date <= NOW() + INTERVAL '2 hours'");
-  if (meetingResp.rows.length > 0) {
-    let rsvped = false;
-    if (req.user) {
-      const rsvpResp = await db.query("SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2", [req.user.id, meetingResp.rows[0].id]);
-      rsvped = rsvpResp.rows.length > 0;
-    }
-    res.render('attend', { title: 'Attend', meeting: meetingResp.rows[0], rsvped: rsvped });
-  }
-  else {
-    res.render('attend', { title: 'Attend', meeting: false });
-  }
-});
+  const meetingResp = await db.query(
+    "SELECT * FROM meetings WHERE date >= NOW() - INTERVAL '2 hours' and date <= NOW() + INTERVAL '2 hours'");
+  const meeting = meetingResp.rows[0];
+  let rsvped = false;
 
-router.post('/attend', async (req, res) => {
-  // use logged in credentials if possible
-  let user_id;
-  let name;
-
-  if (req.body.user_id && req.body.name) {
-    // user is submitting with form data
-    user_id = req.body.user_id;
-    name = req.body.name;
-  }
-  else {
-    user_id = req.user.id;
-    name = req.user.name;
+  if (meeting && req.user) {
+    const rsvpResp = await db.query(
+      "SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2", 
+      [req.user.id, meeting.id]);
+    rsvped = rsvpResp.rows.length > 0;
   }
 
-  // If id or name is still null, something went very wrong
-  if (!user_id || !name) {
-    req.flash('error', 'Something went wrong when trying to track your RSVP! Please contact a site administrator.');
-    res.redirect('/');
-  }
+  res.render('attend', { title: 'Attend', meeting: meeting, rsvped: rsvped });
+}));
 
+router.post('/attend', fallible(async (req, res) => {
+  const form = parseAttendanceForm(req);
   // Check if submitted already
-  const attendance = await db.query("SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2", [user_id, req.body.meeting_id]);
-  if (attendance.rows.length > 0) {
+  const attendanceResp = await db.query(
+    "SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2",
+    [form.user_id, form.meeting_id]);
+  
+  if (attendanceResp.rows.length > 0) {
     req.flash('error', 'You have already submitted an attendance form for this event!');
     res.redirect('/');
   } else {
+    let feedback;
     if (req.body.feedback) {
-      await db.query("INSERT INTO feedback VALUES ($1, $2)", [user_id, req.body.feedback]);
+      if (typeof req.body.feedback === "string" && req.body.feedback.length > 0) {
+        feedback = req.body.feedback;
+      } else {
+        throw new TypeError("Invalid attendance feedback");
+      }
     }
-    await db.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", [req.body.meeting_id, user_id, name]);
+
+    await db.transaction(async (client) => {
+      await client.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", 
+        [form.meeting_id, form.user_id, form.user_name]);
+      if (feedback) {
+        await client.query("INSERT INTO feedback VALUES ($1, $2)", 
+          [form.user_id, feedback]);
+      }
+    });
+
     req.flash('success', 'Your attendance has been logged! Thanks for coming.')
     res.redirect('/');
   }
-});
+}));
 
 module.exports = router;

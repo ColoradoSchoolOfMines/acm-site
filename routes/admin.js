@@ -1,66 +1,172 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
-const { isAdminAuthenticated, upload } = require('../middleware');
+const { isAdminAuthenticated, upload, fallible } = require('../middleware');
 const uuid = require('uuid');
 
-router.get('/admin', isAdminAuthenticated, async (req, res) => {
-  let meetings = await db.query("SELECT * FROM meetings ORDER BY date");
-  for (let meeting in meetings.rows) {
-    const attendance = await db.query("SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", [meetings.rows[meeting].id]);
-    meetings.rows[meeting].attendance = attendance.rows;
+router.get('/admin', isAdminAuthenticated, fallible(async (req, res) => {
+  let meetingsResp = await db.query("SELECT * FROM meetings ORDER BY date");
+  for (let meeting of meetingsResp.rows) {
+    const attendanceResp = await db.query(
+      "SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", 
+      [meeting.id]);
+    meeting.attendance = attendanceResp.rows;
   }
 
-  const officers = await db.query("SELECT * FROM users WHERE title != ''");
-  const feedback = await db.query("SELECT * FROM feedback");
-  res.render('admin', { title: 'Admin', meetings: meetings.rows, officers: officers.rows, feedbackData: feedback.rows });
-});
+  const officersResp = await db.query("SELECT * FROM users WHERE title != ''");
+  const feedbackResp = await db.query("SELECT * FROM feedback");
+  res.render('admin', { title: 'Admin', meetings: meetingsResp.rows, officers: officersResp.rows, feedbackData: feedbackResp.rows });
+}));
 
-router.post('/admin', isAdminAuthenticated, upload('image'), async (req, res) => {
-  await db.query("INSERT INTO images VALUES ($1, $2)", [req.file.filename, req.body.caption]);
+router.post('/admin', isAdminAuthenticated, upload('image'), fallible(async (req, res) => {
+  const image = {}
+  if (req.file) {
+    image.id = req.file.filename;
+  } else {
+    throw new TypeError("Invalid image file");
+  }
+
+  if (typeof req.body.caption === "string" && req.body.caption.length > 0) {
+    image.caption = req.body.caption;
+  } else {
+    throw new TypeError("Invalid image caption");
+  }
+
+  await db.query("INSERT INTO images VALUES ($1, $2)", [image.id, image.caption]);
   req.flash('success', 'Successfully uploaded image!');
   res.redirect('/admin');
-});
+}));
 
-router.post('/officers', isAdminAuthenticated, async (req, res) => {
-  const resp = await db.query("SELECT 1 FROM users WHERE id = $1", [req.body.user_id]);
-  if(resp.rows.length > 0) {
-    await db.query("UPDATE users SET title = $1 WHERE id = $2", [req.body.title, req.body.user_id]);
-    req.flash('success', 'Successfully set officer role to ' + req.body.title + ' for ' + req.body.user_id + '.');
-    res.redirect('/admin');
+router.post('/officers', isAdminAuthenticated, fallible(async (req, res) => {
+  const user = {};
+  if (typeof req.body.user_id === "string" && req.body.user_id.length > 0) {
+    user.id = req.body.user_id;
+  } else {
+    throw new TypeError("Invalid user id");
   }
-  else {
+
+  if (typeof req.body.title === "string" && req.body.title.length > 0) {
+    user.title = req.body.title;
+  } else {
+    throw new TypeError("Invalid title");
+  }
+
+  const userResp = await db.query("SELECT 1 FROM users WHERE id = $1", [user.id]);
+  if (userResp.rows.length > 0) {
+    await db.query("UPDATE users SET title = $1 WHERE id = $2", [user.title, user.id]);
+    req.flash('success', 'Successfully set officer role to ' + user.title + ' for ' + user.id + '.');
+    res.redirect('/admin');
+  } else {
     req.flash('error', 'There is not a user to modify!');
     res.redirect('/admin');
   }
-});
+}));
 
-router.post('/officers/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE users SET title = $1 WHERE id = $2", ['', req.body.user_id]);
-  req.flash('success', 'Successfully removed ' + req.body.user_id + ' as an officer.');
+router.post('/officers/remove', isAdminAuthenticated, fallible(async (req, res) => {
+  if (typeof req.body.user_id !== "string" || req.body.user_id.length < 1) {
+    throw new TypeError("Invalid user id")
+  }
+  const userId = req.body.user_id;
+
+  await db.query("UPDATE users SET title = $1 WHERE id = $2", ['', userId]);
+  req.flash('success', 'Successfully removed ' + userId + ' as an officer.');
   res.redirect('/admin');
-});
+}));
 
-router.post('/feedback/remove', isAdminAuthenticated, async (req, res) => {
-  await db.query("DELETE FROM feedback WHERE user_id = $1 and feedback = $2", [req.body.user_id, req.body.feedback]);
-  req.flash('success', 'Successfully removed feedback from ' + req.body.user_id + '.');
+router.post('/feedback/remove', isAdminAuthenticated, fallible(async (req, res) => {
+  const feedback = {};
+  if (typeof req.body.user_id === "string" && req.body.user_id.length > 0) {
+    feedback.user_id = req.body.user_id;
+  } else {
+    throw new TypeError("Invalid user id");
+  }
+
+  if (typeof req.body.feedback === "string" && req.body.feedback.length > 0) {
+    feedback.feedback = req.body.feedback;
+  } else {
+    throw new TypeError("Invalid feedback");
+  }
+
+  await db.query("DELETE FROM feedback WHERE user_id = $1 and feedback = $2", 
+    [feedback.user_id, feedback.feedback]);
+  req.flash('success', 'Successfully removed feedback from ' + feedback.user_id + '.');
   res.redirect('/admin');
-});
+}));
 
-router.post('/meetings', isAdminAuthenticated, async (req, res) => {
-  await db.query("INSERT INTO meetings VALUES ($1, $2, $3, $4, $5, $6, $7)", [
-    uuid.v4(), req.body.title, req.body.description, req.body.date,
+const parseMeetingInfo = (body) => {
+  const meeting = {};
+
+  if (typeof body.title === "string" && body.title.length > 0) {
+    meeting.title = body.title;
+  } else {
+    throw new TypeError("Invalid meeting title");
+  }
+
+  if (typeof body.description === "string" && body.description.length > 0) {
+    meeting.description = body.description;
+  } else {
+    throw new TypeError("Invalid meeting description");
+  }
+
+  // Ensure that the meeting date is actually a valid timestamp. Date only indicates this
+  // by having a NaN time (which is really hard to accurately check), or having a string
+  // representation of "Invalid date". Do the latter since it's less of a footgun.
+  if (typeof body.date === "string" && new Date(body.date).toString() !== "Invalid Date") {
+    meeting.date = body.date;
+  } else {
+    throw new TypeError("Invalid meeting date");
+  }
+
+  // parseInt returns NaN on invalid input, which should then fail the range comparison
+  // since any comparison w/NaN is false.
+  const duration = parseInt(body.duration);
+  if (duration >= 0 && body.duration <= 10) {
     // convert hours -> milliseconds
-    (req.body.duration * 60 * 60 * 1000), req.body.location, req.body.type]);
-  res.redirect('/admin');
-});
+    meeting.duration = body.duration * 60 * 60 * 1000;
+  } else {
+    throw new TypeError("Invalid meeting duration");
+  }
 
-router.post('/meetings/edit', isAdminAuthenticated, async (req, res) => {
-  await db.query("UPDATE meetings SET title = $1, description = $2, date = $3, duration = $4, location = $5, type = $6 WHERE id = $7", [
-    req.body.title, req.body.description, req.body.date,
-    // convert hours -> milliseconds
-    (req.body.duration * 60 * 60 * 1000), req.body.location, req.body.type, req.body.meeting_id]);
+  if (typeof body.location === "string" && body.location.length > 0) {
+    meeting.location = body.location;
+  } else {
+    throw new TypeError("Invalid meeting location");
+  }
+
+  if (typeof body.type === "string" && body.type.length > 0) {
+    meeting.type = body.type;
+  } else {
+    throw new TypeError("Invalid meeting type");
+  }
+
+  return meeting;
+}
+
+router.post('/meetings', isAdminAuthenticated, fallible(async (req, res) => {
+  const meeting = parseMeetingInfo(req.body);
+  meeting.id = uuid.v4();
+
+  await db.query(
+    "INSERT INTO meetings VALUES ($1, $2, $3, $4, $5, $6, $7)", 
+    [meeting.id, meeting.title, meeting.description, meeting.date,
+    meeting.duration, meeting.location, meeting.type]);
+
   res.redirect('/admin');
-});
+}));
+
+router.post('/meetings/edit', isAdminAuthenticated, fallible(async (req, res) => {
+  const meeting = parseMeetingInfo(req.body);
+  if (uuid.validate(req.body.meeting_id)) {
+    meeting.id = req.body.meeting_id;
+  } else {
+    throw new TypeError("Invalid meeting id");
+  }
+
+  await db.query(
+    "UPDATE meetings SET title = $1, description = $2, date = $3, duration = $4, location = $5, type = $6 WHERE id = $7",
+    [meeting.title, meeting.description, meeting.date, meeting.duration, meeting.location, meeting.type, meeting.id]);
+
+  res.redirect('/admin');
+}));
 
 module.exports = router;
