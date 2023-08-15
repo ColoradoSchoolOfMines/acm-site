@@ -33,8 +33,11 @@ CREATE TABLE IF NOT EXISTS meetings (
 );
 
 CREATE TABLE IF NOT EXISTS feedback (
-    "user_id"   TEXT PRIMARY KEY REFERENCES users(id),
-    "feedback"  TEXT NOT NULL
+    "meeting_id" TEXT REFERENCES meetings(id),
+    "user_id"    TEXT NOT NULL,
+    "user_name"  TEXT NOT NULL,
+    "body"       TEXT NOT NULL,
+    PRIMARY KEY("meeting_id", "user_id")
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
