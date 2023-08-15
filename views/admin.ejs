@@ -30,11 +30,11 @@
             <h2>Feedback</h2>
             <% for(let feedback of feedbackData) { %>
                 <div class="meeting">
-                    <p><strong>User</strong>: <%= feedback.user_id %></p>
-                    <p><strong>Feedback</strong>: <%= feedback.feedback %></p>
+                    <p><strong>User</strong>: <%= feedback.user_name %> (<%= feedback.user_id + "@mines.edu" %>)</p>
+                    <p><strong>Feedback</strong>: <%= feedback.body %></p>
                     <form class="d-inline-block" method="POST" action="/feedback/remove">
+                        <input type="hidden" name="meeting_id" value="<%= feedback.meeting_id %>">
                         <input type="hidden" name="user_id" value="<%= feedback.user_id %>">
-                        <input type="hidden" name="feedback" value="<%= feedback.feedback %>">
                         <button class="btn d-inline-block btn-outline-danger">Delete</button>
                     </form>
                 </div>

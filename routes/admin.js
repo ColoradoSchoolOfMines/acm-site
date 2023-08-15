@@ -75,20 +75,21 @@ router.post('/officers/remove', isAdminAuthenticated, fallible(async (req, res) 
 
 router.post('/feedback/remove', isAdminAuthenticated, fallible(async (req, res) => {
   const feedback = {};
+
+  if (typeof req.body.meeting_id === "string" && req.body.meeting_id.length > 0) {
+    feedback.meeting_id = req.body.meeting_id;
+  } else {
+    throw new TypeError("Invalid feedback meeting id");
+  }
+
   if (typeof req.body.user_id === "string" && req.body.user_id.length > 0) {
     feedback.user_id = req.body.user_id;
   } else {
-    throw new TypeError("Invalid user id");
+    throw new TypeError("Invalid feedback user id");
   }
 
-  if (typeof req.body.feedback === "string" && req.body.feedback.length > 0) {
-    feedback.feedback = req.body.feedback;
-  } else {
-    throw new TypeError("Invalid feedback");
-  }
-
-  await db.query("DELETE FROM feedback WHERE user_id = $1 and feedback = $2", 
-    [feedback.user_id, feedback.feedback]);
+  await db.query("DELETE FROM feedback WHERE meeting_id = $1 and user_id = $2", 
+    [feedback.meeting_id, feedback.user_id]);
   req.flash('success', 'Successfully removed feedback from ' + feedback.user_id + '.');
   res.redirect('/admin');
 }));
