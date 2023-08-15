@@ -103,7 +103,11 @@ router.post('/attend', fallible(async (req, res) => {
     let feedback;
     if (req.body.feedback) {
       if (typeof req.body.feedback === "string" && req.body.feedback.length > 0) {
-        feedback = req.body.feedback;
+        feedback = {
+          meeting_id: form.meeting_id,
+          user_id: form.user_id,
+          body: req.body.feedback
+        }
       } else {
         throw new TypeError("Invalid attendance feedback");
       }
@@ -113,8 +117,8 @@ router.post('/attend', fallible(async (req, res) => {
       await client.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", 
         [form.meeting_id, form.user_id, form.user_name]);
       if (feedback) {
-        await client.query("INSERT INTO feedback VALUES ($1, $2)", 
-          [form.user_id, feedback]);
+        await client.query("INSERT INTO feedback VALUES ($1, $2, '', $3)", 
+          [feedback.meeting_id, feedback.user_id, feedback.body]);
       }
     });
 
