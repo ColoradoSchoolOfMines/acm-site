@@ -106,6 +106,7 @@ router.post('/attend', fallible(async (req, res) => {
         feedback = {
           meeting_id: form.meeting_id,
           user_id: form.user_id,
+          user_name: form.user_name,
           body: req.body.feedback
         }
       } else {
@@ -117,8 +118,8 @@ router.post('/attend', fallible(async (req, res) => {
       await client.query("INSERT INTO attendance VALUES ($1, $2, $3) ON CONFLICT DO NOTHING", 
         [form.meeting_id, form.user_id, form.user_name]);
       if (feedback) {
-        await client.query("INSERT INTO feedback VALUES ($1, $2, '', $3)", 
-          [feedback.meeting_id, feedback.user_id, feedback.body]);
+        await client.query("INSERT INTO feedback VALUES ($1, $2, $3, $4)", 
+          [feedback.meeting_id, feedback.user_id, feedback.user_name, feedback.body]);
       }
     });
 
