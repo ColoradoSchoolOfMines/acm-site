@@ -8,7 +8,7 @@ router.get('/schedule', fallible(async (req, res) => {
   let upcomingResp = await db.query("SELECT * FROM meetings WHERE date >= NOW() AND date <= NOW() + INTERVAL '3 weeks' ORDER BY date");
   for (let meeting of upcomingResp.rows) {
     if (req.user) {
-      const rsvpResp = await db.query("SELECT * FROM rsvps WHERE user_id = $1 AND meeting = $2", [req.user.id, meeting.id]);
+      const rsvpResp = await db.query("SELECT * FROM rsvps WHERE user_id = $1 AND meeting_id = $2", [req.user.id, meeting.id]);
       meeting.rsvped = rsvpResp.rows.length > 0;
     } else {
       meeting.rsvped = false;

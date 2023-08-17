@@ -41,17 +41,17 @@ CREATE TABLE IF NOT EXISTS feedback (
 );
 
 CREATE TABLE IF NOT EXISTS attendance (
-    "meeting"  TEXT REFERENCES meetings(id),
-    "user_id"  TEXT NOT NULL,
-    "name"     TEXT NOT NULL,
-    PRIMARY KEY ("meeting", "user_id")
+    "meeting_id"  TEXT REFERENCES meetings(id),
+    "user_id"     TEXT NOT NULL,
+    "user_name"   TEXT NOT NULL,
+    PRIMARY KEY ("meeting_id", "user_id")
 );
 
 CREATE TABLE IF NOT EXISTS rsvps (
-    "meeting"  TEXT REFERENCES meetings(id),
-    "user_id"  TEXT NOT NULL,
-    "name"     TEXT NOT NULL,
-    PRIMARY KEY ("meeting", "user_id")
+    "meeting_id" TEXT REFERENCES meetings(id),
+    "user_id"    TEXT NOT NULL,
+    "user_name"  TEXT NOT NULL,
+    PRIMARY KEY ("meeting_id", "user_id")
 );
 
 CREATE TABLE IF NOT EXISTS images (

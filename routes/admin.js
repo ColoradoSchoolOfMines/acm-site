@@ -8,7 +8,7 @@ router.get('/admin', isAdminAuthenticated, fallible(async (req, res) => {
   let meetingsResp = await db.query("SELECT * FROM meetings ORDER BY date");
   for (let meeting of meetingsResp.rows) {
     const attendanceResp = await db.query(
-      "SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE meetings.id = $1", 
+      "SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting_id WHERE meetings.id = $1", 
       [meeting.id]);
     meeting.attendance = attendanceResp.rows;
   }

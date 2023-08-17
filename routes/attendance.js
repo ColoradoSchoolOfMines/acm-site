@@ -44,7 +44,7 @@ router.get('/rsvp', fallible(async (req, res) => {
   let rsvped = false;
   if (meeting && req.user) {    
     let rsvpResp = await db.query(
-      "SELECT * FROM rsvps WHERE meeting = $1 AND user_id = $2", 
+      "SELECT * FROM rsvps WHERE meeting_id = $1 AND user_id = $2", 
       [meeting.id, req.user.id]);
     rsvped = rsvpResp.rows.length > 0;
   }
@@ -56,7 +56,7 @@ router.post('/rsvp', fallible(async (req, res) => {
   const form = parseAttendanceForm(req);
   // Check if user has RSVP'ed already
   const rsvpResp = await db.query(
-    "SELECT 1 FROM rsvps WHERE user_id = $1 AND meeting = $2", 
+    "SELECT 1 FROM rsvps WHERE user_id = $1 AND meeting_id = $2", 
     [form.user_id, form.meeting_id]);
 
   if (rsvpResp.rows.length > 0) {
@@ -81,7 +81,7 @@ router.get('/attend', fallible(async (req, res) => {
 
   if (meeting && req.user) {
     const rsvpResp = await db.query(
-      "SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2", 
+      "SELECT * FROM attendance WHERE user_id = $1 AND meeting_id = $2", 
       [req.user.id, meeting.id]);
     rsvped = rsvpResp.rows.length > 0;
   }
@@ -93,7 +93,7 @@ router.post('/attend', fallible(async (req, res) => {
   const form = parseAttendanceForm(req);
   // Check if submitted already
   const attendanceResp = await db.query(
-    "SELECT * FROM attendance WHERE user_id = $1 AND meeting = $2",
+    "SELECT * FROM attendance WHERE user_id = $1 AND meeting_id = $2",
     [form.user_id, form.meeting_id]);
   
   if (attendanceResp.rows.length > 0) {
