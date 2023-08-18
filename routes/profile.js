@@ -10,7 +10,7 @@ router.get('/profile/:id', fallible(async (req, res) => {
   
   if (targetUser) {
     const meetingsResp = await db.query(
-      "SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting WHERE attendance.user_id = $1", 
+      "SELECT title, date FROM meetings JOIN attendance ON meetings.id = attendance.meeting_id WHERE attendance.user_id = $1", 
       [targetUser.id]);
 
     const projectsResp = await db.query(
