@@ -136,7 +136,14 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).render('error', { title: "Error", error: err });
+  let error;
+  if (process.env.NODE_ENV === "development") {
+    // Possible security hazard if we expose the trace, so only display it
+    // in development mode.
+    error = err.stack;
+  }
+
+  res.status(500).render('error', { title: "Error", error: error });
 });
 
 app.listen(process.env.PORT || 3000, async () => {
