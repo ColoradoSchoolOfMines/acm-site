@@ -3,8 +3,8 @@
 <main>
 	<div class="bg-light">	
 		<div class="container">	
-			<div class="row">
-				<div class="col me-5">
+			<div class="row gx-lg-4 gy-4">
+				<div class="col">
 					<h1 class="big-header">Mines ACM</h1>
 					<div class="header-description">
 						Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
@@ -43,7 +43,7 @@
 						<% } %>
 					</div>
 				</div>
-				<div class="col-lg-6 text-center">
+				<div class="col-lg-6 d-flex flex-column justify-content-center align-items-center">
 					<% if (image) { %> 
 						<img src="uploads/<%= image.id %>" class="header-image shadow" />
 						<p class="image-caption"><%= image.caption %></p>
@@ -57,16 +57,9 @@
 	</div>
 
 	<div class="container">
-		<div class="row">
-			<div class="col me-5">
-				<h1 class="big-header-2">Upcoming Meetings</h1>
-			</div>
+		<div class="row gx-lg-4 gy-4">
 			<div class="col">
-				<h1 class="big-header-2">Our Events</h1>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col me-5">
+				<h1 class="big-header-2">Upcoming Meetings</h1>
 				<div class="highlight">
 					<% if(meetings.length > 0) { %>
 						<% for(let meeting of meetings) { %>
@@ -100,7 +93,8 @@
 					<p class="pt-3"><a href="/schedule">View our full schedule here</a>.</p>
 				</div>
 			</div>
-			<div class="col">
+			<div class="col-lg-6">
+				<h1 class="big-header-2">Our Events</h1>
 				<div class="highlight">
 					<div class="event">
 						<p class="meeting-title">Tech Talks</p>
