@@ -1,12 +1,12 @@
 <% layout('layouts/base')%>
 
 <main>
-	<div class="bg-light">	
+	<div class="backdrop">	
 		<div class="container">	
 			<div class="row gx-lg-4 gy-4">
 				<div class="col">
-					<h1 class="big-header">Mines ACM</h1>
-					<div class="header-description">
+					<h1 class="home-header">Mines ACM</h1>
+					<div class="subhead-primary">
 						Mines ACM is the largest Computer Science club at <a href="https://www.mines.edu">Mines</a> and
 						strives
 						to provide meaningful career opportunities and CS experiences to students.
@@ -45,11 +45,11 @@
 				</div>
 				<div class="col-lg-6 d-flex flex-column justify-content-center align-items-center">
 					<% if (image) { %> 
-						<img src="uploads/<%= image.id %>" class="header-image shadow" />
-						<p class="image-caption"><%= image.caption %></p>
+						<img src="uploads/<%= image.id %>" class="home-image shadow" />
+						<p class="home-image-caption"><%= image.caption %></p>
 					<% } else { %>
-						<img src="/static/images/default_acm.jpeg" class="header-image shadow" />
-						<p class="image-caption">ACM officers at the 2021 Celebration of Mines.</p>
+						<img src="/static/images/default_acm.jpeg" class="home-image shadow" />
+						<p class="home-image-caption">ACM officers at the 2021 Celebration of Mines.</p>
 					<% } %>
 				</div>
 			</div>
@@ -59,18 +59,18 @@
 	<div class="container">
 		<div class="row gx-lg-4 gy-4">
 			<div class="col">
-				<h1 class="big-header-2">Upcoming Meetings</h1>
-				<div class="highlight">
+				<h1 class="home-header-2">Upcoming Meetings</h1>
+				<div class="home-card">
 					<% if(meetings.length > 0) { %>
 						<% for(let meeting of meetings) { %>
-							<div class="meeting">
-								<p class="meeting-title">
-									<%= meeting.title %>
+							<div class="meeting-compact py-3">
+								<div class="row row-cols-auto gx-2 align-items-center">									
+									<h4 class="home-header-3"><%= meeting.title %></h4>
 									<% if(meeting.rsvped) { %>
-										<span class="meeting-rsvped">(RSVP'ed)</span>
+										<h4 class="home-sideheader">(RSVP'ed)</h4>
 									<% } else { %>
 			                            <% if (typeof user === 'object' && user) { %>
-			                                <form class="d-inline" method="POST" action="/rsvp">
+			                                <form method="POST" action="/rsvp">
 			                                    <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
 			                                    <button class="btn btn-outline-primary rsvp">RSVP</button>
 			                                </form>
@@ -78,9 +78,9 @@
 			                                <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meeting.id %>-modal">RSVP</button>
 			                            <% } %>
 									<% } %>
-								</p>
+								</div>
 
-								<p class="meeting-info"><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
+								<p><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
 									in <strong><%= meeting.location %></strong></p>
 								<p class="meeting-description"><%= meeting.description %></p>
 							</div>
@@ -94,23 +94,23 @@
 				</div>
 			</div>
 			<div class="col-lg-6">
-				<h1 class="big-header-2">Our Events</h1>
-				<div class="highlight">
+				<h1 class="home-header-2">Our Events</h1>
+				<div class="home-card">
 					<div class="event">
-						<p class="meeting-title">Tech Talks</p>
-						<p class="meeting-description">Tech talks are hour long talks from industry professionals, often
+						<h4 class="home-header-4">Tech Talks</h4>
+						<p>Tech talks are hour long talks from industry professionals, often
 							CS@Mines alum.
 							We've hosted representatives from Google, Chevron, Cloudflare, and more.</p>
 					</div>
 					<div class="event">
-						<p class="meeting-title">Project Meetings</p>
-						<p class="meeting-description">Project meetings are a great and low-pressure way to learn
+						<h4 class="home-header-4">Project Meetings</h4>
+						<p>Project meetings are a great and low-pressure way to learn
 							new skills and collaborate with others outside of school on a variety of <a
 								href="/projects">projects</a>.</p>
 					</div>
 					<div class="event">
-						<p class="meeting-title">Workshops</p>
-						<p class="meeting-description">Workshops are another way Mines ACM provides students with
+						<h4 class="home-header-4">Workshops</h4>
+						<p>Workshops are another way Mines ACM provides students with
 							opportunities to learn
 							industry skills. We regularly host our Git Workshop, with seasonal workshops
 							such as web and even Minecraft development also happening!</p>

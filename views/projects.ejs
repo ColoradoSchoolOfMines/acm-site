@@ -1,8 +1,8 @@
 <% layout('layouts/base')%>
 
-<main class="bg-light">
+<main class="backdrop">
     <div class="container">
-        <h1 class="acm-secondary">Projects</h1>
+        <h1 class="text-secondary">Projects</h1>
         <p style="font-size: 18px;">Projects are a great way to get involved with Mines ACM!
             Apply knowledge from classes and learn new skills with our variety of projects.</p>
 
@@ -12,24 +12,24 @@
             </button>
         <% } %>
 
-        <div class="mt-4 projects-scroll">
+        <div class="mt-4 scroll">
             <% for(let project of projects) { %>
                 <div class="large-card shadow mb-4">
-                    <div class="row align-items-center">
+                    <div class="row align-items-center gx-3 gy-3">
                         <% if(project.image_id) { %>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 text-center">
                                 <img src="uploads/<%= project.image_id %>" class="project-image" />
                             </div>
                         <% } %>
                         
-                        <div class="col">
-                            <h2 class="acm-secondary project-title">
+                        <div class="col-lg">
+                            <h3 class="large-card-title">
                                 <%= project.title %>
                                 <% if (project.archived) { %>
-                                    <span class="project-archived">(Inactive)</span>
+                                    <span class="large-card-sidetitle">(Inactive)</span>
                                 <% } %>
-                            </h2>
-                            <p class="project-desc"><%= project.description %></p>
+                            </h3>
+                            <h5 class="large-card-subtitle"><%= project.description %></h5>
                             <div class="mt-1">                        
                                 <% if(project.website) { %>
                                     <a class="d-block d-inline" href="<%= project.website %>">Website</a>
@@ -37,17 +37,17 @@
                                 <a class="d-block"  href="<%= project.repository %>">Repository</a>
                             </div>
                             <% if (project.authors.length > 0) { %>
-                                <div class="row row-cols-auto align-items-start mx-0 mt-1 gx-1 gy-1">
+                                <div class="row row-cols-auto justify-content-start mx-0 mt-1 gx-1 gy-1">
                                     <% for (author of project.authors) { %>
                                         <div class="col">
                                             <a href="/profile/<%= author.id %>">
                                                 <div class="chip">
                                                     <% if (author.avatar_id) { %>
-                                                        <img src="uploads/<%= author.avatar_id %>" class="d-inline project-user-image" />
+                                                        <img src="uploads/<%= author.avatar_id %>" class="d-inline project-author-picture" />
                                                     <% } else { %>
-                                                        <img src="static/images/default_user.png" class="d-inline project-user-image" />
+                                                        <img src="static/images/default_user.png" class="d-inline project-author-picture" />
                                                     <% } %>
-                                                    <p class="d-inline project-user-name ms-1"><%= author.name %></p>
+                                                    <p class="d-inline project-author-name ms-1"><%= author.name %></p>
                                                 </div>
                                             </a>
                                         </div>
