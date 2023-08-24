@@ -135,3 +135,6 @@ dist
 # Compiled CSS stylesheets
 public/stylesheets/*.css
 public/stylesheets/*.css.map
+
+# Sass cache (if using ruby impl)
+.sass-cache/
