@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "build:styles": "sass --style=compressed public/stylesheets/styles.scss public/stylesheets/styles.css"
+    "start": "sass --style=compressed public/stylesheets/styles.scss public/stylesheets/styles.css && node app.js"
   },
   "author": "",
   "license": "ISC",
