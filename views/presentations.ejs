@@ -18,7 +18,7 @@
                         <%= presentation.title %>
                         <span class="large-card-sidetitle date"><%= presentation.date %></span>
                     </h3>
-                    <h5 class="large-card-subtitle"><%= presentation.description %></h5>
+                    <p class="large-card-subtitle"><%= presentation.description %></p>
                     <a class="d-block mt-1" href="<%= presentation.url %>">Slides</a>
                     
                     <% if (typeof user == 'object' && user && user.is_admin) { %>

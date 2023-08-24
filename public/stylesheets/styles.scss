@@ -131,7 +131,7 @@ footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
 }
 
 .large-card-subtitle {
-  @extend .m-0;
+  @extend .m-0, .fs-5;
   font-weight: normal;
 }
 
@@ -141,12 +141,11 @@ footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
 }
 
 .home-header-2 {
-  @extend .fs-2;
   color: goldenrod;
 }
 
 .home-header-3 {
-  @extend .text-secondary, .m-0;
+  @extend .text-secondary;
   font-weight: bold;
 }
 
@@ -155,7 +154,6 @@ footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
 }
 
 .home-sideheader {
-  @extend .m-0;
   color: var(--bs-tertiary-color);
   font-weight: normal;
 }
