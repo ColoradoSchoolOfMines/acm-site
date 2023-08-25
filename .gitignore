@@ -131,3 +131,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Compiled CSS stylesheets
+public/stylesheets/*.css
+public/stylesheets/*.css.map
+
+# Sass cache (if using ruby impl)
+.sass-cache/

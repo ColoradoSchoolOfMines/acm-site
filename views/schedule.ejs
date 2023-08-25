@@ -1,11 +1,11 @@
 <% layout('layouts/base')%>
 
-<main class="bg-light">
+<main class="backdrop">
     <div class="container">        
-        <div class="row">
-            <div class="pb-4">
-                <h1 class="acm-secondary">Upcoming Meetings</h1>
-                <p class="header-description-secondary">
+        <div class="row gy-3">
+            <div class="col pb-1">
+                <h1 class="text-secondary">Upcoming Meetings</h1>
+                <p class="subhead-secondary">
                     Sync our calendar with yours!
                     <a target="_blank" href="https://support.google.com/calendar/answer/37100#add_via_link">(Instructions)</a>
                     <br><code>https://acm.mines.edu/schedule/ical.ics</code>
@@ -14,43 +14,44 @@
             
             <% for(let meeting of upcoming) { %>
                 <div class="large-card shadow">
-                    <h3 class="acm-secondary">
-                        <%= meeting.title %>
+                    <div class="row row-cols-auto gx-2">
+                        <h3 class="large-card-title">
+                            <%= meeting.title %>
+                        </h3>
                         <% if (meeting.rsvped) { %>
-                            <span class="meeting-rsvped">(RSVP'ed)</span>
+                            <h3 class="large-card-sidetitle">(RSVP'ed)</h3>
                         <% } else { %>
                             <% if (typeof user === 'object' && user) { %>
-                                <form class="d-inline" method="POST" action="/rsvp">
+                                <form method="POST" action="/rsvp">
                                     <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
                                     <button class="btn btn-outline-primary rsvp">RSVP</button>
                                 </form>
                             <% } else { %>
                                 <button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meeting.id %>-modal">RSVP</button>
                             <% } %>
-
                         <% } %>
-                    </h3>
-                    <p><%= meeting.description %></p>
+                    </div>
+                    <p class="large-card-subtitle"><%= meeting.description %></p>
                     <br>
                     <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                     <p><strong>Location</strong>: <%= meeting.location %></p>
                 </div>
             <% } %> 
-        </div> 
 
-        <div class="row pt-4">
-            <h1 class="acm-secondary pb-2">Previous Meetings</h1>
-            <div class="meeting-scroll previous-meetings shadow">
-                <% for(let meeting of previous) { %>   
-                    <div class="meeting p-4 bg-white">
-                        <p><strong><%= meeting.title %></strong></p>
-                        <p><strong>Description</strong>: <%= meeting.description %></p>
-                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
-                        <p><strong>Location</strong>: <%= meeting.location %></p>
-                    </div>
-                <% } %>
+            <div class="row pt-5">
+                <h1 class="text-secondary pb-2">Previous Meetings</h1>
+                <div class="scroll previous-meetings-card shadow">
+                    <% for(let meeting of previous) { %>   
+                        <div class="meeting-compact p-4">
+                            <p><strong><%= meeting.title %></strong></p>
+                            <p><strong>Description</strong>: <%= meeting.description %></p>
+                            <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                            <p><strong>Location</strong>: <%= meeting.location %></p>
+                        </div>
+                    <% } %>
+                </div>
             </div>
-        </div>
+        </div> 
     </div>
 </main>
 

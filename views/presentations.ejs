@@ -1,8 +1,8 @@
 <% layout('layouts/base')%>
 
-<main class="bg-light">
+<main class="backdrop">
     <div class="container">
-        <h1 class="acm-secondary">Presentations</h1>
+        <h1 class="text-secondary">Presentations</h1>
         <p style="font-size: 18px;">Slides of all of our tech talks, workshops and related presentations can be found here!</p>
 
         <% if (typeof user == 'object' && user && user.is_admin) { %>
@@ -11,14 +11,14 @@
             </button>
         <% } %>
 
-        <div class="presentations-scroll mt-3">    
+        <div class="scroll mt-3">    
             <% for(let presentation of presentations) { %>
                 <div class="large-card shadow mb-4">
-                    <h2 class="presentation-title">
+                    <h3 class="large-card-title">
                         <%= presentation.title %>
-                        <span class="presentation-date date"><%= presentation.date %></span>
-                    </h2>
-                    <p class="presentation-desc"><%= presentation.description %></p>
+                        <span class="large-card-sidetitle date"><%= presentation.date %></span>
+                    </h3>
+                    <p class="large-card-subtitle"><%= presentation.description %></p>
                     <a class="d-block mt-1" href="<%= presentation.url %>">Slides</a>
                     
                     <% if (typeof user == 'object' && user && user.is_admin) { %>

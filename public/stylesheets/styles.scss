@@ -1,0 +1,282 @@
+$primary: #0083c5;
+$secondary: #336699;
+$hover: #FFFFFF40;
+$min-contrast-ratio: 3;
+$alert-margin-bottom: 0;
+$alert-border-radius: 0;
+$btn-border-radius: 32px;
+$dropdown-bg: $primary;
+$dropdown-font-size: 18px;
+$dropdown-link-color: white;
+$dropdown-link-hover-color: white;
+$dropdown-link-hover-bg: $hover;
+$modal-inner-padding: 24px;
+$modal-content-border-radius: 32px;
+$navbar-light-color: white;
+$navbar-light-hover-color: white;
+$navbar-light-active-color: white;
+$navbar-dark-color: white;
+$navbar-dark-hover-color: white;
+$navbar-dark-active-color: white;
+$nav-pills-border-radius: 16px;
+$nav-pills-link-active-bg: $secondary;
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// --- ELEMENT OVERRIDES ---
+
+body {
+  -webkit-animation: fadein 1s;
+  /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s;
+  /* Firefox < 16 */
+  -ms-animation: fadein 1s;
+  /* Internet Explorer */
+  -o-animation: fadein 1s;
+  /* Opera < 12.1 */
+  animation: fadein 1s;
+}
+
+main {
+  @extend .flex-grow-1;
+}
+
+p {
+  @extend .m-0;
+}
+
+a {
+  @extend .text-decoration-none;
+}
+
+footer {
+  color: white;
+  background-color: $primary;
+}
+
+// --- DEFAULT OVERRIDES ---
+
+.container {
+  @extend .py-5;
+}
+
+.modal-title {
+  @extend .text-secondary;
+}
+
+.navbar {
+  @extend .py-1, .fs-5;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.navbar-brand, nav .nav-item {
+  @extend .me-lg-5, .align-self-center;
+}
+
+nav .nav-link:hover {
+  background-color: $hover;
+}
+
+footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
+  color: white;
+}
+
+// --- NEW STYLES ---
+
+.backdrop {
+  background-color: var(--bs-secondary-bg);
+}
+
+.subhead-base {
+  @extend .ps-3, .fs-5;
+  border-left: 4px solid;
+}
+
+.subhead-primary {
+  @extend .subhead-base;
+  border-left-color: $primary;
+}
+
+.subhead-secondary {
+  @extend .subhead-base;
+  border-left-color: $secondary;
+}
+
+.scroll {
+  height: 50vh;
+  overflow-y: scroll;
+}
+
+.scroll-wrap {
+  overflow-y: scroll;
+}
+
+.base-large-card {
+  @extend .bg-body;
+  border-bottom: 4px solid $primary;
+}
+
+.large-card {
+  @extend .base-large-card, .p-4;
+}
+
+.large-card-title {
+  @extend .m-0, .text-secondary;
+  font-weight: bold;
+}
+
+.large-card-sidetitle {
+  @extend .m-0;
+  color: var(--bs-tertiary-color);
+  font-weight: normal;
+}
+
+.large-card-subtitle {
+  @extend .m-0, .fs-5;
+  font-weight: normal;
+}
+
+.home-header {
+  @extend .text-primary;
+  font-size: 60px;
+}
+
+.home-header-2 {
+  color: goldenrod;
+}
+
+.home-header-3 {
+  @extend .text-secondary;
+  font-weight: bold;
+}
+
+.home-header-4 {
+  font-weight: bold;
+}
+
+.home-sideheader {
+  color: var(--bs-tertiary-color);
+  font-weight: normal;
+}
+
+.home-image {
+  @extend .rounded-5;
+  max-width: 100%;
+}
+
+.home-image-caption {
+  @extend .pt-2, .text-center, .fs-5;
+  font-style: italic;
+}
+
+.home-card {
+  @extend .ps-3, .pb-3;
+  border-left: 4px solid goldenrod;
+}
+
+.event {
+  @extend .pt-2;
+  line-height: 30px;
+}
+
+.meeting-compact {
+  border-bottom: 1px solid lightgray;
+  line-height: 30px;
+}
+
+.previous-meetings-card {
+  @extend .base-large-card, .p-0;
+}
+
+.team-picture-container {
+  @extend .card-img-top, .text-center, .w-100;
+  padding-top: 1rem;
+}
+
+.team-picture {
+  @extend .rounded-5;
+  width: 128px;
+  height: 128px;
+}
+
+.project-image {
+  @extend .rounded-5, .w-100;
+  width: 100%;
+  max-width: 350px;
+  max-height: 350px;
+}
+
+.chip {
+  @extend .rounded-3;
+  background-color: var(--bs-primary-bg-subtle);
+  padding: 8px 10px 10px 10px;
+}
+
+.project-author-picture {
+  @extend .rounded-1;
+  width: 24px;
+  height: 24px;
+}
+
+.project-author-name {
+  vertical-align: middle;
+}
+
+.profile-picture {
+  @extend .rounded-5, .w-100, .mb-3;
+}
+
+// --- ANIMATIONS ---
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

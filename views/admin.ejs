@@ -1,16 +1,16 @@
 <% layout('layouts/base')%>
 
-<main class="bg-light">
+<main class="backdrop">
     <div class="container">
-        <h1 class="acm-secondary">Admin</h1>
+        <h1 class="text-secondary">Admin</h1>
         <div class="large-card shadow mb-4">
             <div class="row">
-                <div class="col meeting-scroll">
+                <div class="col scroll">
                     <h2>Meetings
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-meeting-modal">Add Meeting</button>
                     </h2>
                     <% for(let meeting of meetings) { %>
-                        <div class="meeting">
+                        <div class="meeting-compact py-3">
                             <p><strong><%= meeting.title %></strong> (<%= meeting.id %>)</p>
                             <p><strong>Description</strong>: <%= meeting.description %></p>
                             <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
@@ -44,7 +44,7 @@
         <div class="large-card shadow mb-4">
             <h2>Officers</h2>
             <% for(let officer of officers) { %>
-                <p><%= officer.name %> | <%= officer.title %></p>
+                <p class="mt-2"><%= officer.name %> | <%= officer.title %></p>
                 <p class="mb-2"><%= officer.id + "@mines.edu" %></p>
 
                 <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.id %>-modal">Edit</button>
