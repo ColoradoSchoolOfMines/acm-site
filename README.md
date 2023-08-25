@@ -2,11 +2,10 @@
 Source code for the acm.mines.edu website.
 
 ## Setup
-Once the repository is cloned, install & compile all dependencies using npm:
+Once the repository is cloned, install all dependencies using npm:
 ```
 cd acm-site
 npm install
-npm run build:styles
 ```
 
 Next, make your environment file. A sample one is provided: `cp .env.sample .env`
