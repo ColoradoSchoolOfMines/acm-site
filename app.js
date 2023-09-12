@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const https = require('https');
 const ejsMate = require('ejs-mate');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -146,7 +147,13 @@ app.use((err, req, res, next) => {
   res.status(500).render('error', { title: "Error", error: error });
 });
 
-app.listen(process.env.PORT || 3000, async () => {
+let privateKey = fs.readFileSync(process.env.PRIVATE_KEY);
+let certificate = fs.readFileSync(process.env.CERTIFICATE);
+
+https.createServer({
+    key: privateKey,
+    cert: certificate
+}, app).listen(process.env.PORT || 3000, async () => {
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
   await db.query(initQuery);
   console.log("ACM server started!");
