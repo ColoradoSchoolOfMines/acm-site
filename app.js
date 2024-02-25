@@ -154,9 +154,10 @@ https.createServer({
     key: privateKey,
     cert: certificate
 }, app).listen(process.env.PORT || 3000, async () => {
+//app.listen(process.env.PORT, async() => {
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
   await db.query(initQuery);
-  console.log("ACM server started!");
+  console.log("ACM server started at port " + (process.env.PORT || 3000) + "!");
 });
 
 process.on('SIGINT', async () => {

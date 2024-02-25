@@ -1,6 +1,8 @@
 require('dotenv').config();
 const pg = require('pg');
-const pool = new pg.Pool({ connectionString: process.env.DB_URL });
+const pool = new pg.Pool({
+    connectionString: process.env.DB_URL,
+    ssl: { rejectUnauthorized: false }});
 
 module.exports = {
     transaction: async (block) => {
