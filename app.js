@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const https = require('https');
+const http = require('http');
 const ejsMate = require('ejs-mate');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -35,7 +35,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "/auth/google/callback",
+  callbackURL: "https://acm.mines.edu/auth/google/callback",
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   if (profile.email.endsWith("@mines.edu")) {
@@ -147,14 +147,7 @@ app.use((err, req, res, next) => {
   res.status(500).render('error', { title: "Error", error: error });
 });
 
-let privateKey = fs.readFileSync(process.env.PRIVATE_KEY);
-let certificate = fs.readFileSync(process.env.CERTIFICATE);
-
-https.createServer({
-    key: privateKey,
-    cert: certificate
-}, app).listen(process.env.PORT || 3000, async () => {
-//app.listen(process.env.PORT, async() => {
+app.listen(process.env.PORT || 3000, async () => {
   const initQuery = fs.readFileSync('database/init_database.sql').toString();
   await db.query(initQuery);
   console.log("ACM server started at port " + (process.env.PORT || 3000) + "!");
