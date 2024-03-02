@@ -5,7 +5,7 @@ const { isAdminAuthenticated, upload, fallible } = require('../middleware');
 const uuid = require('uuid');
 
 router.get('/admin', isAdminAuthenticated, fallible(async (req, res) => {
-  let meetingsResp = await db.query("SELECT * FROM meetings ORDER BY date");
+  let meetingsResp = await db.query("SELECT * FROM meetings ORDER BY date DESC");
   for (let meeting of meetingsResp.rows) {
     const attendanceResp = await db.query(
       "SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting_id WHERE meetings.id = $1", 

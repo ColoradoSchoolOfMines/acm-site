@@ -225,6 +225,11 @@ footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
   @extend .rounded-5, .w-100, .mb-3;
 }
 
+// for 'about us' cards styling
+.row-cols-auto>* {
+  max-width: 20%;
+}
+
 // --- ANIMATIONS ---
 
 @keyframes fadein {
