@@ -11,6 +11,12 @@ router.get('/admin', isAdminAuthenticated, fallible(async (req, res) => {
       "SELECT attendance.user_id FROM meetings JOIN attendance ON meetings.id = attendance.meeting_id WHERE meetings.id = $1", 
       [meeting.id]);
     meeting.attendance = attendanceResp.rows;
+
+    const rsvpResp = await db.query(
+      "SELECT COUNT(*) FROM rsvps JOIN meetings ON meetings.id = rsvps.meeting_id WHERE meetings.id = $1", 
+      [meeting.id]
+    );
+    meeting.rsvps = rsvpResp.rows;
   }
 
   const officersResp = await db.query("SELECT * FROM users WHERE title != ''");
