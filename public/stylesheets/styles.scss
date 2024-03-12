@@ -22,6 +22,37 @@ $nav-pills-border-radius: 16px;
 $nav-pills-link-active-bg: $secondary;
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
+// Light theme colors
+$background-light: #ffffff;
+$text-light: #333333;
+
+// Dark theme colors
+$background-dark: #333333;
+$text-dark: #ffffff;
+
+// Dark mode detection
+$background: $background-light;
+$text: $text-light;
+
+@mixin theme($background, $text) {
+  background-color: $background;
+  color: $text;
+
+  .backdrop {
+    background-color: var($background);
+  }
+}
+
+body {
+  @include theme($background, $text);
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @include theme($background-dark, $text-dark);
+  }
+}
+
 // --- ELEMENT OVERRIDES ---
 
 body {
@@ -81,11 +112,6 @@ footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
 }
 
 // --- NEW STYLES ---
-
-.backdrop {
-  background-color: var(--bs-secondary-bg);
-}
-
 .subhead-base {
   @extend .ps-3, .fs-5;
   border-left: 4px solid;
