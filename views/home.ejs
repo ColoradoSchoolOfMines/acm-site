@@ -45,10 +45,10 @@
 				</div>
 				<div class="col-lg-6 d-flex flex-column justify-content-center align-items-center">
 					<% if (image) { %> 
-						<img src="uploads/<%= image.id %>" class="home-image shadow" />
+						<img src="uploads/<%= image.id %>" alt="<%= image.caption %>" class="home-image shadow" />
 						<p class="home-image-caption"><%= image.caption %></p>
 					<% } else { %>
-						<img src="/static/images/default_acm.jpeg" class="home-image shadow" />
+						<img src="/static/images/default_acm.jpeg" alt="ACM officers at the 2021 Celebration of Mines." class="home-image shadow" />
 						<p class="home-image-caption">ACM officers at the 2021 Celebration of Mines.</p>
 					<% } %>
 				</div>
@@ -65,9 +65,9 @@
 						<% for(let meeting of meetings) { %>
 							<div class="meeting-compact py-3">
 								<div class="row row-cols-auto gx-2 align-items-center">									
-									<h4 class="home-header-3"><%= meeting.title %></h4>
+									<p class="home-header-3"><%= meeting.title %></p>
 									<% if(meeting.rsvped) { %>
-										<h4 class="home-sideheader">(RSVP'ed)</h4>
+										<p class="home-sideheader">(RSVP'ed)</p>
 									<% } else { %>
 			                            <% if (typeof user === 'object' && user) { %>
 			                                <form method="POST" action="/rsvp">
@@ -97,19 +97,19 @@
 				<h1 class="home-header-2">Our Events</h1>
 				<div class="home-card">
 					<div class="event">
-						<h4 class="home-header-4">Tech Talks</h4>
+						<p class="home-header-4">Tech Talks</p>
 						<p>Tech talks are hour long talks from industry professionals, often
 							CS@Mines alum.
 							We've hosted representatives from Google, Chevron, Cloudflare, and more.</p>
 					</div>
 					<div class="event">
-						<h4 class="home-header-4">Project Meetings</h4>
+						<p class="home-header-4">Project Meetings</p>
 						<p>Project meetings are a great and low-pressure way to learn
 							new skills and collaborate with others outside of school on a variety of <a
 								href="/projects">projects</a>.</p>
 					</div>
 					<div class="event">
-						<h4 class="home-header-4">Workshops</h4>
+						<p class="home-header-4">Workshops</p>
 						<p>Workshops are another way Mines ACM provides students with
 							opportunities to learn
 							industry skills. We regularly host our Git Workshop, with seasonal workshops
