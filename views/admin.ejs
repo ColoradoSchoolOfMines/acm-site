@@ -16,12 +16,12 @@
                             <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
                             <p><strong>Location</strong>: <%= meeting.location %></p>
                             <p><strong>Type</strong>: <%= meeting.type %></p>
+                            <% if(meeting.rsvps > 0) { %>
+                                <p><strong>RSVPs</strong>: <%= meeting.rsvps %></p>
+                            <% } %>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-meeting-<%= meeting.id %>-modal">Edit Meeting</button>
                             <% if(meeting.attendance.length > 0) { %>
                                 <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
-                            <% } %>
-                            <% if(meeting.rsvps > 0) { %>
-                                <p><strong>RSVPs</strong>: <%= meeting.rsvps %></p>
                             <% } %>
                         </div>
                     <% } %>
