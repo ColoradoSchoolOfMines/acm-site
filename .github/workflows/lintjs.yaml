@@ -1,0 +1,22 @@
+name: Lint Node
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: clean install
+        run: npm ci
+      - name: run prettier
+        run: |
+          npx prettier --check .

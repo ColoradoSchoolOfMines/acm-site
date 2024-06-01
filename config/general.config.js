@@ -1,31 +1,36 @@
-const multer = require('multer');
-const session = require('express-session');
-const uuid = require('uuid')
+const multer = require("multer");
+const session = require("express-session");
+const uuid = require("uuid");
 
 /* Multer File Upload Configuration */
 const multerConfig = {
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "uploads/")
+      cb(null, "uploads/");
     },
     filename: function (req, file, cb) {
-      cb(null, uuid.v4())
-    }
+      cb(null, uuid.v4());
+    },
   }),
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5 MB
+    fileSize: 5 * 1024 * 1024, // 5 MB
   },
   fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
     cb(null, allowedTypes.includes(file.mimetype));
-  }
-}
+  },
+};
 
 /* Content Security Policy Configuration */
 const cspDirectives = {
   defaultSrc: ["'self'", "https://discord.com/"],
   scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-  styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+  styleSrc: [
+    "'self'",
+    "'unsafe-inline'",
+    "https://fonts.googleapis.com",
+    "https://cdn.jsdelivr.net",
+  ],
   imgSrc: ["'self'", "data:"],
 };
 
@@ -36,27 +41,27 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const cspConfig = {
-  directives: cspDirectives
+  directives: cspDirectives,
 };
 
 /* Cookie & Session Configuration */
 const sessionConfig = {
-  store: new (require('connect-pg-simple')(session))({
+  store: new (require("connect-pg-simple")(session))({
     conString: process.env.DB_URL,
-    createTableIfMissing: true
+    createTableIfMissing: true,
   }),
-  name: 'session',
+  name: "session",
   secret: process.env.COOKIE_SECRET || "change this!",
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7
-  }
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
 };
 
 module.exports = {
   multerConfig: multerConfig,
   cspConfig: cspConfig,
-  sessionConfig: sessionConfig
+  sessionConfig: sessionConfig,
 };

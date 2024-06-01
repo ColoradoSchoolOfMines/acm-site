@@ -1,6 +1,6 @@
 $primary: #0083c5;
 $secondary: #336699;
-$hover: #FFFFFF40;
+$hover: #ffffff40;
 $min-contrast-ratio: 3;
 $alert-margin-bottom: 0;
 $alert-border-radius: 0;
@@ -96,10 +96,11 @@ footer {
 
 .navbar {
   @extend .py-1, .fs-5;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
-.navbar-brand, nav .nav-item {
+.navbar-brand,
+nav .nav-item {
   @extend .me-lg-5, .align-self-center;
 }
 
@@ -107,7 +108,9 @@ nav .nav-link:hover {
   background-color: $hover;
 }
 
-footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
+footer .nav-link,
+footer .nav-link:hover,
+footer .nav-link:focus {
   color: white;
 }
 
@@ -253,7 +256,7 @@ footer .nav-link, footer .nav-link:hover, footer .nav-link:focus {
 }
 
 // for 'about us' cards styling
-.row-cols-auto>* {
+.row-cols-auto > * {
   max-width: 20%;
 }
 
