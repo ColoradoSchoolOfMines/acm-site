@@ -1,31 +1,19 @@
 version: '3.8'
 services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   web:
     build: .
+    env_file: .env
     ports:
       - "${PORT}:${PORT}"
-    env_file: .env
-    depends_on: 
-      db:
-        condition: service_healthy
-    restart: on-failure
+    depends_on:
+      - db
     environment:
-      - DATABASE_URL={$DB_URL}
-    volumes:
-      - node_modules:/app/node_modules
-  db:
-    image: postgres:latest
-    ports:
-      - 35432:5432
-    volumes:
-       - postgres-data:/data/postgres
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-mydb}
-      - POSTGRES_USER=${POSTGRES_USER:-user}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-    healthcheck:
-      test: pg_isready -U ${POSTGRES_USER:-user}
-
-volumes:
-  postgres-data:
-  node_modules: 
+      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
