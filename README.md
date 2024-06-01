@@ -1,8 +1,8 @@
 # acm.mines.edu
-Source code for the acm.mines.edu website.
+Source code for the [acm.mines.edu](https://acm.mines.edu) website.
 
 ## Setup
-Once the repository is cloned, install all dependencies using npm:
+Clone the repository and install all dependencies as follows:
 ```
 cd acm-site
 npm install
@@ -12,6 +12,8 @@ Next, make your environment file. A sample one is provided: `cp .env.sample .env
 
 The `.env` file should specify Google the client ID + secret
 for the OAuth2 hook, as well as a PostgreSQL database link.
+
+Ensure that `NODE_ENV` is `development` in the env file, and then run the site using: `npm start`
 
 ## Docker Setup (Experimental)
 Alternatively, you can follow these steps to run with Docker. First, ensure `HOST` in the `DB_URL` in `.env` is set to `db`, instead of `localhost`.
