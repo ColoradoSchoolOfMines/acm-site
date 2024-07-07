@@ -14,7 +14,9 @@ $modal-inner-padding: 24px;
 $modal-content-border-radius: 32px;
 $navbar-light-color: white;
 $navbar-light-hover-color: white;
-$navbar-light-active-color: white;
+// $navbar-light-active-color: white;
+$navbar-light-active-color: black;
+
 $navbar-dark-color: white;
 $navbar-dark-hover-color: white;
 $navbar-dark-active-color: white;
@@ -23,7 +25,7 @@ $nav-pills-link-active-bg: $secondary;
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 // Light theme colors
-$background-light: #ffffff;
+$background-light: whitesmoke;
 $text-light: #333333;
 
 // Dark theme colors
@@ -84,6 +86,45 @@ footer {
   background-color: $primary;
 }
 
+// NEW STYLES
+.nav-link {
+  color: black;
+}
+
+nav .nav-link:hover {
+  background-color: $hover;
+  text-decoration: underline !important;
+  color: darkblue;
+}
+
+.navbar {
+  background-color: white;
+}
+
+.navbar-nav {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.inner-nav-container {
+  border-top: 1px solid lightslategray;
+  border-bottom: 1px solid lightslategray;
+  padding-top: 17.5px;
+  padding-bottom: 17.5px;
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+nav .nav-item {
+  margin-left: 2rem !important;
+  margin-right: 2rem !important;
+}
+
+.navbar-brand {
+  margin-right: 2rem !important;
+}
+
 // --- DEFAULT OVERRIDES ---
 
 .container {
@@ -96,16 +137,12 @@ footer {
 
 .navbar {
   @extend .py-1, .fs-5;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .navbar-brand,
 nav .nav-item {
   @extend .me-lg-5, .align-self-center;
-}
-
-nav .nav-link:hover {
-  background-color: $hover;
 }
 
 footer .nav-link,
