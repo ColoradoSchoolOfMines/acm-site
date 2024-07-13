@@ -1,27 +1,17 @@
 $primary: #0083c5;
 $secondary: #336699;
 $hover: #ffffff40;
-$min-contrast-ratio: 3;
 $alert-margin-bottom: 0;
 $alert-border-radius: 0;
 $btn-border-radius: 32px;
-$dropdown-bg: $primary;
-$dropdown-font-size: 18px;
-$dropdown-link-color: white;
-$dropdown-link-hover-color: white;
-$dropdown-link-hover-bg: $hover;
 $modal-inner-padding: 24px;
 $modal-content-border-radius: 32px;
 $navbar-light-color: white;
 $navbar-light-hover-color: white;
-// $navbar-light-active-color: white;
 $navbar-light-active-color: black;
-
 $navbar-dark-color: white;
 $navbar-dark-hover-color: white;
 $navbar-dark-active-color: white;
-$nav-pills-border-radius: 16px;
-$nav-pills-link-active-bg: $secondary;
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 // Light theme colors
@@ -41,7 +31,7 @@ $text: $text-light;
   color: $text;
 
   .backdrop {
-    background-color: var($background);
+    background-color: $background;
   }
 }
 
@@ -81,20 +71,30 @@ a {
   @extend .text-decoration-none;
 }
 
+// NEW STYLES
+
+$acm-blue: #5cc1e2;
+$acm-secondary: #303030;
+$acm-tertiary: goldenrod;
+
 footer {
-  color: white;
-  background-color: $primary;
+  // color: white;
+  background-color: white;
 }
 
-// NEW STYLES
+footer .nav-link,
+footer .nav-link:hover,
+footer .nav-link:focus {
+  color: $acm-secondary;
+}
+
 .nav-link {
-  color: black;
+  color: $acm-secondary;
 }
 
 nav .nav-link:hover {
   background-color: $hover;
-  text-decoration: underline !important;
-  color: darkblue;
+  color: $acm-blue;
 }
 
 .navbar {
@@ -107,18 +107,12 @@ nav .nav-link:hover {
 }
 
 .inner-nav-container {
-  border-top: 1px solid lightslategray;
-  border-bottom: 1px solid lightslategray;
-  padding-top: 17.5px;
-  padding-bottom: 17.5px;
   display: flex;
-  margin-top: auto;
-  margin-bottom: auto;
 }
 
 nav .nav-item {
-  margin-left: 2rem !important;
-  margin-right: 2rem !important;
+  margin-left: 1rem !important;
+  margin-right: 1rem !important;
 }
 
 .navbar-brand {
@@ -143,12 +137,6 @@ nav .nav-item {
 .navbar-brand,
 nav .nav-item {
   @extend .me-lg-5, .align-self-center;
-}
-
-footer .nav-link,
-footer .nav-link:hover,
-footer .nav-link:focus {
-  color: white;
 }
 
 // --- NEW STYLES ---
@@ -241,7 +229,7 @@ footer .nav-link:focus {
 }
 
 .event {
-  @extend .pt-2;
+  @extend .pt-2, .pb-2;
   line-height: 30px;
 }
 
