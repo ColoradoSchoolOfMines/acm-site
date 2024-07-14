@@ -32,6 +32,21 @@ $text: $text-light;
   .backdrop {
     background-color: $background;
   }
+
+  .nav-link {
+    color: $text;
+  }
+  
+  nav .nav-link:hover {
+    background-color: $hover;
+    color: $primary;
+  }
+  
+  footer .nav-link,
+  footer .nav-link:hover,
+  footer .nav-link:focus {
+    color: $text;
+  }
 }
 
 body {
@@ -41,6 +56,15 @@ body {
 @media (prefers-color-scheme: dark) {
   body {
     @include theme($background-dark, $text-dark);
+
+    footer {
+      // TODO also make nav a darker dark for this theme + make variable
+      background-color: #202020;
+    }
+
+    .navbar {
+      background-color: #202020;
+    }
   }
 }
 
@@ -90,27 +114,7 @@ nav .nav-item {
   @extend .me-lg-5, .align-self-center;
 }
 
-// --- Footer ---
-footer {
-  background-color: white;
-}
-
-footer .nav-link,
-footer .nav-link:hover,
-footer .nav-link:focus {
-  color: $text;
-}
-
 // --- Navigation ---
-.nav-link {
-  color: $text;
-}
-
-nav .nav-link:hover {
-  background-color: $hover;
-  color: $primary;
-}
-
 .navbar {
   background-color: white;
 }
