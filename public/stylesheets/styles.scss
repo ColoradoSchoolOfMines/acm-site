@@ -1,9 +1,9 @@
 $primary: #0083c5;
 $secondary: #0083c5;
+$primary-dark: #303030;
 $hover: #ffffff40;
 $alert-margin-bottom: 0;
 $alert-border-radius: 0;
-$btn-border-radius: 32px;
 $modal-inner-padding: 24px;
 $modal-content-border-radius: 32px;
 $navbar-light-color: white;
@@ -71,23 +71,40 @@ a {
   @extend .text-decoration-none;
 }
 
-// NEW STYLES
-$acm-secondary: #303030;
-$acm-tertiary: goldenrod;
+// --- DEFAULT OVERRIDES ---
 
+.container {
+  @extend .py-5;
+}
+
+.modal-title {
+  @extend .text-secondary;
+}
+
+.navbar {
+  @extend .py-1, .fs-5;
+  font-family: "Inter", sans-serif;
+}
+
+.navbar-brand,
+nav .nav-item {
+  @extend .me-lg-5, .align-self-center;
+}
+
+// Footer
 footer {
-  // color: white;
   background-color: white;
 }
 
 footer .nav-link,
 footer .nav-link:hover,
 footer .nav-link:focus {
-  color: $acm-secondary;
+  color: $primary-dark;
 }
 
+// --- Navigation ---
 .nav-link {
-  color: $acm-secondary;
+  color: $primary-dark;
 }
 
 nav .nav-link:hover {
@@ -117,30 +134,11 @@ nav .nav-item {
   margin-right: 2rem !important;
 }
 
-// --- DEFAULT OVERRIDES ---
-
-.container {
-  @extend .py-5;
-}
-
-.modal-title {
-  @extend .text-secondary;
-}
-
-.navbar {
-  @extend .py-1, .fs-5;
-  font-family: "Inter", sans-serif;
-}
-
-.navbar-brand,
-nav .nav-item {
-  @extend .me-lg-5, .align-self-center;
-}
-
 // --- NEW STYLES ---
 .subhead-base {
   @extend .ps-3, .fs-5;
   border-left: 4px solid;
+  margin-right: 20px;
 }
 
 .subhead-primary {
