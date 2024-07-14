@@ -1,6 +1,5 @@
 $primary: #0083c5;
 $secondary: #0083c5;
-$primary-dark: #303030;
 $hover: #ffffff40;
 $alert-margin-bottom: 0;
 $alert-border-radius: 0;
@@ -16,7 +15,7 @@ $navbar-dark-active-color: white;
 
 // Light theme colors
 $background-light: whitesmoke;
-$text-light: #333333;
+$text-light: #303030;
 
 // Dark theme colors
 $background-dark: #333333;
@@ -91,7 +90,7 @@ nav .nav-item {
   @extend .me-lg-5, .align-self-center;
 }
 
-// Footer
+// --- Footer ---
 footer {
   background-color: white;
 }
@@ -99,12 +98,12 @@ footer {
 footer .nav-link,
 footer .nav-link:hover,
 footer .nav-link:focus {
-  color: $primary-dark;
+  color: $text;
 }
 
 // --- Navigation ---
 .nav-link {
-  color: $primary-dark;
+  color: $text;
 }
 
 nav .nav-link:hover {
