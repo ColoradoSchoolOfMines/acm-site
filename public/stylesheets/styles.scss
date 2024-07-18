@@ -5,12 +5,7 @@ $alert-margin-bottom: 0;
 $alert-border-radius: 0;
 $modal-inner-padding: 24px;
 $modal-content-border-radius: 32px;
-$navbar-light-color: white;
-$navbar-light-hover-color: white;
-$navbar-light-active-color: black;
-$navbar-dark-color: white;
-$navbar-dark-hover-color: white;
-$navbar-dark-active-color: white;
+$navbar-active-color: $primary;
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 // Light theme colors
@@ -36,12 +31,12 @@ $text: $text-light;
   .nav-link {
     color: $text;
   }
-  
+
   nav .nav-link:hover {
     background-color: $hover;
     color: $primary;
   }
-  
+
   footer .nav-link,
   footer .nav-link:hover,
   footer .nav-link:focus {
@@ -114,9 +109,18 @@ nav .nav-item {
   @extend .me-lg-5, .align-self-center;
 }
 
-// --- Navigation ---
+// --- NAVIGATION & FOOTER ---
+
+.footer {
+  background-color: white;
+}
+
 .navbar {
   background-color: white;
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+  color: $primary;
 }
 
 .navbar-nav {
