@@ -119,7 +119,8 @@ nav .nav-item {
   background-color: white;
 }
 
-.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link.show {
   color: $primary;
 }
 
