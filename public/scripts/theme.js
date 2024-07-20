@@ -4,8 +4,12 @@ const darkImageSrc = "../static/images/logo-dark.png";
 
 const updateLogoWithTheme = () => {
   const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  document.getElementById("nav-logo").src = isDarkMode ? darkImageSrc : lightImageSrc;
+  document.getElementById("nav-logo").src = isDarkMode
+    ? darkImageSrc
+    : lightImageSrc;
 };
 
 updateLogoWithTheme();
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", updateLogoWithTheme);
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", updateLogoWithTheme);
