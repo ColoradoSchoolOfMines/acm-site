@@ -10,22 +10,28 @@ $navbar-active-color: $primary;
 
 // Light theme colors
 $background-light: whitesmoke;
+$background-secondary-light: white;
 $text-light: #303030;
 
 // Dark theme colors
 $background-dark: #333333;
+$background-secondary-dark: #202020;
 $text-dark: #ffffff;
 
 // Dark mode detection
 $background: $background-light;
 $text: $text-light;
 
-@mixin theme($background, $text) {
+@mixin theme($background, $background-secondary, $text) {
   background-color: $background;
   color: $text;
 
   .backdrop {
     background-color: $background;
+  }
+
+  .backdrop-secondary {
+    background-color: $background-secondary;
   }
 
   .nav-link {
@@ -37,29 +43,28 @@ $text: $text-light;
     color: $primary;
   }
 
+  .navbar {
+    background-color: $background-secondary;
+  }
+
   footer .nav-link,
   footer .nav-link:hover,
   footer .nav-link:focus {
     color: $text;
   }
+
+  .footer {
+    background-color: $background;
+  }
 }
 
 body {
-  @include theme($background, $text);
+  @include theme($background, $background-secondary-light, $text);
 }
 
 @media (prefers-color-scheme: dark) {
   body {
-    @include theme($background-dark, $text-dark);
-
-    footer {
-      // TODO also make nav a darker dark for this theme + make variable
-      background-color: #202020;
-    }
-
-    .navbar {
-      background-color: #202020;
-    }
+    @include theme($background-dark, $background-secondary-dark, $text-dark);
   }
 }
 
@@ -110,15 +115,6 @@ nav .nav-item {
 }
 
 // --- NAVIGATION & FOOTER ---
-
-.footer {
-  background-color: white;
-}
-
-.navbar {
-  background-color: white;
-}
-
 .navbar-nav .nav-link.active,
 .navbar-nav .nav-link.show {
   color: $primary;
@@ -285,7 +281,7 @@ nav .nav-item {
 }
 
 // for 'about us' cards styling
-.row-cols-auto > * {
+.row-cols-auto>* {
   max-width: 20%;
 }
 
@@ -314,28 +310,6 @@ nav .nav-item {
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-/* Internet Explorer */
-@-ms-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-/* Opera < 12.1 */
-@-o-keyframes fadein {
   from {
     opacity: 0;
   }
