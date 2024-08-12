@@ -139,6 +139,11 @@ nav .nav-item {
 }
 
 // --- NEW STYLES ---
+.gallery-image-caption {
+  @extend .pt-2, .fs-5;
+  font-style: italic;
+}
+
 .subhead-base {
   @extend .ps-3, .fs-5;
   border-left: 4px solid;

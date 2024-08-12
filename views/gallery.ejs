@@ -1,0 +1,8 @@
+<% layout('layouts/base')%>
+
+<div class="container">
+    <% for(let image of images) { %>
+        <img width="500" src="uploads/<%= image.id %>" alt="<%= image.caption %>" class="rounded shadow" />
+        <p class="gallery-image-caption"><%= image.caption %></p>
+    <% } %>
+</div>

@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const http = require("http");
 const ejsMate = require("ejs-mate");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -142,6 +141,14 @@ app.get(
   fallible(async (req, res) => {
     const peopleResp = await db.query("SELECT * FROM users WHERE title != ''");
     res.render("about", { title: "About Us", people: peopleResp.rows });
+  }),
+);
+
+app.get(
+  "/gallery",
+  fallible(async (req, res) => {
+    const images = await db.query("SELECT * FROM images");
+    res.render("gallery", { title: "Gallery", images: images.rows })
   }),
 );
 

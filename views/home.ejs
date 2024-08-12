@@ -26,7 +26,7 @@
 								<% if (typeof user === 'object' && user) { %>
 									<form class="d-inline" method="POST" action="/rsvp">
 										<input type="hidden" name="meeting_id" value="<%= meetings[0].id %>">
-										<button class="btn btn-outline-primary rsvp">I'm In!</button>
+										<button class="btn btn-outline-primary rsvp">I'm in!</button>
 									</form>
 								<% } else { %>
 									<button class="btn btn-outline-primary rsvp" data-bs-toggle="modal" data-bs-target="#rsvp-<%= meetings[0].id %>-modal">I'm In!</button>
