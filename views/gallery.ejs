@@ -1,8 +1,26 @@
 <% layout('layouts/base')%>
 
 <div class="container">
-    <% for(let image of images) { %>
-        <img width="500" src="uploads/<%= image.id %>" alt="<%= image.caption %>" class="rounded shadow" />
-        <p class="gallery-image-caption"><%= image.caption %></p>
-    <% } %>
+    <h1 class="text-secondary">Gallery</h1>
+    <div class="gallery-container p-4">
+        <% for(let image of images) { %>
+            <div class="thumbnail">
+                <img data-bs-toggle="modal" data-bs-target="#image-detail-<%= image.id %>" src="uploads/<%= image.id %>" alt="<%= image.caption %>" class="gallery-image img-fluid mx-auto d-block rounded shadow" />
+            </div>
+            
+            <div class="modal fade" id="image-detail-<%= image.id %>" tabindex="-1" aria-labelledby="image-detail-<%= image.id %>-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content p-4">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="image-detail-<%= image.id %>-label">Image</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <img src="uploads/<%= image.id %>" alt="<%= image.caption %>" class="mt-2 img-fluid mx-auto d-block rounded shadow" />
+                        <p class="gallery-image-caption"><%= image.caption %></p>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
 </div>
