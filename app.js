@@ -152,6 +152,14 @@ app.get(
   }),
 );
 
+app.post(
+  "/gallery",
+  fallible(async (req, res) => {
+    await db.query("UDPATE images SET active = $1 WHERE id = $2", [req.body.active, req.body.image_id]);
+    res.redirect("/gallery");
+  }),
+);
+
 app.get(
   "/uploads/:id",
   fallible(async (req, res) => {

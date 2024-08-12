@@ -18,6 +18,26 @@
 
                         <img src="uploads/<%= image.id %>" alt="<%= image.caption %>" class="mt-2 img-fluid mx-auto d-block rounded shadow" />
                         <p class="gallery-image-caption"><%= image.caption %></p>
+
+                        <!-- TODO find a better way to do this check -->
+                        <% if(typeof user=='object' && user) { %>
+                            <% if(user.is_admin) { %>
+                            <p>Admin Actions</p>
+                            <form method="POST" action="/gallery">
+                                <input type="hidden" name="image_id" value="<%= image.id %>">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <input class="form-check-input" type="checkbox" checked="<%= image.active %>" role="switch" name="active" id="activeImage">
+                                        <label class="form-check-label" for="activeImage">Active</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Discard</button>
+                                    <button class="btn btn-success">Update</button>
+                                </div>
+                            </form>
+                            <% } %>
+                        <% } %>
                     </div>
                 </div>
             </div>
