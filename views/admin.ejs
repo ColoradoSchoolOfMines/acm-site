@@ -47,7 +47,7 @@
         <div class="large-card shadow mb-4">
             <h2>Officers</h2>
             <% for(let officer of officers) { %>
-                <p class="mt-2"><%= officer.name %> | <%= officer.title %></p>
+                <p class="mt-2"><b><%= officer.name %></b>, <%= officer.title %></p>
                 <p class="mb-2"><%= officer.id + "@mines.edu" %></p>
 
                 <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.id %>-modal">Edit</button>
