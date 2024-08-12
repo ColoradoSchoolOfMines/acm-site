@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS rsvps (
 
 CREATE TABLE IF NOT EXISTS images (
     "id"       TEXT PRIMARY KEY,
-    "caption"  TEXT
+    "caption"  TEXT,
+    "active"   BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS presentations (
