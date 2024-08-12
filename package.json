@@ -1,13 +1,12 @@
 {
   "name": "acm-site",
   "version": "1.0.0",
-  "description": "The backend for the Mines ACM website.",
+  "description": "The Mines ACM club website, acm.mines.edu",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "sass --style=compressed public/stylesheets/styles.scss public/stylesheets/styles.css; node app.js"
   },
-  "author": "",
+  "author": "Mines ACM Contributors",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.3.2",
