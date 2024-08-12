@@ -148,7 +148,7 @@ app.get(
   "/gallery",
   fallible(async (req, res) => {
     const images = await db.query("SELECT * FROM images");
-    res.render("gallery", { title: "Gallery", images: images.rows })
+    res.render("gallery", { title: "Gallery", images: images.rows });
   }),
 );
 
