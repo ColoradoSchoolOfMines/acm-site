@@ -139,9 +139,29 @@ nav .nav-item {
 }
 
 // --- NEW STYLES ---
+.gallery-container {
+  background-color: white;
+  border-bottom: 4px solid $primary;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 15px;
+  column-gap: 15px;
+}
+
+.gallery-image {
+  object-fit: contain;
+}
+
+.thumbnail {
+  display: flex;
+  height: 200px;
+}
+
 .gallery-image-caption {
   @extend .pt-2, .fs-5;
   font-style: italic;
+  text-align: center;
+  margin-bottom: 2%;
 }
 
 .subhead-base {
@@ -256,6 +276,7 @@ nav .nav-item {
   @extend .rounded-5;
   width: 128px;
   height: 128px;
+  object-fit: cover;
 }
 
 .project-image {
@@ -285,7 +306,6 @@ nav .nav-item {
   @extend .rounded-5, .w-100, .mb-3;
 }
 
-// for 'about us' cards styling
 .row-cols-auto > * {
   max-width: 20%;
 }

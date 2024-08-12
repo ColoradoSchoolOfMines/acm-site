@@ -14,7 +14,7 @@
             
             <% for(let meeting of upcoming) { %>
                 <div class="large-card shadow">
-                    <div class="row row-cols-auto gx-2">
+                    <div class="row gx-2">
                         <h3 class="large-card-title">
                             <%= meeting.title %>
                         </h3>
@@ -37,21 +37,20 @@
                     <p><strong>Location</strong>: <%= meeting.location %></p>
                 </div>
             <% } %> 
-
-            <div class="row pt-4">
-                <h1 class="text-secondary pb-2">Previous Meetings</h1>
-                <div class="scroll previous-meetings-card shadow">
-                    <% for(let meeting of previous) { %>   
-                        <div class="meeting-compact p-4">
-                            <p><strong><%= meeting.title %></strong></p>
-                            <p><strong>Description</strong>: <%= meeting.description %></p>
-                            <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
-                            <p><strong>Location</strong>: <%= meeting.location %></p>
-                        </div>
-                    <% } %>
-                </div>
-            </div>
         </div> 
+        <div class="row pt-4">
+            <h1 class="text-secondary pb-2">Previous Meetings</h1>
+            <div class="scroll previous-meetings-card shadow">
+                <% for(let meeting of previous) { %>   
+                    <div class="meeting-compact p-4">
+                        <p><strong><%= meeting.title %></strong></p>
+                        <p><strong>Description</strong>: <%= meeting.description %></p>
+                        <p><strong>Date</strong>: <span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></p>
+                        <p><strong>Location</strong>: <%= meeting.location %></p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
     </div>
 </main>
 
