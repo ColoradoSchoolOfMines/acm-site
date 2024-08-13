@@ -69,10 +69,7 @@ router.post(
   "/meetings/remove",
   isAdminAuthenticated,
   fallible(async (req, res) => {
-    await db.query(
-      "DELETE FROM meetings WHERE id = $1",
-      [req.body.meeting_id],
-    );
+    await db.query("DELETE FROM meetings WHERE id = $1", [req.body.meeting_id]);
     req.flash(
       "success",
       "Successfully removed meeting with id " + req.body.meeting_id + ".",
