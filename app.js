@@ -11,12 +11,13 @@ const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const { cspConfig, sessionConfig } = require("./config/general.config");
 const db = require("./database/db");
 const { fallible } = require("./middleware");
-const authRoutes = require("./routes/auth");
-const attendRoutes = require("./routes/attendance");
 const adminRoutes = require("./routes/admin");
+const attendRoutes = require("./routes/attendance");
+const authRoutes = require("./routes/auth");
+const galleryRoutes = require("./routes/gallery");
+const presentationsRoutes = require("./routes/presentations");
 const profileRoutes = require("./routes/profile");
 const projectsRoutes = require("./routes/projects");
-const presentationsRoutes = require("./routes/presentations");
 const scheduleRoutes = require("./routes/schedule");
 const app = express();
 
@@ -100,6 +101,7 @@ app.use((req, res, next) => {
 app.use("/", adminRoutes);
 app.use("/", attendRoutes);
 app.use("/", authRoutes);
+app.use("/", galleryRoutes);
 app.use("/", presentationsRoutes);
 app.use("/", profileRoutes);
 app.use("/", projectsRoutes);
@@ -145,27 +147,6 @@ app.get(
 );
 
 app.get(
-  "/gallery",
-  fallible(async (req, res) => {
-    const images = await db.query("SELECT * FROM images");
-    res.render("gallery", { title: "Gallery", images: images.rows });
-  }),
-);
-
-app.post(
-  "/gallery",
-  fallible(async (req, res) => {
-    const active =
-      req.body.active === "true" || req.body.activeHidden === "false";
-    await db.query("UPDATE images SET active = $1 WHERE id = $2", [
-      active,
-      req.body.image_id,
-    ]);
-    res.redirect("/gallery");
-  }),
-);
-
-app.get(
   "/uploads/:id",
   fallible(async (req, res) => {
     let path = "uploads/" + req.params.id;
@@ -186,11 +167,8 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   let error;
   if (process.env.NODE_ENV === "development") {
-    // Possible security hazard if we expose the trace, so only display it
-    // in development mode.
     error = err.stack;
   }
-
   res.status(500).render("error", { title: "Error", error: error });
 });
 
