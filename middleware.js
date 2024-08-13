@@ -15,13 +15,22 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 module.exports.isAdminAuthenticated = (req, res, next) => {
-  if (req.user == undefined || !req.user.is_admin || !req.isAuthenticated()) {
-    req.session.returnTo = req.originalUrl;
-    req.user = false;
-    req.flash("error", "You do not have permission to view this page!");
-    return res.redirect("/");
-  } else {
+  if (process.env.NODE_ENV === "development") {
+    // bypass admin auth in development mode
     next();
+  } else {
+    if (
+      req.user === undefined ||
+      !req.user.is_admin ||
+      !req.isAuthenticated()
+    ) {
+      req.session.returnTo = req.originalUrl;
+      req.user = false;
+      req.flash("error", "You do not have permission to view this page!");
+      return res.redirect("/");
+    } else {
+      next();
+    }
   }
 };
 

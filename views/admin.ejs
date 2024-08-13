@@ -20,6 +20,10 @@
                                 <p><strong>RSVPs</strong>: <%= meeting.rsvps %></p>
                             <% } %>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-meeting-<%= meeting.id %>-modal">Edit Meeting</button>
+                            <form class="d-inline-block" method="POST" action="/meetings/remove">
+                                <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
+                                <button class="btn d-inline-block btn-outline-danger">Delete</button>
+                            </form>
                             <% if(meeting.attendance.length > 0) { %>
                                 <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
                             <% } %>
@@ -47,7 +51,7 @@
         <div class="large-card shadow mb-4">
             <h2>Officers</h2>
             <% for(let officer of officers) { %>
-                <p class="mt-2"><%= officer.name %> | <%= officer.title %></p>
+                <p class="mt-2"><b><%= officer.name %></b>, <%= officer.title %></p>
                 <p class="mb-2"><%= officer.id + "@mines.edu" %></p>
 
                 <button class="btn d-inline-block btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-officer-<%= officer.id %>-modal">Edit</button>

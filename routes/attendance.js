@@ -86,7 +86,7 @@ router.post(
 router.get(
   "/attend",
   fallible(async (req, res) => {
-    // Find active meeting if possible (2 hour buffer) TODO there's probably a better way to do this
+    // Find active meeting if possible (2 hour buffer)
     const meetingResp = await db.query(
       "SELECT * FROM meetings WHERE date >= NOW() - INTERVAL '2 hours' and date <= NOW() + INTERVAL '2 hours'",
     );

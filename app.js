@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const http = require("http");
 const ejsMate = require("ejs-mate");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -12,12 +11,13 @@ const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const { cspConfig, sessionConfig } = require("./config/general.config");
 const db = require("./database/db");
 const { fallible } = require("./middleware");
-const authRoutes = require("./routes/auth");
-const attendRoutes = require("./routes/attendance");
 const adminRoutes = require("./routes/admin");
+const attendRoutes = require("./routes/attendance");
+const authRoutes = require("./routes/auth");
+const galleryRoutes = require("./routes/gallery");
+const presentationsRoutes = require("./routes/presentations");
 const profileRoutes = require("./routes/profile");
 const projectsRoutes = require("./routes/projects");
-const presentationsRoutes = require("./routes/presentations");
 const scheduleRoutes = require("./routes/schedule");
 const app = express();
 
@@ -101,6 +101,7 @@ app.use((req, res, next) => {
 app.use("/", adminRoutes);
 app.use("/", attendRoutes);
 app.use("/", authRoutes);
+app.use("/", galleryRoutes);
 app.use("/", presentationsRoutes);
 app.use("/", profileRoutes);
 app.use("/", projectsRoutes);
@@ -110,7 +111,7 @@ app.get(
   "/",
   fallible(async (req, res) => {
     const imageResp = await db.query(
-      "SELECT * FROM images ORDER BY RANDOM() LIMIT 1",
+      "SELECT * FROM images WHERE active = true ORDER BY RANDOM() LIMIT 1",
     );
     const image = imageResp.rows[0];
 
@@ -166,11 +167,8 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   let error;
   if (process.env.NODE_ENV === "development") {
-    // Possible security hazard if we expose the trace, so only display it
-    // in development mode.
     error = err.stack;
   }
-
   res.status(500).render("error", { title: "Error", error: error });
 });
 
