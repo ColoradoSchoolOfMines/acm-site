@@ -20,6 +20,10 @@
                                 <p><strong>RSVPs</strong>: <%= meeting.rsvps %></p>
                             <% } %>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-meeting-<%= meeting.id %>-modal">Edit Meeting</button>
+                            <form class="d-inline-block" method="POST" action="/meetings/remove">
+                                <input type="hidden" name="meeting_id" value="<%= meeting.id %>">
+                                <button class="btn d-inline-block btn-outline-danger">Delete</button>
+                            </form>
                             <% if(meeting.attendance.length > 0) { %>
                                 <button class="btn btn-primary attendance-csv" data-attendance="<%= JSON.stringify([meeting.attendance, meeting.date]) %>">Export attendance to CSV</button>
                             <% } %>
