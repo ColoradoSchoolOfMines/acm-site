@@ -155,7 +155,8 @@ app.get(
 app.post(
   "/gallery",
   fallible(async (req, res) => {
-    await db.query("UDPATE images SET active = $1 WHERE id = $2", [req.body.active, req.body.image_id]);
+    const active = req.body.active === 'true' || req.body.activeHidden === 'false';
+    await db.query("UPDATE images SET active = $1 WHERE id = $2", [active, req.body.image_id]);
     res.redirect("/gallery");
   }),
 );

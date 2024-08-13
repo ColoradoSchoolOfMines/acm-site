@@ -25,10 +25,12 @@
                             <p>Admin Actions</p>
                             <form method="POST" action="/gallery">
                                 <input type="hidden" name="image_id" value="<%= image.id %>">
+                                <input type="hidden" name="activeHidden" value="<%= image.active %>">
+
                                 <div class="modal-body">
                                     <div class="mb-3">
-                                        <input class="form-check-input" type="checkbox" checked="<%= image.active %>" role="switch" name="active" id="activeImage">
-                                        <label class="form-check-label" for="activeImage">Active</label>
+                                        <input class="form-check-input" type="checkbox" <%= image.active ? 'checked' : '' %> role="switch" name="active" id="activeImage-<%= image.id %>" value="<%= image.active ? '1' : '0' %>">
+                                        <label class="form-check-label" for="activeImage-<%= image.id %>">Active</label>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
