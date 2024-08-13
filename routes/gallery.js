@@ -1,8 +1,9 @@
 const express = require("express");
-const { isAdminAuthenticated } = require("../middleware");
+const db = require("../database/db");
+const { isAdminAuthenticated, fallible } = require("../middleware");
 const router = express.Router();
 
-app.get(
+router.get(
   "/gallery",
   fallible(async (req, res) => {
     const images = await db.query("SELECT * FROM images");
@@ -10,7 +11,7 @@ app.get(
   }),
 );
 
-app.post(
+router.post(
   "/gallery",
   isAdminAuthenticated,
   fallible(async (req, res) => {
