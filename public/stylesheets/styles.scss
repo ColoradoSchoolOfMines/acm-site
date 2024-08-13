@@ -99,6 +99,10 @@ a {
   color: white;
 }
 
+.btn:hover {
+  color: white;
+}
+
 .container {
   @extend .py-5;
 }
@@ -208,6 +212,7 @@ nav .nav-item {
 .large-card-title {
   @extend .m-0, .text-secondary;
   font-weight: bold;
+  display: inline-block;
 }
 
 .large-card-sidetitle {
@@ -315,6 +320,12 @@ nav .nav-item {
 
 .row-cols-auto > * {
   max-width: 20%;
+}
+
+.rsvp {
+  // display: flex;
+  align-items: center;
+  margin-left: 1%;
 }
 
 // --- ANIMATIONS ---

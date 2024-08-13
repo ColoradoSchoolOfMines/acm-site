@@ -59,7 +59,7 @@
 						<% if(meetings.length > 0) { %>
 							<% for(let meeting of meetings) { %>
 								<div class="meeting-compact py-3">
-									<div class="row row-cols-auto gx-2 align-items-center">									
+									<div class="d-flex align-items-center">
 										<p class="home-header-3"><%= meeting.title %></p>
 										<% if(meeting.rsvped) { %>
 											<p class="home-sideheader">(RSVP'ed)</p>
@@ -74,7 +74,6 @@
 											<% } %>
 										<% } %>
 									</div>
-
 									<p><strong><span class="datetime"><%= meeting.date %>,<%= meeting.duration %></span></strong>
 										in <strong><%= meeting.location %></strong></p>
 									<p class="meeting-description"><%= meeting.description %></p>
