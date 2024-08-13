@@ -109,7 +109,7 @@ app.get(
   "/",
   fallible(async (req, res) => {
     const imageResp = await db.query(
-      "SELECT * FROM images ORDER BY RANDOM() LIMIT 1",
+      "SELECT * FROM images WHERE active = true ORDER BY RANDOM() LIMIT 1",
     );
     const image = imageResp.rows[0];
 

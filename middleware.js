@@ -15,8 +15,6 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 module.exports.isAdminAuthenticated = (req, res, next) => {
-  // TODO add debug/dev env check here?
-
   if (req.user == undefined || !req.user.is_admin || !req.isAuthenticated()) {
     req.session.returnTo = req.originalUrl;
     req.user = false;
