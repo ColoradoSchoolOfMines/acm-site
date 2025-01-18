@@ -66,6 +66,11 @@ body {
   body {
     @include theme($background-dark, $background-secondary-dark, $text-dark);
   }
+
+  .previous-meetings-card {
+    background-color: $background-secondary-dark !important;
+    color: $text-dark;
+  }
 }
 
 // --- ELEMENT OVERRIDES ---
