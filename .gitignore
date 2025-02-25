@@ -138,3 +138,7 @@ public/stylesheets/*.css.map
 
 # Sass cache (if using ruby impl)
 .sass-cache/
+
+
+# DS_Store (macOS)
+.DS_Store
