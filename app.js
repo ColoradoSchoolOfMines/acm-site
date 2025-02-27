@@ -147,6 +147,13 @@ app.get(
 );
 
 app.get(
+  "/blasterhacks",
+  fallible(async (req, res) => {
+    res.render("blasterhacks", { title: "BlasterHacks 2025" });
+  }),
+);
+
+app.get(
   "/uploads/:id",
   fallible(async (req, res) => {
     let path = "uploads/" + req.params.id;
