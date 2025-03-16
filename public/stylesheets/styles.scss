@@ -28,6 +28,7 @@ $text: $text-light;
 
   .backdrop {
     background-color: $background;
+    margin: 0 15px;
   }
 
   .backdrop-secondary {
@@ -282,6 +283,11 @@ nav .nav-item {
 
 .previous-meetings-card {
   @extend .base-large-card, .p-0;
+}
+
+.blasterhacks-card {
+  @extend .base-large-card, .p-4;
+  line-height: 2rem;
 }
 
 .team-picture-container {
