@@ -16,7 +16,7 @@
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
     "express": "^4.21.2",
-    "express-session": "^1.18.1",
+    "express-session": "^1.18.2",
     "helmet": "^7.0.0",
     "ical-generator": "^5.0.0",
     "multer": "^2.0.2",
